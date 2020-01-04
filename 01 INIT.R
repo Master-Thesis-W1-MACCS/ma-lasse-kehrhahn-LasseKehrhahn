@@ -57,9 +57,13 @@ for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
                     
                     #### ============================== SIMULATION ======================================
                     for (nn in 1:SIM_NUMB) {
-                         
-                  
-                     # DATA = .system_datalogging(o,nn,FIRM,DATA)
+                    
+                    # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
+                      
+                    # Customer_generation [ NUMB_C ]
+  
+                      
+                    # DATA = .system_datalogging(o,nn,FIRM,DATA)
                     
                       o=o+1 #Counting for the total number of runs
                     }
