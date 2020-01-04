@@ -16,6 +16,7 @@ SIM_NUMB =         200                    #Control Variable - Number of Simulati
 TC =               1000000                #Total costs
 TQ =               100
 NUMB_C =           3
+NUMB_CN =          3
 NUMB_FR_MAX =      3
 
 ## ============ INPUT PARAMETER MASK ===========
@@ -62,6 +63,8 @@ for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
                       
                     # Customer_generation [ NUMB_C ]
   
+                    CUSTOMER = gen_CUSTOMER
+                    
                       
                     # DATA = .system_datalogging(o,nn,FIRM,DATA)
                     
