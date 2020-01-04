@@ -1,143 +1,66 @@
 #############################################################
-# STARTING THE EXPLORATION OF THE EXTENDED AXIOMATIC DEIGN
+# EXPLORATION OF THE EXTENDED AXIOMATIC DEIGN
 
 
 ## ============ CONTROL&FIXED PARAMETERS ===========
-FIRM = list()                           
-FIRM$PRODUCTION_ENVIRONMENT = list()
-FIRM$COSTING_SYSTEM = list()
-
+EAD = list()                           
 DATA = data.frame()
 DATAp = data.frame()
 
 
 NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
 NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-
-SIM_NUMB =         200                  #Control Variable - Number of Simulations for every single environment (standard: 30)     
+NUMB_CM =          10
+SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
 TC =               1000000                #Total costs
-
-
-ProductCostOutput= 0                      #Control Variable -  Zero = no tracking of the product level
-set_PE_constant=   0                      #Control Variable -  Decide if genProduction environment is fixed: Using the same firm.
-
-dec_ERROR=         1                      #Control Variable - 
-
-#dec_DC=           0                      # = no direct costs 
-dec_CP=            1                      # =
-dec_CD=            1                      # =
-
-
+TQ =               100
+NUMB_C =           3
+NUMB_FR_MAX =      3
 
 ## ============ INPUT PARAMETER MASK ===========
+DENS_CNFR = c(-1)
+DENS_FRCM = c(-1)
+DENS_CMPV = c(-1)
+DENS_PVRC = c(-1)  
 
-
-CP = c(10,12,14,16,18,20)                                 #No. of Cost Pools
-COR = c(0.6)                              #Correlation between resources
-RC_VAR =  c(-1)                          #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
-Q_VAR = c(0.4)                            #Demand variation
-Error = c(0.5)                              #Measurement error (BHL2011)
-NUMB_Error = c(0.1,0.2,0.4,0.6,0.8,1)                         #Number of errornoues links (LV2008)
-DENS = c(-1)                              #Number of links between products and resources (sharing)
-CC = c(0.4)                               #Correlation Cutoff for correlative assignement in CP HEURISTICS
-MISCPOOLSIZE = c(0.25)                    #share of total costs that are supposed to go into the miscpool if there is a miscpool in the Costing System
-DISP1 = c(10)                             #No. of the biggest resources that have a DISP2 share of the total costs
-
-CP_HEURISTIC = 6                          #Which Heuristic for pooling resources? # 0-4
-CD_HEURISTIC = 0                          #which Heuristic for selecting a driver?
+Q_VAR = c(0.4)  
+RCC_VAR =    c(-1)                           #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 
 set.seed(13) #Reproducability
 o=1 # First design point
 
 ## ==== DESIGN OF EXPERIMENTS ==== 
 ## EVIRONMENTAL FACTORS [] 
-for (ix_CP in seq_along(CP)) {
-  for (ix_COR in seq_along(COR)) {
-    for (ix_RC_VAR in seq_along(RC_VAR)) {
-      for (ix_Q_VAR in seq_along(Q_VAR)) {
-        for (ix_Error in seq_along(Error)) {
-          for (ix_NUMB_Error in seq_along(NUMB_Error)) {
-            for (ix_DENS in seq_along(DENS)) {
-              for(ix_CC in seq_along(CC)){
-                for(ix_MISCPOOLSIZE in seq_along(MISCPOOLSIZE)){
-                  for(ix_DISP1 in seq_along(DISP1)){
-                    
-                    
+for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
+  for (ix_DENS_FRCM in seq_along(DENS_FRCM)) {
+    for (ix_DENS_CMPV in seq_along(DENS_CMPV)) {
+      for (ix_DENS_PVRC in seq_along(DENS_PVRC)) {
+        for (ix_Q_VAR in seq_along(Q_VAR)) {
+          for (ix_RCC_VAR in seq_along(RCC_VAR)) {
+                 
                     ## ====================== PREDETERMINING AND PREALLOCATION  =========================          
                     
-                    FIRM$PRODUCTION_ENVIRONMENT$DENS = DENS[ix_DENS]   
-                    FIRM$PRODUCTION_ENVIRONMENT$COR  = COR[ix_COR]
-                    FIRM$PRODUCTION_ENVIRONMENT$Q_VAR= Q_VAR[ix_Q_VAR]
-                    FIRM$PRODUCTION_ENVIRONMENT$NUMB_PRO = NUMB_PRO
-                    FIRM$PRODUCTION_ENVIRONMENT$NUMB_RES = NUMB_RES
-                    FIRM$PRODUCTION_ENVIRONMENT$DISP1 = DISP1
-                    FIRM$COSTING_SYSTEM$CP = CP[ix_CP]
-                    FIRM$COSTING_SYSTEM$RC_VAR = RC_VAR[ix_RC_VAR]
-                    FIRM$COSTING_SYSTEM$Error = Error[ix_Error]
-                    FIRM$COSTING_SYSTEM$NUMB_Error = NUMB_Error[ix_NUMB_Error]
-                    FIRM$COSTING_SYSTEM$TC = TC
-                    FIRM$COSTING_SYSTEM$CC = CC
-                    FIRM$COSTING_SYSTEM$MISCPOOLSIZE = MISCPOOLSIZE
-                    FIRM$COSTING_SYSTEM$CP_HEURISTIC = CP_HEURISTIC
-                    FIRM$COSTING_SYSTEM$CD_HEURISTIC = CD_HEURISTIC
+                    EAD$DENS_CNFR = DENS_CNFR[ix_DENS_CNFR]   
+                    EAD$DENS_FRCM = DENS_FRCM[ix_DENS_FRCM]   
+                    EAD$DENS_CMPV = DENS_CMPV[ix_DENS_CMPV]   
+                    EAD$DENS_PVRC = DENS_PVRC[ix_DENS_PVRC]   
+                    EAD$Q_VAR = Q_VAR[ix_Q_VAR]
+                    EAD$RCC_VAR = RCC_VAR[ix_RCC_VAR]
                     
                     
-                    
+                    EAD$NUMB_PRO = NUMB_PRO
+                    EAD$NUMB_RES = NUMB_RES
+                    EAD$NUMB_C   = NUMB_C
+                
                     nn=1 # necessary for repeating the SIM_NUMB loop
+                    
                     #### ============================== SIMULATION ======================================
                     for (nn in 1:SIM_NUMB) {
-                      
-                      #print(FIRM$COSTING_SYSTEM$CP)  
-                      #print(FIRM$COSTING_SYSTEM$Error)  
-                      
-                      FIRM = gen_ProductionEnvironment(FIRM,set_PE_constant) #Generate Production Environment with RES_CONS_PAT
-                      
-                      ##Building the cost pools
-                      if(CP_HEURISTIC == 0){FIRM = MAP_RES_CP_SIZE_MISC(FIRM)}
-                      
-                      else if(CP_HEURISTIC == 1){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_ANAND(FIRM)}
-                      
-                      else if(CP_HEURISTIC == 2){FIRM = MAP_RES_CP_SIZE_RANDOM_MISC(FIRM)}
-                      
-                      else if(CP_HEURISTIC == 3){FIRM = MAP_RES_CP_SIZE_CORREL_CUTOFF_MISC_ANAND(FIRM)}
-                      
-                      else if(CP_HEURISTIC == 4){FIRM = MAP_CP_CORREL_MISC(FIRM)}
-                      
-                      else if(CP_HEURISTIC == 5){FIRM = MAP_RES_CP_SIZE_CORREL_MISC_OWN(FIRM)}
-                      
-                      else if(CP_HEURISTIC == 6){FIRM = MAP_RES_CP_SIZE_RANDOM(FIRM)}
-                      ## Selecting the drivers of a cost pool
-                      if(CD_HEURISTIC == 0){FIRM = MAP_CP_P_BIGPOOL(FIRM,Error)}
-                      
-                      
-                      ## Calculating the estimated product costs
-                      
-                      FIRM$COSTING_SYSTEM$PCH =  FIRM$COSTING_SYSTEM$ACT_CONS_PAT %*% FIRM$COSTING_SYSTEM$ACP # CHECKED 2019/09/12
-                      
-                      ## ERROR MEASURES AFTER LABRO & VANHOUCKE 2007 
-                      EUCD = round(sqrt(sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2)
-                      MAPE = round(mean(abs(FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB),digits=4)
-                      MSE = round(mean(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)^2)),digits=2);
-                      
-                      
-                      UC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)>0)/NUMB_PRO
-                      OC = sum((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)<=0)/NUMB_PRO  
-                      
-                      UC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)>0.05)/NUMB_PRO
-                      OC5 = sum(((FIRM$COSTING_SYSTEM$PCB-FIRM$COSTING_SYSTEM$PCH)/FIRM$COSTING_SYSTEM$PCB)<=-0.05)/NUMB_PRO  
-                      
-                      
-                      
-                      ## DATA LOGGING
-                      
-                      DATA = .system_datalogging(o,nn,FIRM,DATA)
-                      if (ProductCostOutput==1){DATAp = .product_datalogging(o,nn,FIRM,DATAp,CP_HEURISTIC,CD_HEURISTIC)}
-                      ## Print outputs;
-                      print(o)
-                      print(FIRM$COSTING_SYSTEM$CP)
-                      print((EUCD))
-                      
+                         
+                  
+                     # DATA = .system_datalogging(o,nn,FIRM,DATA)
+                    
                       o=o+1 #Counting for the total number of runs
                     }
                   }
@@ -146,18 +69,12 @@ for (ix_CP in seq_along(CP)) {
             }  
           }
         }
-      }
-    }
-  }
-}
 
 #### ====================================== OUTPUT WRITING ===================================
 
 #output data
 # output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
 # write.csv(DATA, file = output)
-
-
 
 print("EAD_ FILE has been written")
 
