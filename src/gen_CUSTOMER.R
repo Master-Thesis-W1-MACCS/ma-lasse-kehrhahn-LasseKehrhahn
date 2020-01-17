@@ -1,15 +1,17 @@
 #
 
-gen_CUSTOMER <- function(EAD,NUMB_CN,NUMB_C,TQ) {
+gen_EAD <- function(EAD,NUMB_CN,NUMB_C,TQ) {
   
 # Customer generation function
 #  % 23.4. - Generates the customers in the market 
 #  % 24.7. - Make customers' attributes more precise, in particular CN and FRN
 #   01.10 - Code simplification 
 
-NUMB_CN = 3 
-NUMB_C =3
-## Which customers exist and how many needs do they got? 
+
+
+CN <- c(rep(1, NUMB_CN))
+CUSTOMERS <- c(10,20,30)
+# Which customers exist and how many needs do they got? 
     
     # Customer.NEEDS 
     # Explanation; 
@@ -18,60 +20,37 @@ NUMB_C =3
     # C1    1     1   1       [does have this necessity]  
     # C2    1     0   1       [does not have this necessity]
     # Cn    n     n   nm
-  
-  
-    C_CN.matrix_pre = runif(NUMB_CN*NUMB_C) #draw random numbers
-    ## 1/0 DENSITY
-    C_CN.matrix <- matrix(ifelse(C_CN.matrix_pre > 0.4, 0,1),NUMB_CN, NUMB_C)
+    DENS_C = 2
+    DENS_CNFR = -1 
+    DENS_FRCM = -1
+    DENS_CMPV = -1
+    DENS_PVRC = -1
     
-
-#     % MANUAL EXCPTION SET THE MAXIMUM TO A LEVEL OF THREE 
-#     CN_TO_FR_MAXIMUM(1:NUMB_CN) = NUMB_MAX_FR;
-#     
-#     % CN_TO_FR_MAXIMUM EXPLANATION
-#     %                   CustomersNeed1         CustomersNeed2  
-#     % Amount of FR      4 [four different FR]  [1 just one FR]  
-#     
-#     Customer.FR = CN_TO_FR_MAXIMUM;
-#     
-# ## ========================= Determining customers demand for the functional =========================
-# # Each customer need (CN) has at least one functional requirement (FR).
-# # Each customer does not always need the highest FR; 
-# # A Functional requirement can be an ordinary specification such as increasing performance of an engine (1 = 100 HP, 2 = 200 HP) 
-# # or an option such as a color (blue = 1, green = 2 .... ]
-# # Here we build a reference market sturcture that is automatically the ideal structure for a product family 
-# #(see Du et al 2001, Martin (1996))
-# 
-#     
-#     
-# MAX_DESIGN_CN_FR = Customer.NEEDS.*CN_TO_FR_MAXIMUM; % Generating for each customer the maximum FR 
-# Customer.VAM_Reference = MAX_DESIGN_CN_FR; % Transfering to the value to the struct for later usage
-# 
-# %% Determining the market structure by performance 
-# % % % PERFORMANCE_CUSTOMER = zeros(Customer.NUMB,1);
-# % % % LOW_PERFORMANCE_MIN = 0.2;
-# % % % LOW_PERFORMANCE_MAX = 0.5;
-# % % % LOW_PERFORMANCE= LOW_PERFORMANCE_MIN + (LOW_PERFORMANCE_MAX-LOW_PERFORMANCE_MIN).*rand(1,1); %Scalar Uniformley distribution (0,1)
-# % % % CUSTOMER_OF_HIGH_PERFORMANCE = ceil(NUMB_AGENTS*0.2); 
-# % % % CUSTOMER_OF_LOW_PERFORMANCE = ceil((NUMB_AGENTS-CUSTOMER_OF_HIGH_PERFORMANCE)*LOW_PERFORMANCE) + CUSTOMER_OF_HIGH_PERFORMANCE;
-# % % % % % % PERFORMANCE_CUSTOMER(1:CUSTOMER_OF_HIGH_PERFORMANCE,:)=HIGH ; 
-# % % % % % % PERFORMANCE_CUSTOMER((CUSTOMER_OF_HIGH_PERFORMANCE+1):CUSTOMER_OF_LOW_PERFORMANCE,:)=LOW ; 
-# % % % % % % 
-#   
-#   % Random allocation of functional requirements to each customer. 
-# % VALUE(ROW, COLUMN) 
-# 
-# for i=1:Customer.NUMB
-# for j=1:Customer.NUMB_CN
-# if MAX_DESIGN_CN_FR(i,j)>0   
-# Customer.CN_FR_MAP(i,j)= randi([NUMB_MIN_FR max(MAX_DESIGN_CN_FR(i,j))],1,1);
-# else 
-#   Customer.CN_FR_MAP(i,j)= 0;
-# end 
-# end
-# end
-# 
-# NUMB_MIN_FR = 1; #Auxilliar variable that declares the minimum level of product specs.
+    NUMB_C =3
+    NUMB_CN = 3 
+    NUMB_FR = 4
+    NUMB_CM = 5
+    NUMB_PV = 6
+    NUMB_RC = 50
+    
+    
+    EAD = list()
+    
+    
+    
+    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C)
+    A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR)
+    A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM)
+    A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV)
+    A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC)
+    
+    CN = t(A_CCN)  %*% CUSTOMERS # computing CN * q from the customers
+    FR = t(A_CNFR) %*% CN  # computing FR * q
+    CM = t(A_FRCM) %*% FR  # computing CM * q
+    PV = t(A_CMPV) %*% CM  # computing CM * q
+    RC = t(A_PVRC) %*% PV  # computing CM * q
+    
+    
 
 
 
