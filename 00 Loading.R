@@ -21,4 +21,7 @@
 ##############################
 
 ## SOURCE THIS FILE FOR EXECUTION
-source("01 INIT.R")
+#source("01 INIT.R")
+source("src/.designfunctions.R")
+source("src/.gen_RCC.R")
+
