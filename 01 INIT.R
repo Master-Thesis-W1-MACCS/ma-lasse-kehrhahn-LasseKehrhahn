@@ -83,7 +83,6 @@ for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
 # output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
 # write.csv(DATA, file = output)
 
-print("EAD_ FILE has been written")
 
 # check = aggregate(DATA,list(DATA$CP),mean)
 # plot(check$MAPE,type ='l')
