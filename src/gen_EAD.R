@@ -8,18 +8,13 @@ gen_EAD <- function(EAD,NUMB_CN,NUMB_C,TQ) {
 
 CUSTOMERS <- vector()
 CUSTOMERS <- c(10, 30, 50)
-# Which customers exist and how many needs do they got? 
-    
-    # Customer.NEEDS 
-    #       CN1  CN2  CNm 
-    # C1    1     1   1       [does have this necessity]  
-    # C2    1     0   1       [does not have this necessity]
-    # Cn    n     n   nm
+
+
     DENS_C = 2
     DENS_CNFR = 2
-    DENS_FRCM = -1
-    DENS_CMPV = -1
-    DENS_PVRC = -1
+    DENS_FRCM = 0.1
+    DENS_CMPV = 0.1
+    DENS_PVRC = 0.1
     
     NUMB_C = 3
     NUMB_CN = 3
@@ -30,26 +25,19 @@ CUSTOMERS <- c(10, 30, 50)
     RC_VAR = -1
     
     
-    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C)
-    
-    
-    A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR)
-    
-    A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM)
-    
-    
-    
-    
-    A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV)
-    A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC)
+    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C,"C","CN")
+    A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR")
+    A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM")
+    A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV")
+    A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC")
     
     
     
-    CN = (A_CCN)  %*% CUSTOMERS # computing CN * q from the customers
-    FR = (A_CNFR) %*% as.vector(CN)  # computing FR * q
-    CM = (A_FRCM) %*% as.vector(FR)  # computing CM * q
-    PV = (A_CMPV) %*% as.vector(CM)  # computing CM * q
-    RC = (A_PVRC) %*% as.vector(PV)  # computing CM * q
+    CN = CUSTOMERS %*% (A_CCN)  # computing CN * q from the customers
+    FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
+    CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
+    PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
+    RC = as.vector(PV) %*% (A_PVRC) # computing CM * q
     
     RCC = matrix(.gen_RCC(RC_VAR,1*10^6,RC))
     #RCU = (RCC/RC)
@@ -59,19 +47,19 @@ CUSTOMERS <- c(10, 30, 50)
     
     ##############################################
     
-    A_PVRCp <- sweep((A_PVRC),1,rowSums(A_PVRC),"/") #Absolute matrix to relative matrix
-    A_CMPVp <- sweep((A_CMPV),1,rowSums(A_CMPV),"/") #Absolute matrix to relative matrix  
-    A_FRCMp <- sweep((A_FRCM),1,rowSums(A_FRCM),"/") #Absolute matrix to relative matrix
-    A_CNFRp <- sweep((A_CNFR),1,rowSums(A_CNFR),"/") #Absolute matrix to relative matrix
-    A_CCNp <- sweep((A_CCN),1,rowSums(A_CCN),"/") #Absolute matrix to relative matrix
+    A_PVRCp <- sweep((A_PVRC),2,colSums(A_PVRC),"/") #Absolute matrix to relative matrix
+    A_CMPVp <- sweep((A_CMPV),2,colSums(A_CMPV),"/") #Absolute matrix to relative matrix  
+    A_FRCMp <- sweep((A_FRCM),2,colSums(A_FRCM),"/") #Absolute matrix to relative matrix
+    A_CNFRp <- sweep((A_CNFR),2,colSums(A_CNFR),"/") #Absolute matrix to relative matrix
+    A_CCNp  <- sweep((A_CCN),2,colSums(A_CCN),"/") #Absolute matrix to relative matrix
     
-    PVC =  (A_PVRCp) * as.vector(RCC)
-    CMC =  (A_CMPVp) * as.vector(colSums(PVC))
-    FRC =  (A_FRCMp) * as.vector(colSums(CMC))
-    CNC =  (A_CNFRp) * as.vector(colSums(FRC))
-    CC  =  (A_CCNp)  * as.vector(colSums(CNC))
- sum(CC)  
-    
+    PVC =  (A_PVRCp) %*% as.vector(RCC)
+    CMC =  (A_CMPVp) %*% as.vector(PVC)
+    FRC =  (A_FRCMp) %*% as.vector((CMC))
+    CNC =  (A_CNFRp) %*% as.vector((FRC))
+    CC  =  (A_CCNp)  %*% as.vector((CNC))
+    C=sum(CC)  
+    print(C)
 }
 
   

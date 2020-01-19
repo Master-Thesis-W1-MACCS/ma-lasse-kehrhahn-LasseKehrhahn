@@ -1,7 +1,12 @@
-.create_designmatrix <- function(X,Y,DENS) {
+.create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
  #generating A_X_Y  => design matrix
   
-     #//  identity matrix
+  
+  
+  
+repeat
+  {
+
   if(DENS == 2) {
     
     if (X!=Y) {A_XY = 'error'}
@@ -16,45 +21,35 @@
     DENS_MAX = 0.7
     DENS = runif(1, DENS_MIN, DENS_MAX);
     rand_DENS = runif(X*Y) #draw random numbers
-    A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),Y,X) ## 1/0 DENSITY 
+    A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),nrow=X,ncol=Y) ## 1/0 DENSITY 
   
   }
   
   else {
     rand_DENS = runif(X*Y) #draw random numbers
-    A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),Y,X) ## 1/0 DENSITY 
+    A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),nrow=X,ncol=Y) ## 1/0 DENSITY 
   }
 
   
-A_YX = .checkzero(A_YX,DENS)
+    
+ 
+  ROW_ZEROS<-any(rowSums(A_YX[,])==0)   #every product need at least one resource
+  COL_ZEROS<-any(colSums(A_YX[,])==0)   #every resource needs to be used at least once
+  
+  if(ROW_ZEROS==FALSE & COL_ZEROS==FALSE) {  break  }   
+}
+  
+  
+  
+rownames(A_YX) = c(paste0(rowname, 1:nrow(A_YX)))
+colnames(A_YX) = c(paste0(colname, 1:ncol(A_YX)))
+
 
 return(A_YX)
  
 }
 
 
-.checkzero <-function(Matrix,DENS) {
-  
- # Matrix = matrix(c(0,0,0,0,0,0,0,0,0),3,3)
- #  DENS = 2
-  ## ===================== EXCPETION HANDLER ====================
-  
-  # EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
-  # in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; Substantiation of this hidden formalization remains unclear. 
-  
-  repeat
-  {
-    ROW_ZEROS<-any(rowSums(Matrix[,])==0)   #every product need at least one resource
-    COL_ZEROS<-any(colSums(Matrix[,])==0)   #every resource needs to be used at least once
-    
-    if(ROW_ZEROS==FALSE & COL_ZEROS==FALSE) {  break  }
-    
-    Matrix =.create_designmatrix(nrow(Matrix),ncol(Matrix),DENS)
- 
-    
-  }
-  return(Matrix)
-}
 
 
 

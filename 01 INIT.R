@@ -66,7 +66,8 @@ for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
                     # EAD = gen_EAD
                     
                     # XYXYXY
-                      
+                      gen_EAD(EAD,NUMB_CN,NUMB_C,TQ)
+                      .plotigraph(A_CNFR,A_FRCM,A_CMPV,A_PVRC)
                     # EAD = 
                       
                     # DATA = .system_datalogging(o,nn,FIRM,DATA)
