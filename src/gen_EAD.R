@@ -17,10 +17,10 @@ CUSTOMERS <- c(10,20,30,40,50)
     # C2    1     0   1       [does not have this necessity]
     # Cn    n     n   nm
     DENS_C = 2
-    DENS_CNFR = 0.1
-    DENS_FRCM = 0.1
-    DENS_CMPV = 0.1
-    DENS_PVRC = 0.1
+    DENS_CNFR = 2
+    DENS_FRCM = -1
+    DENS_CMPV = -1
+    DENS_PVRC = -1
     
     NUMB_C = 5
     NUMB_CN = 5
