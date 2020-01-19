@@ -13,7 +13,7 @@ colnames(A_FRCM) = c(paste0("CM", 1:ncol(A_FRCM)))
 
 
 g2 <- graph_from_incidence_matrix(A_FRCM, weighted = TRUE)
-plot(g2)
+#plot(g2)
 
 rownames(A_CMPV) = c(paste0("CM", 1:nrow(A_CMPV)))
 colnames(A_CMPV) = c(paste0("PV", 1:ncol(A_CMPV)))

@@ -63,8 +63,11 @@ for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
                       
                     # Customer_generation [ NUMB_C ]
   
-                    CUSTOMER = gen_CUSTOMER
+                    # EAD = gen_EAD
                     
+                    # XYXYXY
+                      
+                    # EAD = 
                       
                     # DATA = .system_datalogging(o,nn,FIRM,DATA)
                     
