@@ -12,9 +12,9 @@ CUSTOMERS <- c(10, 30, 50)
 
     DENS_C = 2
     DENS_CNFR = 2
-    DENS_FRCM = 0.1
-    DENS_CMPV = 0.1
-    DENS_PVRC = 0.1
+    DENS_FRCM = -1
+    DENS_CMPV = -1
+    DENS_PVRC = -1
     
     NUMB_C = 3
     NUMB_CN = 3
