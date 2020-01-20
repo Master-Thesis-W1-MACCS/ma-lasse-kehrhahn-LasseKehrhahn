@@ -41,6 +41,7 @@ A_FRM = matrix(c(1,1,0,0,0,0,1,0,0,0,0,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRU
     # 4. AGGREGATE THE PVS OVER THE MODULE
       for (row in cms_used_for_module_idx) { # aggregation function for building a new production lines for the module. 
         pvs_module = pvs_used_for_module[row,] + pvs_module
+        A_MPV[row,] = pvs_module
          #5. CLEAN UP THE MATRIX
         }
   
@@ -49,7 +50,7 @@ A_FRM = matrix(c(1,1,0,0,0,0,1,0,0,0,0,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRU
   A_MPV[row,] = pvs_module
   
   
-  A_MPV = A_MPV[-2,]  
+  A_MPV = A_MPV[-row,]  
   }
  
   
