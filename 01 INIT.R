@@ -19,6 +19,8 @@ NUMB_C =           3
 NUMB_CN =          3
 NUMB_FR_MAX =      3
 
+
+
 ## ============ INPUT PARAMETER MASK ===========
 DENS_CNFR = c(-1)
 DENS_FRCM = c(-1)
@@ -67,6 +69,8 @@ for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
                     
                     # XYXYXY
                       gen_EAD(EAD,NUMB_CN,NUMB_C,TQ)
+                      
+                      
                       .plotigraph(A_CNFR,A_FRCM,A_CMPV,A_PVRC)
                     # EAD = 
                       

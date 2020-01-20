@@ -12,15 +12,15 @@ CUSTOMERS <- c(10, 30, 50)
 
     DENS_C = 2
     DENS_CNFR = 2
-    DENS_FRCM = 0.1
-    DENS_CMPV = 0.1
-    DENS_PVRC = 0.1
+    DENS_FRCM = 1
+    DENS_CMPV = 2
+    DENS_PVRC = 1
     
-    NUMB_C = 3
-    NUMB_CN = 3
+    NUMB_C = 3 #Customers
+    NUMB_CN = 3 #Customer' needs 
     NUMB_FR = 3
-    NUMB_CM = 10
-    NUMB_PV = 5
+    NUMB_CM = 3
+    NUMB_PV = 3
     NUMB_RC = 6
     RC_VAR = -1
     
