@@ -2,21 +2,23 @@
  #generating A_X_Y  => design matrix
   
   
-  
+  X = 3
+  Y =3
+  DENS = -1
   
 repeat
   {
 
-  if(DENS == 2) {
+  if(DENS == 2) {                 #Density is defined in gen_EAD for each matrix separatly (e.g. DENS_CNFR), if density = 2 we want a diagonal matrix
     
-    if (X!=Y) {A_XY = 'error'}
+    if (X!=Y) {A_XY = 'error'}    #Size must be identical nrow = ncol
     else {
         A_YX = diag(X)# full decoupled
       }
     
   }
   
-  else if(DENS == -1) {
+  else if(DENS == -1) {           #if density = -1 we want a matrix with a random density between the desired boundaries (eg. [0.4,0.7])
     DENS_MIN = 0.4
     DENS_MAX = 0.7
     DENS = runif(1, DENS_MIN, DENS_MAX);
@@ -25,7 +27,7 @@ repeat
   
   }
   
-  else {
+  else {                          #if density is set to a fixed value 
     rand_DENS = runif(X*Y) #draw random numbers
     A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),nrow=X,ncol=Y) ## 1/0 DENSITY 
   }

@@ -1,16 +1,16 @@
 #
 .modularize <- function(EAD,NUMB_CN,NUMB_C,TQ) {
  
-Modularize_FR_level = 2  
+Modularize_FR_level = 2  #?
   
   
-A_FRM = A_FRCM
-A_MPV = A_CMPV
-A_FRM  =  matrix( rep( 0, len=NUMB_FR*(NUMB_CM+1)), ncol = NUMB_CM+1)
+A_FRM = A_FRCM          #functional requirements - components matrix ---> Functional requirements - modules 
+A_MPV = A_CMPV          #componentes - processes matrix ----> modules - processes 
+A_FRM  =  matrix( rep(0, len=NUMB_FR*(NUMB_CM+1)), ncol = NUMB_CM+1) #?
 
 #große neue MAtrix aufbauen 
 
-A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  
+A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  #nur zwischenschritt?
 
 
 ## START MODULARIZATION
@@ -43,7 +43,7 @@ A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)
   }
 
   #NEXT A_PVRC!!!!
-  
+  #Arent resources just summed up as well?
   
 
   

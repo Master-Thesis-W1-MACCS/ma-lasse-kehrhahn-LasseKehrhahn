@@ -16,24 +16,24 @@ CUSTOMERS <- c(10, 30, 50)
     DENS_CMPV = 2
     DENS_PVRC = 1
     
-    NUMB_C = 3 #Customers
-    NUMB_CN = 3 #Customer' needs 
-    NUMB_FR = 3
-    NUMB_CM = 3
-    NUMB_PV = 3
-    NUMB_RC = 6
-    RC_VAR = -1
+    NUMB_C = 3 #Customers (length(CUSTOMERS))
+    NUMB_CN = 3 #Customer' needs
+    NUMB_FR = 3 #Functional Requirements
+    NUMB_CM = 3 #Components
+    NUMB_PV = 3 #Processes
+    NUMB_RC = 6 #Resources
+    RC_VAR = -1 #Cost Variation among resource costs
     
     
-    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C,"C","CN")
-    A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR")
-    A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM")
-    A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV")
-    A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC")
+    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C,"C","CN") #Customer - Customer Needs Matrix
+    A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR") #Customer Needs - Functional Requirements Matrix
+    A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
+    A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
+    A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
     
     
     
-    CN = CUSTOMERS %*% (A_CCN)  # computing CN * q from the customers
+    CN = CUSTOMERS %*% (A_CCN)  #computing CN * q from the customers
     FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
     CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
     PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
