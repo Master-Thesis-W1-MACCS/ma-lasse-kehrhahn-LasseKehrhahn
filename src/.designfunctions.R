@@ -2,10 +2,7 @@
  #generating A_X_Y  => design matrix
   
   
-  X = 3
-  Y =3
-  DENS = -1
-  
+ 
 repeat
   {
 

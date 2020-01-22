@@ -12,7 +12,7 @@ CUSTOMERS <- c(10, 30, 50)
 
     DENS_C = 2
     DENS_CNFR = 2
-    DENS_FRCM = 1
+    DENS_FRCM = 2
     DENS_CMPV = 2
     DENS_PVRC = 1
     
@@ -22,6 +22,7 @@ CUSTOMERS <- c(10, 30, 50)
     NUMB_CM = 3 #Components
     NUMB_PV = 3 #Processes
     NUMB_RC = 6 #Resources
+    
     RC_VAR = -1 #Cost Variation among resource costs
     
     
