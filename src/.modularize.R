@@ -10,8 +10,10 @@
 
   #Referenzmatrix; 
   #FR1 = Eine CM ; FR2 = 2 CM ; FR = 3 CM //dadurch teurer -> Low, Mid, High
-  A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=EAD$NUMB_FR,ncol =EAD$NUMB_CM,byrow = TRUE)  
-
+  #A_FRCM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=EAD$NUMB_FR,ncol =EAD$NUMB_CM,byrow = TRUE)
+  A_FRCM1 = matrix(c(1,0,0,1,1,0,1,1,1),nrow=EAD$NUMB_FR,ncol =EAD$NUMB_CM,byrow = TRUE)  
+  colnames(A_FRCM1) = c('CM1','CM2','CM3')
+  rownames(A_FRCM1) = c('FR1','FR2','FR3')
   #A_FRM = A_FRCM          #functional requirements - components matrix ---> Functional requirements - modules 
   A_MPV = EAD$A_CMPV          #componentes - processes matrix ----> modules - processes 
 
@@ -31,7 +33,7 @@
   #--------------#---------------
   # 3. MODULARIZE THE A_FRM MATRIX BY MERGING THE CMs TO THE M
   # 3.1 DEFINE WHICH COMPONENTS GO INTO A MODULE AND WHICH NOT
-  cms_not_used_for_modul_idx = setdiff(as.vector(unique(col(A_FRM))),cms_used_for_module_idx)
+  cms_not_used_for_modul_idx = setdiff(as.vector(unique(col(EAD$A_FRCM))),cms_used_for_module_idx)
   
   A_FRM_1 = A_FRM[,cms_not_used_for_modul_idx]  #components that are not modularized
   
@@ -113,6 +115,7 @@
   
   EAD$A_FRM = A_FRM
   EAD$A_MPV = A_MPV
+  EAD$A_FRCM = A_FRCM1
   return(EAD)
   
 }
