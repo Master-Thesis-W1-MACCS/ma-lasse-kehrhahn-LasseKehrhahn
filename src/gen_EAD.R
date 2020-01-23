@@ -9,7 +9,7 @@ DENS_CMPV = EAD$DENS_CMPV
 DENS_PVRC = EAD$DENS_PVRC
 
 
-browser()
+
 NUMB_C = EAD$NUMB_C #Customers
 NUMB_CN = EAD$NUMB_CN #Customer' needs 
 NUMB_FR = EAD$NUMB_FR #Functional Requirements

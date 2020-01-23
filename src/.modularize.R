@@ -2,14 +2,15 @@
 .modularize <- function(EAD,NUMB_CN,NUMB_C,TQ) {
  
 Modularize_FR_level = 2  #modularization based on medium market segment
-  
+
+NUMB_M = 1
 
 
 #Referenzmatrix; 
 #FR1 = Eine CM ; FR2 = 2 CM ; FR = 3 CM //dadurch teurer -> Low, Mid, High
 A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  
 
-A_FRM = A_FRCM          #functional requirements - components matrix ---> Functional requirements - modules 
+#A_FRM = A_FRCM          #functional requirements - components matrix ---> Functional requirements - modules 
 A_MPV = A_CMPV          #componentes - processes matrix ----> modules - processes 
 
 #A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  
@@ -24,39 +25,95 @@ A_MPV = A_CMPV          #componentes - processes matrix ----> modules - processe
   # 2. COMPOSITE COMPONENTS INTO ONE MODULE
   cms_used_for_module_idx = which((cms_used_for_module>0))   #
   #numbcms= sum(cms_used_for_module>0)
-
-  for (pv in seq(NUMB_PV)){
-    # 3. GET THE PVS OF THE NEW MODULE
-        pvs_used_for_module = A_CMPV[cms_used_for_module_idx,] #Processes that can be joined together because of the modularization
-      }    
-    # 4. AGGREGATE THE PVS OVER THE MODULE
-      for (row in 1:nrow(pvs_used_for_module)) { # aggregation function for building a new production lines for the module. 
-        pvs_module = pvs_used_for_module[row,] + pvs_module
-        A_MPV[row,] = pvs_module
-         #5. CLEAN UP THE MATRIX
-        }
   
-  for (row in nrow(A_MPV))  {
+  # 3. MODULARIZE THE A_FRM MATRIX BY MERGING THE CMs TO THE M
+  # 3.1 DEFINE WHICH COMPONENTS GO INTO A MODULE AND WHICH NOT
+  cms_not_used_for_modul_idx = setdiff(as.vector(unique(col(A_FRM))),cms_used_for_module_idx)
   
-    A_MPV[row,] = pvs_module
-    A_MPV = A_MPV[-row,]  
+  A_FRM_1 = A_FRM[,cms_not_used_for_modul_idx]  #components that are not modularized
+  
+  # 3.2. NEW EMPTY MATRIX THAT ONLY CONTAINS THE MODULE M
+  
+  A_FRM_2 = matrix(c(0,0,0),nrow=NUMB_FR,ncol = NUMB_M ,byrow = TRUE)  
+  
+  # 3.3 MERGE THE TWO COMPONENTS INTO ONE MODULE
+  
+  for (row in 1:nrow(A_FRM)){
+    
+    A_FRM_2[row,] = max(A_FRM[row,cms_used_for_module_idx])       #add two ones to 2?
+    
   }
-
-
-
-#Delete modularized columns of A_FRM --> same amount of FRs but less CM/M
-
-A_FRM
-
-#DELETION OF PROCESSES THAT ARE NOT USED ANYMORE 3x3->2x3
   
-A_MPV = A_MPV[,-which(colSums(A_MPV)==0)]
+  # 3.4 BINDING THE TWO MATRICES TO GET A_FRM
   
-
-
-    #NEXT A_PVRC!!!!
+  A_FRM = matrix(cbind(A_FRM_1, A_FRM_2),nrow = NUMB_FR, ncol = ncol(A_FRCM)-length(cms_used_for_module_idx)+NUMB_M) #+1 because we have one module
+  
+  #-------------------------A_MPV----------------------------
+  # SAME PROCESS AS FOR A_FRM
+  
+  pvs_used_for_module_idx = ceiling(which(A_CMPV[cms_used_for_module_idx,]>0)/2)
+  
+  pvs_not_used_for_module_idx = setdiff(as.vector(unique(col(A_CMPV))),pvs_used_for_module_idx)
+  
+  A_MPV_1 = A_CMPV[pvs_not_used_for_module_idx,]
+  
+  A_MPV_2 = matrix(c(0,0,0),nrow=NUMB_M,ncol = NUMB_PV ,byrow = TRUE)  
+  
+  for (col in 1:ncol(A_CMPV)){
+    
+    A_MPV_2[,col] = max(A_CMPV[pvs_used_for_module_idx,col])
+    
+  }
+  
+  A_MPV = matrix(rbind(A_MPV_1,A_MPV_2), nrow = ncol(A_CMPV)-length(cms_used_for_module_idx)+NUMB_M,ncol = NUMB_PV)
+  
+  #----------------------A_PVRC--------------------------------
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+# 
+#   for (pv in seq(NUMB_PV)){
+#     # 3. GET THE PVS OF THE NEW MODULE
+#         pvs_used_for_module = A_CMPV[cms_used_for_module_idx,] #Processes that can be joined together because of the modularization
+#       }    
+#     # 4. AGGREGATE THE PVS OVER THE MODULE
+#       for (row in 1:nrow(pvs_used_for_module)) { # aggregation function for building a new production lines for the module. 
+#         pvs_module = pvs_used_for_module[row,] + pvs_module
+#         A_MPV[row,] = pvs_module
+#          #5. CLEAN UP THE MATRIX
+#         }
+#   
+#   for (row in nrow(A_MPV))  {
+#   
+#     A_MPV[row,] = pvs_module
+#     A_MPV = A_MPV[-row,]  
+#   }
+# 
+# 
+# 
+# 
+# #DELETION OF PROCESSES THAT ARE NOT USED ANYMORE 3x3->2x3
+#   
+# A_MPV = A_MPV[,-which(colSums(A_MPV)==0)]
+#   
+# 
+# 
+#     #NEXT A_PVRC!!!!
+  
+EAD$A_FRM = A_FRM
+EAD$A_MPV = A_MPV
 
   
 }

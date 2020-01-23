@@ -10,7 +10,6 @@ DATAp = data.frame()
 
 NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
 NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-NUMB_CM =          10
 SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
 TC =               10000                #Total costs
@@ -30,7 +29,7 @@ DENS_CMPV = c(2)
 DENS_PVRC = c(2)  
 Q_VAR = c(-1)  
 RCC_VAR =    c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
-NUMB_CM = c(6)
+NUMB_CM = c(3)
 
 
 
@@ -73,6 +72,8 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     
                     # XYXYXY
                       gen_EAD(EAD,NUMB_CN,NUMB_C,TQ)
+                      
+                      .modularize(EAD,NUMB_CN,NUMB_C,TQ)
                       
                       
                       .plotigraph(A_CNFR,A_FRCM,A_CMPV,A_PVRC)
