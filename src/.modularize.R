@@ -8,10 +8,10 @@ NUMB_M = 1
 
 #Referenzmatrix; 
 #FR1 = Eine CM ; FR2 = 2 CM ; FR = 3 CM //dadurch teurer -> Low, Mid, High
-A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  
+A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=EAD$NUMB_FR,ncol =EAD$NUMB_CM,byrow = TRUE)  
 
 #A_FRM = A_FRCM          #functional requirements - components matrix ---> Functional requirements - modules 
-A_MPV = A_CMPV          #componentes - processes matrix ----> modules - processes 
+A_MPV = EAD$A_CMPV          #componentes - processes matrix ----> modules - processes 
 
 #A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  
 
@@ -19,7 +19,7 @@ A_MPV = A_CMPV          #componentes - processes matrix ----> modules - processe
 ## START MODULARIZATION
 
   #for (fr in seq(NUMB_FR)) {
-  pvs_module <- rep(0, NUMB_PV)
+  pvs_module <- rep(0, EAD$NUMB_PV)
   # 1. GET THE FRAME FOR THE MODULE - FR2 
   cms_used_for_module = A_FRM[Modularize_FR_level,] #gives the 1 and 0 of row 2
   # 2. COMPOSITE COMPONENTS INTO ONE MODULE
@@ -39,8 +39,9 @@ A_MPV = A_CMPV          #componentes - processes matrix ----> modules - processe
   # 3.3 MERGE THE TWO COMPONENTS INTO ONE MODULE
   
   for (row in 1:nrow(A_FRM)){
-    
-    A_FRM_2[row,] = max(A_FRM[row,cms_used_for_module_idx])       #add two ones to 2?
+    #When using the maximum value = Max(....)
+    #When using the sum = Sum(...)
+    A_FRM_2[row,] = max(A_FRM[row,cms_used_for_module_idx])       
     
   }
   
@@ -57,32 +58,19 @@ A_MPV = A_CMPV          #componentes - processes matrix ----> modules - processe
   
   A_MPV_1 = A_CMPV[pvs_not_used_for_module_idx,]
   
-  A_MPV_2 = matrix(c(0,0,0),nrow=NUMB_M,ncol = NUMB_PV ,byrow = TRUE)  
+  A_MPV_2 = matrix(c(0,0,0),nrow=NUMB_M,ncol = EAD$NUMB_PV ,byrow = TRUE)  
   
   for (col in 1:ncol(A_CMPV)){
-    
+    #When using the maximum value = Max(....)
+    #When using the sum = Sum(...)
     A_MPV_2[,col] = max(A_CMPV[pvs_used_for_module_idx,col])
     
   }
   
-  A_MPV = matrix(rbind(A_MPV_1,A_MPV_2), nrow = ncol(A_CMPV)-length(cms_used_for_module_idx)+NUMB_M,ncol = NUMB_PV)
+  A_MPV = matrix(rbind(A_MPV_1,A_MPV_2), nrow = ncol(A_CMPV)-length(cms_used_for_module_idx)+NUMB_M,ncol = EAD$NUMB_PV)
   
   #----------------------A_PVRC--------------------------------
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
 # 
 #   for (pv in seq(NUMB_PV)){
 #     # 3. GET THE PVS OF THE NEW MODULE

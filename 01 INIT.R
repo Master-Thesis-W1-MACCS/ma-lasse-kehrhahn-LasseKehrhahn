@@ -75,8 +75,10 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                       
                       .modularize(EAD,NUMB_CN,NUMB_C,TQ)
                       
+                      browser()
+                      .plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                       
-                      .plotigraph(A_CNFR,A_FRCM,A_CMPV,A_PVRC)
+                      .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     # EAD = 
                       
                     # DATA = .system_datalogging(o,nn,FIRM,DATA)
