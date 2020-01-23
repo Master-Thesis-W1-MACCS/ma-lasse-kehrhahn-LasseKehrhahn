@@ -6,16 +6,16 @@ Modularize_FR_level = 2
   
 A_FRM = A_FRCM
 A_MPV = A_CMPV
-A_FRM  =  matrix( rep( 0, len=NUMB_FR*(NUMB_CM+1)), ncol = NUMB_CM+1)
 
-#große neue MAtrix aufbauen 
 
+#Referenzmatrix; 
+#FR1 = Eine CM ; FR2 = 2 CM ; FR = 3 CM //dadurch teurer -> Low, Mid, High
 A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  
 
 
 ## START MODULARIZATION
 
-#for (fr in seq(NUMB_FR)) {
+  #for (fr in seq(NUMB_FR)) {
   pvs_module <- rep(0, NUMB_PV)
   # 1. GET THE FRAME FOR THE MODULE - FR2 
   cms_used_for_module = A_FRM[Modularize_FR_level,]

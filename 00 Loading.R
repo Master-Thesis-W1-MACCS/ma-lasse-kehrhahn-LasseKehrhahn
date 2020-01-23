@@ -27,3 +27,5 @@ source("src/gen_EAD.R")
 source("src/.designfunctions.R")
 source("src/.gen_RCC.R")
 source("src/.networkvisualization.R")
+
+source("01 INIT.R")

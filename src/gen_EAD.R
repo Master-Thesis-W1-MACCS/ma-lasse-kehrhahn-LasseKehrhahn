@@ -1,6 +1,29 @@
 #
 gen_EAD <- function(EAD,NUMB_CN,NUMB_C,TQ) {
   
+#
+DENS_CCN =  EAD$DENS_CCN
+DENS_CNFR = EAD$DENS_CNFR
+DENS_FRCM = EAD$DENS_FRCM
+DENS_CMPV = EAD$DENS_CMPV
+DENS_PVRC = EAD$DENS_PVRC
+
+
+browser()
+NUMB_C = EAD$NUMB_C #Customers
+NUMB_CN = EAD$NUMB_CN #Customer' needs 
+NUMB_FR = EAD$NUMB_FR
+NUMB_CM = EAD$NUMB_CM
+NUMB_PV = EAD$NUMB_PV
+NUMB_RC = EAD$NUMB_RC
+RC_VAR = -1
+DENS_C = 2
+DENS_CNFR = 2
+DENS_FRCM = 1
+DENS_CMPV = 2
+DENS_PVRC = 1
+  
+  
 # Customer generation function
 #  % 23.4. - Generates the customers in the market 
 #  % 24.7. - Make customers' attributes more precise, in particular CN and FRN
@@ -10,22 +33,7 @@ CUSTOMERS <- vector()
 CUSTOMERS <- c(10, 30, 50)
 
 
-    DENS_C = 2
-    DENS_CNFR = 2
-    DENS_FRCM = 1
-    DENS_CMPV = 2
-    DENS_PVRC = 1
-    
-    NUMB_C = 3 #Customers
-    NUMB_CN = 3 #Customer' needs 
-    NUMB_FR = 3
-    NUMB_CM = 3
-    NUMB_PV = 3
-    NUMB_RC = 6
-    RC_VAR = -1
-    
-    
-    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C,"C","CN")
+    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_CCN,"C","CN")
     A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR")
     A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM")
     A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV")
