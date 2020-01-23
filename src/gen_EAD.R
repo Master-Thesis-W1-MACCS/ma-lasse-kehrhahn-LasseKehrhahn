@@ -69,6 +69,15 @@ CUSTOMERS <- c(10, 30, 50)
     CC  =  (A_CCNp)  %*% as.vector((CNC))
     C=sum(CC)  
     print(C)
+    
+    
+    EAD$A_CCN = A_CCN
+    EAD$A_CNFR = A_CNFR
+    EAD$A_FRCM = A_FRCM
+    EAD$A_CMPV = A_CMPV
+    EAD$A_PVRC = A_PVRC
+    
+return(EAD)
 }
 
   
