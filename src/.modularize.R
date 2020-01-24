@@ -16,7 +16,10 @@
   rownames(A_FRCM1) = c('FR1','FR2','FR3')
   #A_FRM = A_FRCM          #functional requirements - components matrix ---> Functional requirements - modules 
   A_MPV = EAD$A_CMPV          #componentes - processes matrix ----> modules - processes 
-
+  A_FRM = A_FRCM1
+  #A_FRM = EAD$A_FRCM       #if we want to use standard matrix from gen_EAD
+    
+  
   #A_FRM = matrix(c(1,0,0,0,1,1,1,1,1),nrow=NUMB_FR,ncol =NUMB_CM,byrow = TRUE)  
 
 
