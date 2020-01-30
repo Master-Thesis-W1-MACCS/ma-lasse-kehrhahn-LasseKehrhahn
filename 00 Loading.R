@@ -12,8 +12,8 @@
 # 
 # ))
 # 
-# Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph")
-# lapply(Packages, library, character.only = TRUE)
+ Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph")
+ lapply(Packages, library, character.only = TRUE)
 
 
 ##############################

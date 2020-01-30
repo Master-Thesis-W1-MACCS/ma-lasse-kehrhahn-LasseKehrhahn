@@ -10,7 +10,7 @@ DATAp = data.frame()
 
 NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
 NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-SIM_NUMB =         200                    #Control Variable - Number of Simulations for every single environment (standard: 30)     
+SIM_NUMB =         1                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
 TC =               10000                #Total costs
 TQ =               100
@@ -78,7 +78,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                       EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
                       
                       #without modules
-                      .plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                     .plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                       
                       
                       #with modules
@@ -109,9 +109,9 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
 # plot(check$MAPE,type ='l')
 # print(check$MAPE)
 
-if (ProductCostOutput==1)
-{
-  output = paste("output/EAD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
-  write.csv(DATAp, file = output)
-  print("Product costs FILE has been written")
-}
+#if (ProductCostOutput==1)
+#{
+#  output = paste("output/EAD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
+#  write.csv(DATAp, file = output)
+#print("Product costs FILE has been written")
+#}
