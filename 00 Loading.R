@@ -1,19 +1,20 @@
 #####
 ## Extended Axiomatic Design   // 2020-01-02   V 0.01
-##
-## 0 - Install librairies - Library
-
-# install.packages(c(
+### install.packages(c(
 #   "dplyr",
 #   "tidyr",
 #   "rmarkdown",
 #   "ggplot2",
-#   "igraph"
+#   "igraph",
+#   "collapsibleTree",
+#   "data.tree"
 # 
 # ))
 # 
- Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph")
- lapply(Packages, library, character.only = TRUE)
+# Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph","collapsibleTree","data.tree")
+# lapply(Packages, library, character.only = TRUE)
+
+## 0 - Install librairies - Library
 
 
 ##############################
