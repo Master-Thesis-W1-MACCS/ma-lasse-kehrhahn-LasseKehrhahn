@@ -78,11 +78,14 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                       EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
                       
                       #without modules
-                      .plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                      #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                       
+                      
+                      .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                       
                       #with modules
-                      .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                      #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                      .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     # EAD = 
                       
                     # DATA = .system_datalogging(o,nn,FIRM,DATA)
