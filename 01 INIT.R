@@ -10,7 +10,7 @@ DATAp = data.frame()
 
 NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
 NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-SIM_NUMB =         100                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
+SIM_NUMB =         1                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
 TC =               10000                #Total costs
 TQ =               100
@@ -86,7 +86,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                      
                       EAD = calc_EAD(EAD)
                       
-                      browser()
+                     # browser()
                       
                       Diff_unit =  EAD$CCM - EAD$CCB
                       Diff_total = EAD$CCM_T- EAD$CC 

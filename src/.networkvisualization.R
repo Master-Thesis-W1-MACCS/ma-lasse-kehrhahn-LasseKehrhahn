@@ -1,10 +1,8 @@
 #install.packages('igraph')
-<<<<<<< HEAD
+
 library(igraph)
 library(visNetwork)
-=======
 
->>>>>>> 89daae9b50f5b1f645b06843532d0957e0e667b9
 
 .plotigraph <- function(A_CNFR,A_FRCM,A_CMPV,A_PVRC) {
 
