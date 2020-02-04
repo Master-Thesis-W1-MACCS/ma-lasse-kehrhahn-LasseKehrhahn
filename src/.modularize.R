@@ -1,8 +1,7 @@
 #
 .modularize <- function(EAD,NUMB_CN,NUMB_C,TQ) {
  
-  EAD
-  
+ 
   Modularize_FR_level = 2  #modularization based on medium market segment
 
   NUMB_M = 1
@@ -63,7 +62,7 @@
   #-------------------------A_MPV----------------------------
   # SAME PROCESS AS FOR A_FRM
   
-  pvs_used_for_module_idx = ceiling(which(EAD$A_CMPV[cms_used_for_module_idx,]>0)/2)  #needs to be changed 2-> nrows
+  pvs_used_for_module_idx = ceiling(which(EAD$A_CMPV[cms_used_for_module_idx,]>0)/nrow(EAD$A_CMPV))  #needs to be changed 2-> nrows
   
   pvs_not_used_for_module_idx = setdiff(as.vector(unique(col(EAD$A_CMPV))),pvs_used_for_module_idx)
   

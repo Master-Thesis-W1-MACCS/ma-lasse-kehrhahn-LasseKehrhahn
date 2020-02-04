@@ -79,6 +79,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                       
                       #without modules
                       #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+
                       
                       #with modules
                       # .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
@@ -90,8 +91,12 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                       Diff_unit =  EAD$CCM - EAD$CCB
                       Diff_total = EAD$CCM_T- EAD$CC 
                       print(round(sum(Diff_total)))
+                   
+                      .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                       
-                      
+                      #with modules
+                      #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                      .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     
                       # DATA = .system_datalogging(o,nn,FIRM,DATA)
                     
