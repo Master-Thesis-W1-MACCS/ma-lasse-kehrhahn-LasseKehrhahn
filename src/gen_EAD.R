@@ -27,20 +27,23 @@ DENS_PVRC = 1
 # Customer generation function
 #  % 23.4. - Generates the customers in the market 
 #  % 24.7. - Make customers' attributes more precise, in particular CN and FRN
-#   01.10 - Code simplification 
+#  % 01.10 - Code simplification 
+#  % 04.2  - Cost calculation implemented
 
 CUSTOMERS <- vector()
 CUSTOMERS <- c(10, 30, 50)
-
+EAD$CUSTOMERS <- CUSTOMERS
 
 
     A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C,"C","CN") #Customer - Customer Needs Matrix
     A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR") #Customer Needs - Functional Requirements Matrix
     A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
+    A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
+    
     A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
     A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
     
-    
+   
     
     CN = CUSTOMERS %*% (A_CCN)  #computing CN * q from the customers
     FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
@@ -51,11 +54,9 @@ CUSTOMERS <- c(10, 30, 50)
     RCC = matrix(.gen_RCC(RC_VAR,1*10^6,RC))
     #RCU = (RCC/RC)
     
-
-    
-    
     ##############################################
-    
+    ## Computing benchmark costs 
+   
     A_PVRCp <- sweep((A_PVRC),2,colSums(A_PVRC),"/") #Absolute matrix to relative matrix
     A_CMPVp <- sweep((A_CMPV),2,colSums(A_CMPV),"/") #Absolute matrix to relative matrix  
     A_FRCMp <- sweep((A_FRCM),2,colSums(A_FRCM),"/") #Absolute matrix to relative matrix
@@ -67,10 +68,18 @@ CUSTOMERS <- c(10, 30, 50)
     FRC =  (A_FRCMp) %*% as.vector((CMC))
     CNC =  (A_CNFRp) %*% as.vector((FRC))
     CC  =  (A_CCNp)  %*% as.vector((CNC))
-    C=sum(CC)  
-    print(C)
+  
+   # browser()
+    # Check routine 
+    A_CRC = ((as.vector(CUSTOMERS)) * A_CCN) %*% A_CNFR %*% A_FRCM %*% A_CMPV %*% A_PVRC
+    EAD$RCDB = RCC / as.vector(RC) # computing the resource cost driver Benchmark
+    EAD$CC = A_CRC  %*% EAD$RCDB #computing the total costs of each product
     
+    EAD$CCB = EAD$CC / CUSTOMERS # computing the unit costs of each product (customer costs)
+
+   
     
+    EAD$RCC = RCC
     EAD$A_CCN = A_CCN
     EAD$A_CNFR = A_CNFR
     EAD$A_FRCM = A_FRCM
