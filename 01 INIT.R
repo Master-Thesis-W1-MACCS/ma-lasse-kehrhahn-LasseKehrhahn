@@ -10,15 +10,15 @@ DATAp = data.frame()
 
 NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
 NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-SIM_NUMB =         2                   #Control Variable - Number of Simulations for every single environment (standard: 30)     
+SIM_NUMB =         10                  #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
 TC =               10000                #Total costs
 TQ =               100
-EAD$NUMB_C =           3
-EAD$NUMB_CN =          3
-EAD$NUMB_FR =          3
-EAD$NUMB_PV =          3
-EAD$NUMB_RC =          3
+EAD$NUMB_C =       3
+EAD$NUMB_CN =      3
+EAD$NUMB_FR =      3
+EAD$NUMB_PV =      3
+EAD$NUMB_RC =      3
 
 
 ## ============ INPUT PARAMETER MASK ===========
@@ -65,29 +65,29 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     for (nn in 1:SIM_NUMB) {
                     
                     # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
-                    EAD = gen_EAD(EAD,NUMB_CN,NUMB_C,TQ)
+                    EAD = gen_EAD(EAD,TQ)
                       
                       
                       
                     EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
                       
                       
-                    #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
-
-                      
-                    #with modules
-                    # .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                 
                      
                       EAD = calc_EAD(EAD)
                       
-                    # browser()
+              
                       
                     EAD$Diff_unit =  EAD$CCM - EAD$CCB
                     EAD$Diff_total = sum(EAD$CCM_T- EAD$CC)
                     print(EAD$Diff_total)
+                    
+                    
+                    #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                    # .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                    
                     #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
-                    #with modules
-                    #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                                      #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     
                     DATA = .system_datalogging(o,nn,EAD,DATA)
