@@ -26,18 +26,6 @@ C_DEMAND <- c(10, 30, 50)
 EAD$C_DEMAND <- C_DEMAND
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     # CUSTOMER MARKET
     A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
     A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR") #Customer Needs - Functional Requirements Matrix
@@ -45,6 +33,7 @@ EAD$C_DEMAND <- C_DEMAND
     
     # PRODUCT ARCHITECTURE
     A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
+    # Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
     A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
     A_FRCM[diag(A_FRCM)] <- 1
     

@@ -11,11 +11,6 @@
   Modularize_FR_level = 2  #modularization based on medium market segment
   NUMB_M = 1
 
-  
-  
-  
-  
-  
 
   #Referenzmatrix; 
   #FR1 = Eine CM ; FR2 = 2 CM ; FR = 3 CM //dadurch teurer -> Low, Mid, High

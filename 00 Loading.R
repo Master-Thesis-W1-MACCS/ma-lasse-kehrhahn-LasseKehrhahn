@@ -11,8 +11,8 @@
 # 
 # ))
 # 
-# Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph","collapsibleTree","data.tree")
-# lapply(Packages, library, character.only = TRUE)
+ Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph","data.tree", "reshape")
+ lapply(Packages, library, character.only = TRUE)
 
 ## 0 - Install librairies - Library
 
