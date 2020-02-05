@@ -30,20 +30,29 @@ NUMB_RC = EAD$NUMB_RC #Resources
 
 
 
-browser()
+
 CUSTOMERS <- vector()
 CUSTOMERS <- c(10, 30, 50)
 EAD$CUSTOMERS <- CUSTOMERS
 
 
-    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_C,"C","CN") #Customer - Customer Needs Matrix
+    # CUSTOMER MARKET
+    A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
     A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR") #Customer Needs - Functional Requirements Matrix
+    
+    
+    # PRODUCT ARCHITECTURE
     A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
     A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
+    A_FRCM[diag(A_FRCM)] <- 1
+    
+    
+    
+    # PRODUCTION TECHNOLOGY
     A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
     A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
     
-   browser()
+  
     
     CN = CUSTOMERS %*% (A_CCN)  #computing CN * q from the customers
     FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
@@ -51,7 +60,7 @@ EAD$CUSTOMERS <- CUSTOMERS
     PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
     RC = as.vector(PV) %*% (A_PVRC) # computing CM * q
     
-    RCC = matrix(.gen_RCC(RC_VAR,1*10^6,RC))
+    RCC = matrix(.gen_RCC(RCC_VAR,1*10^6,RC))
     #RCU = (RCC/RC)
     
     ##############################################

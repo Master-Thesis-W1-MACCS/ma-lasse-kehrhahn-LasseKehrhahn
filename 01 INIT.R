@@ -24,11 +24,11 @@ EAD$NUMB_RC =      3
 ## ============ INPUT PARAMETER MASK ===========
 DENS_CCN = c(2)
 DENS_CNFR = c(2)
-DENS_FRCM = c(-1)
+DENS_FRCM = c(0.2)
 DENS_CMPV = c(2)
 DENS_PVRC = c(2)  
 Q_VAR = c(-1)  
-RCC_VAR =    c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
+RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 NUMB_CM = c(3)
 
 
@@ -74,14 +74,16 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                       
                  
                      
-                      EAD = calc_EAD(EAD)
+                    EAD = calc_EAD(EAD)
                       
               
                       
                     EAD$Diff_unit =  EAD$CCM - EAD$CCB
-                    EAD$Diff_total = sum(EAD$CCM_T- EAD$CC)
+                    Diff_total = (EAD$CCM_T- EAD$CC)
+                    EAD$Diff_total = sum(Diff_total)
                     print(EAD$Diff_total)
                     
+                    browser()
                     
                     #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                     # .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)

@@ -1,11 +1,21 @@
 #
 .modularize <- function(EAD,NUMB_CN,NUMB_C,TQ) {
  
+  
+  
+  ### 
+  
+  
+  
  
   Modularize_FR_level = 2  #modularization based on medium market segment
-
   NUMB_M = 1
 
+  
+  
+  
+  
+  
 
   #Referenzmatrix; 
   #FR1 = Eine CM ; FR2 = 2 CM ; FR = 3 CM //dadurch teurer -> Low, Mid, High
@@ -57,7 +67,6 @@
   colnames(A_FRM) = c('CM1','M1')
   rownames(A_FRM) = c('FR1','FR2','FR3')
   #
-  
   
   #-------------------------A_MPV----------------------------
   # SAME PROCESS AS FOR A_FRM
@@ -112,6 +121,8 @@
 # 
 # 
 #     #NEXT A_PVRC!!!
+  
+  
   
   EAD$A_FRM = A_FRM
   EAD$A_MPV = A_MPV
