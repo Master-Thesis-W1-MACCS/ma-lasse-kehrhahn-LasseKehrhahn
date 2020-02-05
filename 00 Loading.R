@@ -6,12 +6,12 @@
 #   "rmarkdown",
 #   "ggplot2",
 #   "igraph",
-#   "collapsibleTree",
+#   "visNetwork",
 #   "data.tree"
 # 
 # ))
 # 
- Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph","data.tree", "reshape")
+ Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph","data.tree", "reshape",'visNetwork')
  lapply(Packages, library, character.only = TRUE)
 
 ## 0 - Install librairies - Library

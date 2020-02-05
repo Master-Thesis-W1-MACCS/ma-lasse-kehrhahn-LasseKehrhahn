@@ -67,7 +67,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
                     EAD = gen_EAD(EAD,TQ)
                       
-                      
+                   
                       
                     EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
                       
@@ -82,14 +82,15 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     EAD$Diff_total = sum(EAD$CCM_T- EAD$CC)
                     print(EAD$Diff_total)
                     
-                    browser()
                     
-                    #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
-                    # .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                    .plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                    .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     
-                    .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                    #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                    
                                       #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
-                    .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                    
+                    #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     
                     DATA = .system_datalogging(o,nn,EAD,DATA)
                   
@@ -103,7 +104,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
             }  
           }
         }
-    
+
 #### ====================================== OUTPUT WRITING ===================================
 
 #output data

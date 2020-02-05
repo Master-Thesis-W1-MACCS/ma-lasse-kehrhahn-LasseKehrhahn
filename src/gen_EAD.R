@@ -34,8 +34,8 @@ EAD$C_DEMAND <- C_DEMAND
     # PRODUCT ARCHITECTURE
     A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
     # Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
+    A_FRCM[diag(A_FRCM)<1] <- 1
     A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
-    A_FRCM[diag(A_FRCM)] <- 1
     
     
     
@@ -85,6 +85,13 @@ EAD$C_DEMAND <- C_DEMAND
     EAD$A_FRCM = A_FRCM
     EAD$A_CMPV = A_CMPV
     EAD$A_PVRC = A_PVRC
+    
+    
+
+    
+####ERROR MESSAGES####
+    
+    if(NUMB_FR != NUMB_CM){stop("Number of Functional Requirements is unequal to Number of Componentes: Symmetrical matrix can not be generated")}
     
 return(EAD)
 }

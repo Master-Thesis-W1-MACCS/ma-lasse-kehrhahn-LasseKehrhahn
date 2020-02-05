@@ -1,8 +1,5 @@
 #install.packages('igraph')
 
-library(igraph)
-library(visNetwork)
-
 
 .plotigraph <- function(A_CNFR,A_FRCM,A_CMPV,A_PVRC) {
 
@@ -93,6 +90,7 @@ plot(g_sum)
   # collapsibleTree(EAD_Tree)
   
   
+  
   #4.VISNETWORK####
   
   nodes = data.frame(as.vector(unique(unlist(network))),
@@ -122,10 +120,10 @@ plot(g_sum)
   
   edges = cbind(edges, smooth)
   
-  network_plot = visNetwork(nodes,edges)%>%
+  visNetwork(nodes,edges)%>%
     visOptions(highlightNearest = TRUE) %>% 
     visLayout(improvedLayout = TRUE)
-  return(network_plot)
+  
 }
 
 
