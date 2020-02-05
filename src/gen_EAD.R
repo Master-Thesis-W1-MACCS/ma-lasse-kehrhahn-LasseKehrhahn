@@ -1,7 +1,14 @@
-#
+# # MAIN FUNCTION FOR GENERATING A PRODUCT PROGRAM
 gen_EAD <- function(EAD,TQ) {
+
+### Customer generation function
+#  % 23.4. - Generates the customers in the market 
+#  % 24.7. - Make customers' attributes more precise, in particular CN and FRN
+#  % 01.10 - Code simplification 
+#  % 04.2  - Cost calculation implemented
+#  % 05.02 - Simulation has been implemented 
   
-#
+### INIT 
 DENS_CCN =  EAD$DENS_CCN
 DENS_CNFR = EAD$DENS_CNFR
 DENS_FRCM = EAD$DENS_FRCM
@@ -14,26 +21,21 @@ NUMB_CM = EAD$NUMB_CM #Components
 NUMB_PV = EAD$NUMB_PV #Processes
 NUMB_RC = EAD$NUMB_RC #Resources
 
-# RC_VAR = -1 #Cost Variation among resource costs
-# DENS_C = 2
-# DENS_CNFR = 2
-# DENS_FRCM = 1
-# DENS_CMPV = 2
-# DENS_PVRC = 1
-  
-  
-# Customer generation function
-#  % 23.4. - Generates the customers in the market 
-#  % 24.7. - Make customers' attributes more precise, in particular CN and FRN
-#  % 01.10 - Code simplification 
-#  % 04.2  - Cost calculation implemented
+C_DEMAND <- vector()
+C_DEMAND <- c(10, 30, 50)
+EAD$C_DEMAND <- C_DEMAND
 
 
 
 
-CUSTOMERS <- vector()
-CUSTOMERS <- c(10, 30, 50)
-EAD$CUSTOMERS <- CUSTOMERS
+
+
+
+
+
+
+
+
 
 
     # CUSTOMER MARKET
@@ -54,7 +56,7 @@ EAD$CUSTOMERS <- CUSTOMERS
     
   
     
-    CN = CUSTOMERS %*% (A_CCN)  #computing CN * q from the customers
+    CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
     FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
     CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
     PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
@@ -80,11 +82,11 @@ EAD$CUSTOMERS <- CUSTOMERS
   
    # browser()
     # Check routine 
-    A_CRC = ((as.vector(CUSTOMERS)) * A_CCN) %*% A_CNFR %*% A_FRCM %*% A_CMPV %*% A_PVRC
+    A_CRC = ((as.vector(C_DEMAND)) * A_CCN) %*% A_CNFR %*% A_FRCM %*% A_CMPV %*% A_PVRC
     EAD$RCDB = RCC / as.vector(RC) # computing the resource cost driver Benchmark
     EAD$CC = A_CRC  %*% EAD$RCDB #computing the total costs of each product
     
-    EAD$CCB = EAD$CC / CUSTOMERS # computing the unit costs of each product (customer costs)
+    EAD$CCB = EAD$CC / C_DEMAND # computing the unit costs of each product (customer costs)
 
    
     
