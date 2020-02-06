@@ -21,6 +21,13 @@ EAD$NUMB_PV =      3
 EAD$NUMB_RC =      3
 
 
+EAD$TYPE_CCN  =    "UC"               #Define wether the matrix is uncoupled ("UC" and DENS = 2), Decoupled ("DC" and DENS = 0-1), or coupled ("C" and DENS = 0-1)
+EAD$TYPE_CNFR =    "UC"
+EAD$TYPE_FRCM =    "DC"
+EAD$TYPE_CMPV =    "UC"
+EAD$TYPE_PVRC =    "UC"
+
+
 ## ============ INPUT PARAMETER MASK ===========
 DENS_CCN = c(2)
 DENS_CNFR = c(2)
@@ -64,6 +71,9 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     #### ============================== SIMULATION ======================================
                     for (nn in 1:SIM_NUMB) {
                     
+                    
+                    error_raiser(EAD)  
+                      
                     # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
                     EAD = gen_EAD(EAD,TQ)
                       
@@ -86,11 +96,11 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     .plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                     .plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     
-                    #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                    .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                     
                                       #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     
-                    #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                    .visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                     
                     DATA = .system_datalogging(o,nn,EAD,DATA)
                   
