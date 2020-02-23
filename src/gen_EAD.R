@@ -7,6 +7,7 @@ gen_EAD <- function(EAD,TQ) {
 #  % 01.10 - Code simplification 
 #  % 04.2  - Cost calculation implemented
 #  % 05.02 - Simulation has been implemented 
+
   
 ### INIT 
 DENS_CCN =  EAD$DENS_CCN
@@ -40,13 +41,15 @@ EAD$C_DEMAND <- C_DEMAND
     }
    
     
-    
-    
     # PRODUCTION TECHNOLOGY
-    A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
+
+   ### Design creating matrix ; No production technology;
+   # A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
+    EAD = gen_ProductionEnvironment(EAD,NUMB_CM,NUMB_PV,DENS_CMPV)
+    A_CMPV = EAD$A_CMPV
     A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
     
-  
+    browser()
     
     CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
     FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
@@ -129,20 +132,20 @@ error_raiser <- function(EAD){
     stop("Diagonal Processes/Resources Matrix can not be generated when the Matrix Type is coupled (C)")}
   
   #Matrix Density Errors##
-  if(EAD$TYPE_CCN == "UC" & EAD$DENS_CCN != 2){
-    stop("Type and Density Parameters are not matching for A_CCN")}
-  
-  if(EAD$TYPE_CNFR == "UC" & EAD$DENS_CNFR != 2){
-    stop("Type and Density Parameters are not matching for A_CNFR")}
-  
-  if(EAD$TYPE_FRCM == "UC" & EAD$DENS_FRCM != 2){
-    stop("Type and Density Parameters are not matching for A_FRCM")}
-  
-  if(EAD$TYPE_CMPV == "UC" & EAD$DENS_CMPV != 2){
-    stop("Type and Density Parameters are not matching for A_CMPV")}
-  
-  if(EAD$TYPE_PVRC == "UC" & EAD$DENS_PVRC != 2){
-    stop("Type and Density Parameters are not matching for PVRC")}
+  # if(EAD$TYPE_CCN == "UC" & EAD$DENS_CCN != 2){
+  #   stop("Type and Density Parameters are not matching for A_CCN")}
+  # 
+  # if(EAD$TYPE_CNFR == "UC" & EAD$DENS_CNFR != 2){
+  #   stop("Type and Density Parameters are not matching for A_CNFR")}
+  # 
+  # if(EAD$TYPE_FRCM == "UC" & EAD$DENS_FRCM != 2){
+  #   stop("Type and Density Parameters are not matching for A_FRCM")}
+  # 
+  # if(EAD$TYPE_CMPV == "UC" & EAD$DENS_CMPV != 2){
+  #   stop("Type and Density Parameters are not matching for A_CMPV")}
+  # 
+  # if(EAD$TYPE_PVRC == "UC" & EAD$DENS_PVRC != 2){
+  #   stop("Type and Density Parameters are not matching for PVRC")}
   
 }
 

@@ -32,7 +32,7 @@ EAD$TYPE_PVRC =    "UC"
 DENS_CCN = c(2)
 DENS_CNFR = c(2)
 DENS_FRCM = c(0.2)
-DENS_CMPV = c(2)
+DENS_CMPV = c(-1)
 DENS_PVRC = c(2)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
@@ -77,13 +77,8 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
                     EAD = gen_EAD(EAD,TQ)
                       
-                   
-                      
                     EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
-                      
-                      
-                 
-                     
+                           
                     EAD = calc_EAD(EAD)
                       
               

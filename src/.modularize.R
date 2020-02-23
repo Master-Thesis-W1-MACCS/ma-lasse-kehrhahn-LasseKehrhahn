@@ -49,7 +49,6 @@
   # SAME PROCESS AS FOR A_FRM
   
   pvs_used_for_module_idx = ceiling(which(A_MPV[cms_used_for_module_idx,]>0)/nrow(A_MPV))  #test if that also works for more than three pvs
-  
   pvs_not_used_for_module_idx = setdiff(as.vector(unique(col(EAD$A_CMPV))),pvs_used_for_module_idx)
   
   A_MPV_1 = A_MPV[pvs_not_used_for_module_idx,]
