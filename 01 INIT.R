@@ -78,7 +78,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     EAD = gen_EAD(EAD,TQ)
                       
                     EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
-                           
+                     browser()      
                     EAD = calc_EAD(EAD)
                       
               

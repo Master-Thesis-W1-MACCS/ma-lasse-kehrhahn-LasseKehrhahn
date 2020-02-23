@@ -49,8 +49,6 @@ EAD$C_DEMAND <- C_DEMAND
     A_CMPV = EAD$A_CMPV
     A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
     
-    browser()
-    
     CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
     FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
     CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
