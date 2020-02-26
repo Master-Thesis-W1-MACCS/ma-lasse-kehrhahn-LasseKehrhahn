@@ -27,27 +27,38 @@ C_DEMAND <- c(10, 30, 50)
 EAD$C_DEMAND <- C_DEMAND
 
 
-    # CUSTOMER MARKET
+    #### CUSTOMER MARKET ####
     A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
     A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR") #Customer Needs - Functional Requirements Matrix
+
     
-    
-    # PRODUCT ARCHITECTURE
-    A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
-    # Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
-    if(EAD$TYPE_FRCM != "C"){
-      A_FRCM[diag(A_FRCM)<1] <- 1
-      A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
-    }
    
     
-    # PRODUCTION TECHNOLOGY
+    #### PRODUCT ARCHITECTURE  ####
+    A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
+    # Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
+     if(EAD$TYPE_FRCM != "C"){
+     if(sum(diag(A_FRCM))<NUMB_FR)  {
+      diag(A_FRCM) <- 1
+      A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
+    }
+    }
+    EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
+    
+    
+    
+      
+    #### PRODUCTION TECHNOLOGY ####
 
-   ### Design creating matrix ; No production technology;
-   # A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
+    # Design creating matrix ; No production technology;
+    # A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
     EAD = gen_ProductionEnvironment(EAD,NUMB_CM,NUMB_PV,DENS_CMPV)
     A_CMPV = EAD$A_CMPV
     A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
+    
+    
+
+    
     
     CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
     FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
@@ -57,9 +68,9 @@ EAD$C_DEMAND <- C_DEMAND
     
     RCC = matrix(.gen_RCC(RCC_VAR,1*10^6,RC))
     #RCU = (RCC/RC)
-    
-    ##############################################
-    ## Computing benchmark costs 
+ 
+   
+    #### COST COMPUTING ####
    
     A_PVRCp <- sweep((A_PVRC),2,colSums(A_PVRC),"/") #Absolute matrix to relative matrix
     A_CMPVp <- sweep((A_CMPV),2,colSums(A_CMPV),"/") #Absolute matrix to relative matrix  
@@ -94,7 +105,18 @@ return(EAD)
 }
 
 
-####ERROR MESSAGES####
+
+
+
+
+
+
+
+count_nonzeros <-function(your.matrix){
+  colsum_nonzeros = colSums(your.matrix != 0)
+  percentageofnonzeros = sum(colsum_nonzeros)/(ncol(your.matrix)*nrow(your.matrix))
+  return(percentageofnonzeros)
+}
 error_raiser <- function(EAD){
   
   ##Matrix Size Errors if uncoupled or decoupled matrix is wanted##
