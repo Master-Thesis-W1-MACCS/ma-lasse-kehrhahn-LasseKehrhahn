@@ -18,11 +18,8 @@ colnames(DATApre) = c('o','nn','NUMB_C','NUMB_CN', "NUMB_FR", "NUMB_CM", "NUMB_P
                      "DIFF_COST")    
  
 DATA = rbind(DATA,DATApre) #put it together
-  
  
-  
-  
-  
+
   return(DATA)
 }
 

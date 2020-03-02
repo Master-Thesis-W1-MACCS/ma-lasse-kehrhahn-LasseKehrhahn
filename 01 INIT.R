@@ -1,5 +1,4 @@
-#############################################################
-# EXPLORATION OF THE EXTENDED AXIOMATIC DEIGN
+#### EXTENDED AXIOMATIC DESIGN ####
 
 
 ## ============ CONTROL&FIXED PARAMETERS ===========
@@ -10,7 +9,7 @@ DATAp = data.frame()
 
 NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
 NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-SIM_NUMB =         10                  #Control Variable - Number of Simulations for every single environment (standard: 30)     
+SIM_NUMB =         100                  #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
 TC =               10000                #Total costs
 TQ =               100
@@ -23,7 +22,7 @@ EAD$NUMB_RC =      3
 
 EAD$TYPE_CCN  =    "UC"               #Define wether the matrix is uncoupled ("UC" and DENS = 2), Decoupled ("DC" and DENS = 0-1), or coupled ("C" and DENS = 0-1)
 EAD$TYPE_CNFR =    "UC"
-EAD$TYPE_FRCM =    "DC"
+EAD$TYPE_FRCM =    "C"
 EAD$TYPE_CMPV =    "UC"
 EAD$TYPE_PVRC =    "UC"
 
@@ -31,12 +30,12 @@ EAD$TYPE_PVRC =    "UC"
 ## ============ INPUT PARAMETER MASK ===========
 DENS_CCN = c(2)
 DENS_CNFR = c(2)
-DENS_FRCM = c(0.2)
-DENS_CMPV = c(-1)
+DENS_FRCM = c(0.2,0.4,0.5,0.6,0.8,1)
+DENS_CMPV = c(0.2,0.4,0.5,0.6,0.8,1)
 DENS_PVRC = c(2)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
-NUMB_CM = c(3)
+NUMB_CM = c(9)
 
 
 
@@ -72,7 +71,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     for (nn in 1:SIM_NUMB) {
                     
                     
-                    error_raiser(EAD)  
+                    #error_raiser(EAD)  
                       
                     # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
                     EAD = gen_EAD(EAD,TQ)

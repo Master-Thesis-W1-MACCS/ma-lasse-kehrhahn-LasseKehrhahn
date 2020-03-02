@@ -25,9 +25,9 @@
   {
     DENS_MIN = 0.4;
     DENS_MAX = 0.7;
-    DENS = runif(1, DENS_MIN, DENS_MAX);
-  }
-  EAD$PRODUCTION_TECHNOLOGY$DENS_CMPV = DENS
+    DENS = runif(1, DENS_MIN, DENS_MAX)}
+  else{DENS=DENS_CMPV}
+    EAD$PRODUCTION_TECHNOLOGY$DENS_CMPV = DENS
 
 ## ====================== STEP 1 BASELINE NORM ========================= 
 

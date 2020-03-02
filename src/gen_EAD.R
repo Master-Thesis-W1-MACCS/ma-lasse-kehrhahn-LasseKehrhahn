@@ -7,7 +7,8 @@ gen_EAD <- function(EAD,TQ) {
 #  % 01.10 - Code simplification 
 #  % 04.2  - Cost calculation implemented
 #  % 05.02 - Simulation has been implemented 
-
+#  % 25.02 - Update Product architecture generation
+#  % 
   
 ### INIT 
 DENS_CCN =  EAD$DENS_CCN
@@ -26,14 +27,10 @@ C_DEMAND <- vector()
 C_DEMAND <- c(10, 30, 50)
 EAD$C_DEMAND <- C_DEMAND
 
-
     #### CUSTOMER MARKET ####
     A_CCN =  .create_designmatrix(NUMB_C,NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
     A_CNFR = .create_designmatrix(NUMB_CN,NUMB_FR,DENS_CNFR,"CN","FR") #Customer Needs - Functional Requirements Matrix
 
-    
-   
-    
     #### PRODUCT ARCHITECTURE  ####
     A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
     # Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
@@ -46,12 +43,11 @@ EAD$C_DEMAND <- C_DEMAND
     EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
     
     
-    
       
     #### PRODUCTION TECHNOLOGY ####
 
-    # Design creating matrix ; No production technology;
     # A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
+  
     EAD = gen_ProductionEnvironment(EAD,NUMB_CM,NUMB_PV,DENS_CMPV)
     A_CMPV = EAD$A_CMPV
     A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
@@ -101,6 +97,9 @@ EAD$C_DEMAND <- C_DEMAND
     EAD$A_CMPV = A_CMPV
     EAD$A_PVRC = A_PVRC
     
+    
+    
+    
 return(EAD)
 }
 
@@ -117,40 +116,43 @@ count_nonzeros <-function(your.matrix){
   percentageofnonzeros = sum(colsum_nonzeros)/(ncol(your.matrix)*nrow(your.matrix))
   return(percentageofnonzeros)
 }
+
+
+
 error_raiser <- function(EAD){
-  
-  ##Matrix Size Errors if uncoupled or decoupled matrix is wanted##
-  if(EAD$NUMB_C != EAD$NUMB_CN & (EAD$DENS_CCN == 2 | EAD$TYPE_CCN == "UC"| EAD$TYPE_CCN == "DC")){
-    stop("Number of Customers is unequal to Number of Customer Needs: Symmetrical matrix can not be generated")}
-  
-  if(EAD$NUMB_CN != EAD$NUMB_FR & (EAD$DENS_CNFR == 2 | EAD$TYPE_CNFR == "UC"| EAD$TYPE_CNFR == "DC")){
-    stop("Number of Customers is unequal to Number of Functional Requirements: Symmetrical matrix can not be generated")}
-  
-  if(EAD$NUMB_FR != EAD$NUMB_CM & (EAD$DENS_FRCM == 2 | EAD$TYPE_FRCM == "UC"| EAD$TYPE_FRCM == "DC")){
-    stop("Number of Functional Requirements is unequal to Number of Componentes: Symmetrical matrix can not be generated")}
-  
-  if(EAD$NUMB_CM != EAD$NUMB_PV & (EAD$DENS_CMPV == 2 | EAD$TYPE_CMPV == "UC"| EAD$TYPE_CMPV == "DC")){
-    stop("Number of Components is unequal to Number of Processes: Symmetrical matrix can not be generated")}
-  
-  if(EAD$NUMB_PV != EAD$NUMB_RC & (EAD$DENS_PVRC == 2 | EAD$TYPE_PVRC == "UC"| EAD$TYPE_PVRC == "DC")){
-    stop("Number of Processes is unequal to Number of Resources: Symmetrical matrix can not be generated")}
-  
-  ##Matrix Size Errors if coupled matrix is wanted##
-  if(EAD$TYPE_CCN == "C" & EAD$DENS_CCN == 2){
-    stop("Diagonal Customer/Customer Needs Matrix can not be generated when the Matrix Type is coupled (C)")}
-  
-  if(EAD$TYPE_CNFR == "C" & EAD$DENS_CNFR == 2){
-    stop("Diagonal Customer Needs/Functional Requirements Matrix can not be generated when the Matrix Type is coupled (C)")}
-  
-  if(EAD$TYPE_FRCM == "C" & EAD$DENS_FRCM == 2){
-    stop("Diagonal Functional Requirements/Componentes Matrix can not be generated when the Matrix Type is coupled (C)")}
-  
-  if(EAD$TYPE_CMPV == "C" & EAD$DENS_CMPV == 2){
-    stop("Diagonal Components/Processes Matrix can not be generated when the Matrix Type is coupled (C)")}
-  
-  if(EAD$TYPE_PVRC == "C" & EAD$DENS_PVRC == 2){
-    stop("Diagonal Processes/Resources Matrix can not be generated when the Matrix Type is coupled (C)")}
-  
+  # 
+  # ##Matrix Size Errors if uncoupled or decoupled matrix is wanted##
+  # if(EAD$NUMB_C != EAD$NUMB_CN & (EAD$DENS_CCN == 2 | EAD$TYPE_CCN == "UC"| EAD$TYPE_CCN == "DC")){
+  #   stop("Number of Customers is unequal to Number of Customer Needs: Symmetrical matrix can not be generated")}
+  # 
+  # if(EAD$NUMB_CN != EAD$NUMB_FR & (EAD$DENS_CNFR == 2 | EAD$TYPE_CNFR == "UC"| EAD$TYPE_CNFR == "DC")){
+  #   stop("Number of Customers is unequal to Number of Functional Requirements: Symmetrical matrix can not be generated")}
+  # 
+  # if(EAD$NUMB_FR != EAD$NUMB_CM & (EAD$DENS_FRCM == 2 | EAD$TYPE_FRCM == "UC"| EAD$TYPE_FRCM == "DC")){
+  #   stop("Number of Functional Requirements is unequal to Number of Componentes: Symmetrical matrix can not be generated")}
+  # 
+  # if(EAD$NUMB_CM != EAD$NUMB_PV & (EAD$DENS_CMPV == 2 | EAD$TYPE_CMPV == "UC"| EAD$TYPE_CMPV == "DC")){
+  #   stop("Number of Components is unequal to Number of Processes: Symmetrical matrix can not be generated")}
+  # 
+  # if(EAD$NUMB_PV != EAD$NUMB_RC & (EAD$DENS_PVRC == 2 | EAD$TYPE_PVRC == "UC"| EAD$TYPE_PVRC == "DC")){
+  #   stop("Number of Processes is unequal to Number of Resources: Symmetrical matrix can not be generated")}
+  # 
+  # ##Matrix Size Errors if coupled matrix is wanted##
+  # if(EAD$TYPE_CCN == "C" & EAD$DENS_CCN == 2){
+  #   stop("Diagonal Customer/Customer Needs Matrix can not be generated when the Matrix Type is coupled (C)")}
+  # 
+  # if(EAD$TYPE_CNFR == "C" & EAD$DENS_CNFR == 2){
+  #   stop("Diagonal Customer Needs/Functional Requirements Matrix can not be generated when the Matrix Type is coupled (C)")}
+  # 
+  # if(EAD$TYPE_FRCM == "C" & EAD$DENS_FRCM == 2){
+  #   stop("Diagonal Functional Requirements/Componentes Matrix can not be generated when the Matrix Type is coupled (C)")}
+  # 
+  # if(EAD$TYPE_CMPV == "C" & EAD$DENS_CMPV == 2){
+  #   stop("Diagonal Components/Processes Matrix can not be generated when the Matrix Type is coupled (C)")}
+  # 
+  # if(EAD$TYPE_PVRC == "C" & EAD$DENS_PVRC == 2){
+  #   stop("Diagonal Processes/Resources Matrix can not be generated when the Matrix Type is coupled (C)")}
+  # 
   #Matrix Density Errors##
   # if(EAD$TYPE_CCN == "UC" & EAD$DENS_CCN != 2){
   #   stop("Type and Density Parameters are not matching for A_CCN")}

@@ -2,7 +2,6 @@
  #generating A_X_Y  => design matrix
   
   
- 
 repeat
   {
 
@@ -27,6 +26,7 @@ repeat
   else {                          #if density is set to a fixed value 
     rand_DENS = runif(X*Y) #draw random numbers
     A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),nrow=X,ncol=Y) ## 1/0 DENSITY 
+  
   }
 
   
@@ -36,13 +36,12 @@ repeat
   COL_ZEROS<-any(colSums(A_YX[,])==0)   #every resource needs to be used at least once
   
   if(ROW_ZEROS==FALSE & COL_ZEROS==FALSE) {  break  }   
-}
+  }
   
-  
+
   
 rownames(A_YX) = c(paste0(rowname, 1:nrow(A_YX)))
 colnames(A_YX) = c(paste0(colname, 1:ncol(A_YX)))
-
 
 return(A_YX)
  
