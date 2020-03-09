@@ -9,7 +9,7 @@ DATAp = data.frame()
 
 NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
 NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-SIM_NUMB =         50                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
 TC =               10000                #Total costs
 TQ =               100
@@ -30,8 +30,8 @@ EAD$TYPE_PVRC =    "UC"
 ## ==== INPUT PARAMETER MASK ===========
 DENS_CCN = c(2)
 DENS_CNFR = c(2)
-DENS_FRCM = c(0.2,0.3,0.4,0.6,0.8)
-DENS_CMPV = c(0.2,0.3,0.4,0.6,0.8)
+DENS_FRCM = c(0.15,0.2,0.3,0.4,0.6,0.8)
+DENS_CMPV = c(0.15,0.2,0.3,0.4,0.6,0.8)
 DENS_PVRC = c(2)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
