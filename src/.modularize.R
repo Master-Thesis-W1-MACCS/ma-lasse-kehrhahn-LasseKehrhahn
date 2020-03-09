@@ -2,7 +2,7 @@
 .modularize <- function(EAD,NUMB_CN,NUMB_C,TQ) {
  
  
-  Modularize_FR_level = 2  #modularization based on medium market segment
+  Modularize_FR_level = 1  #modularization based on medium market segment
   NUMB_M = 1               #because modularization happens over medium market segment, there is only one module generated
 
   
@@ -10,7 +10,6 @@
   A_MPV = EAD$A_CMPV      
 
   ## START MODULARIZATION
-  
   # 1. GET THE FRAME FOR THE MODULE - FR2 
   cms_used_for_module = A_FRM[Modularize_FR_level,] 
   # 2. COMPOSITE COMPONENTS INTO ONE MODULE
@@ -21,9 +20,7 @@
   # 3.1 DEFINE WHICH COMPONENTS GO INTO A MODULE AND WHICH NOT
   cms_not_used_for_module_idx = setdiff(as.vector(unique(col(EAD$A_FRCM))),cms_used_for_module_idx)
 
- 
-  
-   A_FRM_1 = as.matrix(A_FRM[,cms_not_used_for_module_idx])  #components that are not modularized
+  A_FRM_1 = as.matrix(A_FRM[,cms_not_used_for_module_idx])  #components that are not modularized
   
   # 3.2. NEW EMPTY MATRIX THAT ONLY CONTAINS THE MODULE M
   
@@ -50,11 +47,18 @@
   #
   #-------------------------A_MPV----------------------------
   # SAME PROCESS AS FOR A_FRM
+  # pvs_used_for_module_idx = (which(A_MPV[cms_used_for_module_idx,]>0))  #test if that also works for more than three pvs
+ 
   
-  pvs_used_for_module_idx = ceiling(which(A_MPV[cms_used_for_module_idx,]>0)/nrow(A_MPV))  #test if that also works for more than three pvs
+  if (length(cms_used_for_module_idx)<=1){
+    pvs_used_for_module_idx = as.numeric(A_MPV[cms_used_for_module_idx]!= 0)
+  } else {
+    pvs_used_for_module_idx = colSums(A_MPV[cms_used_for_module_idx,]!= 0)
+  }
+ 
+  pvs_used_for_module_idx= which(pvs_used_for_module_idx!=0,arr.ind = T)
   pvs_not_used_for_module_idx = setdiff(as.vector(unique(col(EAD$A_CMPV))),pvs_used_for_module_idx)
   
-  A_MPV_1 = A_MPV[pvs_not_used_for_module_idx,]
   A_MPV_2 = matrix(c(rep(0,EAD$NUMB_PV)),nrow=NUMB_M,ncol = EAD$NUMB_PV ,byrow = TRUE)  
 
   for (col in 1:ncol(A_MPV)){
@@ -64,6 +68,10 @@
     
   }
   
+  A_MPV_1 = A_MPV[-c(cms_used_for_module_idx),] # delete components of the module 
+  A_MPV = matrix(nrow = (nrow(EAD$A_CMPV)-length(cms_used_for_module_idx)+NUMB_M),ncol = EAD$NUMB_PV)
+  
+  ### this function does not work right. !
   A_MPV = matrix(as.vector(rbind(A_MPV_2,A_MPV_1)), nrow = (nrow(EAD$A_CMPV)-length(cms_used_for_module_idx)+NUMB_M),ncol = EAD$NUMB_PV)
   rownames(A_MPV) = c(colnames(A_FRM))
   colnames(A_MPV) = c(rep(paste0("PV",c(1:ncol(A_MPV)))))
@@ -74,6 +82,9 @@
   
   EAD$A_FRM = A_FRM
   EAD$A_MPV = A_MPV
+  #print(A_FRM)
+  #print(A_MPV)
+
   return(EAD)
   
 }

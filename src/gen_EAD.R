@@ -39,14 +39,16 @@ EAD$C_DEMAND <- C_DEMAND
       diag(A_FRCM) <- 1
       A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
     }
-    }
+     }
+    #print(A_FRCM)
+
     EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
     
     
       
     #### PRODUCTION TECHNOLOGY ####
 
-    # A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
+    #A_CMPV = .create_designmatrix(NUMB_CM,NUMB_PV,DENS_CMPV,"CM","PV") #Components - Processed Matrix
   
     EAD = gen_ProductionEnvironment(EAD,NUMB_CM,NUMB_PV,DENS_CMPV)
     A_CMPV = EAD$A_CMPV
