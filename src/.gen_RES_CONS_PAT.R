@@ -134,6 +134,8 @@ EAD$PRODUCTION_TECHNOLOGY$countNonZero<-mean(colSums(RES_CONS_PAT[,]>0))
   
 # EAD$PRODUCTION_TECHNOLOGY$COR2<-mean(cor(RES_CONS_PAT[,c(1,((unitsize)+1):NUMB_PV)])[1,])
 
+rownames(RES_CONS_PAT) = c(paste0('CM', 1:nrow(RES_CONS_PAT)))
+colnames(RES_CONS_PAT) = c(paste0('PV', 1:ncol(RES_CONS_PAT)))
 
 
 #Average distance 

@@ -38,6 +38,7 @@ EAD$C_DEMAND <- C_DEMAND
      if(sum(diag(A_FRCM))<NUMB_FR)  {
       diag(A_FRCM) <- 1
       A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
+   
     }
      }
     #print(A_FRCM)

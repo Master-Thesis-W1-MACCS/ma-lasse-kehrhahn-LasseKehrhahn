@@ -78,13 +78,11 @@
 
     
 
-
   
   EAD$A_FRM = A_FRM
   EAD$A_MPV = A_MPV
   #print(A_FRM)
   #print(A_MPV)
-
   return(EAD)
   
 }

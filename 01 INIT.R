@@ -83,19 +83,17 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                       
                     EAD$Diff_unit =  EAD$CCM - EAD$CCB
                     EAD$Diff_total = sum(EAD$CCM_T- EAD$CC)
-                    print(EAD$DENS_FRCM)
-                    print(EAD$DENS_CMPV)
+                    #print(EAD$DENS_FRCM)
+                    #print(EAD$DENS_CMPV)
                     print(EAD$Diff_total)
                     
                     
                     #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                     #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
-                    
+                    #browser()
                     #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
-                    
-                                      #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
-                    
                     #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                   
                     
                     DATA = .system_datalogging(o,nn,EAD,DATA)
                   
