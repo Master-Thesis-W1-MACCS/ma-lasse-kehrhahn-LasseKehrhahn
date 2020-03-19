@@ -88,7 +88,19 @@
 }
 
 
-
+.benchmark <- function(EAD,NUMB_CN,NUMB_C,TQ) {
+  
+  A_FRM = EAD$A_FRCM
+  A_MPV = EAD$A_CMPV  
+  
+  
+  
+  EAD$A_FRM = A_FRM
+  EAD$A_MPV = A_MPV
+  
+  return(EAD)
+  
+}
 
 calc_EAD <- function(EAD) {
   
