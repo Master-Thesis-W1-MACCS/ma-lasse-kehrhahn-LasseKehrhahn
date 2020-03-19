@@ -1,49 +1,47 @@
 #### EXTENDED AXIOMATIC DESIGN ####
-
+#### V. 1.00 - Stablized; Runable for many settings; 
 
 ## ============ CONTROL&FIXED PARAMETERS ===========
 EAD = list()                           
 DATA = data.frame()
 DATAp = data.frame()
 
-
-NUMB_PRO =         50                     #INPUT independent Variable - Number of products 
-NUMB_RES  =        50                     #INPUT independent variable - Number of factors
-SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
-
-TC =               10000                #Total costs
-TQ =               100
-EAD$NUMB_C =       3
-EAD$NUMB_CN =      3
+EAD$NUMB_C =       10
+EAD$NUMB_CN =      6
 EAD$NUMB_FR =      3
 EAD$NUMB_PV =      3
 EAD$NUMB_RC =      3
 
+SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
-EAD$TYPE_CCN  =    "UC"               #Define wether the matrix is uncoupled ("UC" and DENS = 2), Decoupled ("DC" and DENS = 0-1), or coupled ("C" and DENS = 0-1)
-EAD$TYPE_CNFR =    "UC"
-EAD$TYPE_FRCM =    "C"
-EAD$TYPE_CMPV =    "UC"
-EAD$TYPE_PVRC =    "UC"
+TC =               10000                #Total costs
+TQ =               100
+
+
+###### STRUKTUR BEACHTUNG ##########
+# EAD$TYPE_CCN  =    "UC"               #DefiNS = 0-1)
+# EAD$TYPE_CNFR =    "UC"
+# EAD$TYPE_FRCM =    "C"
+# EAD$TYPE_CMPV =    "UC"
+# EAD$TYPE_PVRC =    "UC"
 
 
 ## ==== INPUT PARAMETER MASK ===========
-DENS_CCN = c(2)
-DENS_CNFR = c(2)
+DENS_CCN = c(0.4)
+DENS_CNFR = c(0.4)
 DENS_FRCM = c(0.15,0.2,0.3,0.4,0.6,0.8)
 DENS_CMPV = c(0.15,0.2,0.3,0.4,0.6,0.8)
-DENS_PVRC = c(2)  
+DENS_PVRC = c(0.4)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 NUMB_CM = c(9)
-
-
 
 
 set.seed(13) #Reproducability
 o=1 # First design point
 
 ## ==== DESIGN OF EXPERIMENTS ==== 
+
 ## EVIRONMENTAL FACTORS [] 
 for (ix_DENS_CCN in seq_along(DENS_CCN)) {
   for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
@@ -54,7 +52,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
             for (ix_RCC_VAR in seq_along(RCC_VAR)) {
               for (ix_NUMB_CM in seq_along(NUMB_CM)) {
                  
-                    ## ====================== PREDETERMINING AND PREALLOCATION  =========================          
+                    ## ======== PREDETERMINING AND PREALLOCATION ==========          
                     EAD$NUMB_CM = NUMB_CM[ix_NUMB_CM]
                     EAD$DENS_CCN = DENS_CCN[ix_DENS_CCN]
                     EAD$DENS_CNFR = DENS_CNFR[ix_DENS_CNFR]   
@@ -67,7 +65,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                 
                     nn=1 # necessary for repeating the SIM_NUMB loop
                     
-                    #### ============================== SIMULATION ======================================
+                    ## ======== SIMULATION =========
                     for (nn in 1:SIM_NUMB) {
                     
                     
@@ -76,7 +74,9 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
                     EAD = gen_EAD(EAD,TQ)
                       
-                    EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
+                    #EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
+                    EAD = .benchmark(EAD,NUMB_CN,NUMB_C,TQ)
+                    
                     EAD = calc_EAD(EAD)
                       
               
@@ -85,8 +85,8 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     EAD$Diff_total = sum(EAD$CCM_T- EAD$CC)
                     #print(EAD$DENS_FRCM)
                     #print(EAD$DENS_CMPV)
-                    print(EAD$Diff_total)
-                    
+                    #print(EAD$Diff_total)
+                    print(nn)
                     
                     #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
                     #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
@@ -114,16 +114,3 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
 output = paste("output/CSD_",format(Sys.time(),"%Y-%m-%d-%H%M"),".csv", sep = "")
 write.csv(DATA, file = output)
 print("FILE has been written")
-
-
-
-# check = aggregate(DATA,list(DATA$CP),mean)
-# plot(check$MAPE,type ='l')
-# print(check$MAPE)
-
-#if (ProductCostOutput==1)
-#{
-#  output = paste("output/EAD_",format(Sys.time(),"%Y-%m-%d-%H%M"), ".csv", sep = "")          
-#  write.csv(DATAp, file = output)
-#print("Product costs FILE has been written")
-#}

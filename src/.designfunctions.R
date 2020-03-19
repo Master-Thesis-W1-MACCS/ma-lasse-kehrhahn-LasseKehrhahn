@@ -24,14 +24,12 @@ repeat
   }
   
   else {                          #if density is set to a fixed value 
+    
     rand_DENS = runif(X*Y) #draw random numbers
     A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),nrow=X,ncol=Y) ## 1/0 DENSITY 
   
   }
 
-  
-    
- 
   ROW_ZEROS<-any(rowSums(A_YX[,])==0)   #every product need at least one resource
   COL_ZEROS<-any(colSums(A_YX[,])==0)   #every resource needs to be used at least once
   
