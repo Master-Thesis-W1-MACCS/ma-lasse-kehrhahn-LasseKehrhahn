@@ -1,4 +1,5 @@
-#
+#Functions to change the benchmark EAD 
+
 .modularize <- function(EAD,NUMB_CN,NUMB_C,TQ) {
  
  
@@ -102,6 +103,10 @@
   
 }
 
+
+
+
+#Calculating the costs of the EAD
 calc_EAD <- function(EAD) {
   
   EAD$A_FRCM
