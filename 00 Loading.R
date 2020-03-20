@@ -24,6 +24,7 @@
 ## SOURCE THIS FILE FOR EXECUTION
 #source("01 INIT.R")
 source("src/.datalogging.R")
+source("src/.auxiliar_functions.R")
 source("src/.modularize.R")
 source("src/gen_EAD.R")
 source("src/.designfunctions.R")
