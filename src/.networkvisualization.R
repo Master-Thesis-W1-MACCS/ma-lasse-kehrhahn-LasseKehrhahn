@@ -1,4 +1,4 @@
-#install.packages('igraph')
+#('igraph')
 
 
 .plotigraph <- function(A_CNFR,A_FRCM,A_CMPV,A_PVRC) {
