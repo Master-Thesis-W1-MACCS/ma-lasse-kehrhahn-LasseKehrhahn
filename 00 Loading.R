@@ -1,13 +1,14 @@
 #####
 ## Extended Axiomatic Design   // 2020-01-02   V 0.01
-### install.packages(c(
+# install.packages(c(
 #   "dplyr",
 #   "tidyr",
 #   "rmarkdown",
 #   "ggplot2",
 #   "igraph",
 #   "visNetwork",
-#   "data.tree"
+#   "data.tree",
+#   "reshape"
 # 
 # ))
 # 

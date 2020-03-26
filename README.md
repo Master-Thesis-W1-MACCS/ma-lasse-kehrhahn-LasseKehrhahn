@@ -1,6 +1,6 @@
 # EAD_
  
- %% ======================================  DOKUMENTATION ============================================================
+%% ======================================  DOKUMENTATION ============================================================
 % V 0.1 New resource consumption algorithm - Now the model uses highest 
 % intensities from the DMM for the modules. This helps that the modules are
 % not cheaper than before (see Literature)
@@ -41,4 +41,4 @@
 % test provided evidences that solely the lower triangular makes sence for
 % up- and downscaling; 
 
-%
+% V 2.5 ; Production Environment Generation update

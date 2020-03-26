@@ -29,8 +29,8 @@ TQ =               100
 ## ==== INPUT PARAMETER MASK ===========
 DENS_CCN = c(0.4)
 DENS_CNFR = c(0.4)
-DENS_FRCM = c(0.15,0.2,0.3,0.4,0.6,0.8)
-DENS_CMPV = c(0.15,0.2,0.3,0.4,0.6,0.8)
+DENS_FRCM = c(0.4)
+DENS_CMPV = c(0.4)
 DENS_PVRC = c(0.4)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
