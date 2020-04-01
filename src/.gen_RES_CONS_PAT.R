@@ -71,7 +71,7 @@ for (i in 1:(EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE*NUMB_PV)) #unitsize+1
 
 for (i in ((unitsize)+1) : NUMB_PV) #nonunitsize+1 (34+1)
 {
-  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,i];
+  RES_CONS_PAT[,i] <- (COR2 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,i];
 }
 
 ## ====================== STEP 1.b DENSITY ========================= 
