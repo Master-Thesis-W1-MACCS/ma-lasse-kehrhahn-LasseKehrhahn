@@ -6,15 +6,15 @@ EAD = list()
 DATA = data.frame()
 DATAp = data.frame()
 
-EAD$NUMB_C =       10
-EAD$NUMB_CN =      6
+EAD$NUMB_C =       2
+EAD$NUMB_CN =      2
 EAD$NUMB_FR =      3
 EAD$NUMB_PV =      3
-EAD$NUMB_RC =      3
+EAD$NUMB_RC =      4
 
 SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
-TC =               10000                #Total costs
+TC =               100                #Total costs
 TQ =               100
 
 
@@ -34,7 +34,7 @@ DENS_CMPV = c(0.4)
 DENS_PVRC = c(0.4)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
-NUMB_CM = c(9)
+NUMB_CM = c(3)
 
 
 set.seed(13) #Reproducability
