@@ -14,21 +14,21 @@ gen_EAD <- function(EAD,TQ) {
   
   
   
-  #### PREDETERMINING ====
+  #### PREDETERMINING ====   #aus 01 INIT?
   DENS_CCN =  EAD$DENS_CCN
   DENS_CNFR = EAD$DENS_CNFR
   DENS_FRCM = EAD$DENS_FRCM
   DENS_CMPV = EAD$DENS_CMPV
-  DENS_PVRC = EAD$DENS_PVRC
+  DENS_PVRC = EAD$DENS_PVRC 
   NUMB_C = EAD$NUMB_C #Customers
   NUMB_CN = EAD$NUMB_CN #Customer' needs 
   NUMB_FR = EAD$NUMB_FR #Functional Requirements
-  NUMB_CM = EAD$NUMB_CM #Components
+  NUMB_CM = EAD$NUMB_CM #Components / Designparameter
   NUMB_PV = EAD$NUMB_PV #Processes
   NUMB_RC = EAD$NUMB_RC #Resources
   Q_VAR = EAD$Q_VAR
   
-  #### DEMAND GENERATION ####
+  #### DEMAND GENERATION ####      # <- ist quasi das Selbe wie =
   
   C_DEMAND <- .gen_Demand(NUMB_C, TQ, Q_VAR)
   EAD$C_DEMAND <- C_DEMAND
