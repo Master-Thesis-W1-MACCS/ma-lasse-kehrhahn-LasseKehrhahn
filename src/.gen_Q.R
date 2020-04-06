@@ -8,11 +8,11 @@
   {
     Q_VAR_MIN = 0.4
     Q_VAR_MAX = 1.6
-    Q_VAR = runif(1, Q_VAR_MIN, Q_VAR_MAX)
+    Q_VAR = runif(1, Q_VAR_MIN, Q_VAR_MAX) #runif = Uniform Distribution on interval min to max.
   }
   
-  preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #preDemand is buildup as a -> LogNormal Distribution 
-  DEMAND = ceiling((preDemand/sum(preDemand))*TQ)
+  preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #preDemand is buildup as a -> Log Normal Distribution whose logarithm has mean equal to meanlog and standard deviation equal to sdlog
+  DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = runden
   EAD$Q_VAR_draw = Q_VAR
   
   #CHECKS 

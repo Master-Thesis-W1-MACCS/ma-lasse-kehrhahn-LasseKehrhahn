@@ -28,7 +28,8 @@ gen_EAD <- function(EAD,TQ) {
   NUMB_RC = EAD$NUMB_RC #Resources
   Q_VAR = EAD$Q_VAR
   
-  #### DEMAND GENERATION ####      # <- ist quasi das Selbe wie =
+  #### DEMAND GENERATION ####      # <- ist quasi das Selbe wie =   # %*% ist Matrix mult. Operator
+  #aus designfunctions: .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y")
   
   C_DEMAND <- .gen_Demand(NUMB_C, TQ, Q_VAR)
   EAD$C_DEMAND <- C_DEMAND
@@ -65,7 +66,7 @@ gen_EAD <- function(EAD,TQ) {
   CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
   EAD$CM = CM
   
-  #### PRODUCTION TECHNOLOGY ####
+  #### PRODUCTION TECHNOLOGY ####   #A_CMPV wird anders gebildet in gen:ProductEnvironment
   
   
   EAD = gen_ProductionEnvironment(EAD,NUMB_CM,NUMB_PV,DENS_CMPV)
