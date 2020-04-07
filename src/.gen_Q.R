@@ -4,6 +4,7 @@
 
 .gen_Demand <- function(NUMB_C,TQ,Q_VAR){
   # This has been used in the Mertens (2020) for modeling dispersed realized demand
+
   if (Q_VAR == -1)
   {
     Q_VAR_MIN = 0.4

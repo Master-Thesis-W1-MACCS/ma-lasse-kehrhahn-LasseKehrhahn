@@ -1,0 +1,32 @@
+---
+title: "Documentation"
+author: "Lasse Kehrhahn"
+date: "7 4 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 01 INIT
+
+Hier werden Parameter eingegeben.  
+1. NUMB_C =       Customer = `R 01 INIT(EAD$NUMB_C)`   
+2. NUMB_CN =      Customer Needs  
+3. NUMB_FR =      Functional Requierements  
+4. NUMB_PV =      Processes  
+5. NUMB_RC =      Ressourcen  
+```{r}
+set.seed(13)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
