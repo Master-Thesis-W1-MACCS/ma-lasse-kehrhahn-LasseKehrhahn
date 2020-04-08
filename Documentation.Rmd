@@ -72,4 +72,4 @@ Um diese Beziehung in Form eines Vektors zu zufällig generieren, wird die Funkt
   EAD$C_DEMAND <- C_DEMAND
 ```
 
-Daraus ergibt sich: `r C_DEMAND`.
+Daraus ergibt sich: `r C_DEMAND`. (In Summe 101, wieso?)
