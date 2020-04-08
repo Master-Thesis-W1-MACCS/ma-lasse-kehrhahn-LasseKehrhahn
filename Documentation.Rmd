@@ -5,28 +5,71 @@ date: "7 4 2020"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+Funktionen sind _kursiv_.  
+Reiter sind __fett__.
 
 # 01 INIT
 
-Hier werden Parameter eingegeben.  
-1. NUMB_C =       Customer = `R 01 INIT(EAD$NUMB_C)`   
-2. NUMB_CN =      Customer Needs  
-3. NUMB_FR =      Functional Requierements  
-4. NUMB_PV =      Processes  
-5. NUMB_RC =      Ressourcen  
-```{r}
-set.seed(13)
+Input-Parameter eingeben.  
+
+```{r, echo=FALSE}
+EAD = list()                           
+DATA = data.frame()
+DATAp = data.frame()
+
+EAD$NUMB_C =       2
+EAD$NUMB_CN =      2
+EAD$NUMB_FR =      3
+EAD$NUMB_PV =      3
+EAD$NUMB_RC =      4
+SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+TC =               100                #Total costs
+TQ =               100
+DENS_CCN = c(0.4)
+DENS_CNFR = c(0.4)
+DENS_FRCM = c(0.4)
+DENS_CMPV = c(0.4)
+DENS_PVRC = c(0.4)  
+Q_VAR = c(-1)  
+RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
+NUMB_CM = c(3)
+```
+Kunden: `r EAD$NUMB_C`.  
+Kundenwünsche: `r EAD$NUMB_CN`.
+
+# gen_EAD
+
+Die eingegebenen Parameter werden aus __01 INIT__ übergeben.  
+
+### Demand generation
+
+Die Beziehung zwischen Customer und Customer Needs wird als Demand beschrieben.  
+Um diese Beziehung in Form eines Vektors zu zufällig generieren, wird die Funktion _gen_Demand_ aus __gen_Q.R__ ausgeführt.
+
+```{r, echo=FALSE}
+.gen_Demand <- function(NUMB_C,TQ,Q_VAR){
+  # This has been used in the Mertens (2020) for modeling dispersed realized demand
+
+  if (Q_VAR == -1)
+  {
+    Q_VAR_MIN = 0.4
+    Q_VAR_MAX = 1.6
+    Q_VAR = runif(1, Q_VAR_MIN, Q_VAR_MAX) #runif = Uniform Distribution on interval min to max.
+  }
+  
+  preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #preDemand is buildup as a -> Log Normal Distribution whose logarithm has mean equal to meanlog and standard deviation equal to sdlog
+  DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = runden
+  EAD$Q_VAR_draw = Q_VAR
+  
+  #CHECKS 
+  Qs = sort(DEMAND, decreasing = TRUE)
+  EAD$CHECK$Q20 = sum(Qs[1:(0.2 * NUMB_C)])/TQ        #no. of units of 20% biggest products
+  
+  return(DEMAND)
+}
+
+  C_DEMAND <- .gen_Demand(EAD$NUMB_C, TQ, Q_VAR)
+  EAD$C_DEMAND <- C_DEMAND
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Daraus ergibt sich: `r C_DEMAND`.
