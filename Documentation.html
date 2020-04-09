@@ -364,7 +364,6 @@ summary {
 
 <h1 class="title toc-ignore">Documentation</h1>
 <h4 class="author">Lasse Kehrhahn</h4>
-<h4 class="date">7 4 2020</h4>
 
 </div>
 
@@ -374,17 +373,44 @@ Reiter sind <strong>fett</strong>.</p>
 <div id="init" class="section level1">
 <h1>01 INIT</h1>
 <p>Input-Parameter eingeben.</p>
-<p>Kunden: 2.<br />
-Kundenwünsche: 2.</p>
+<p>Kunden: 2<br />
+Kundenwünsche: 2<br />
+Functional Requ.: 3<br />
+Processes: 3<br />
+Ressourcen: 4</p>
 </div>
 <div id="gen_ead" class="section level1">
 <h1>gen_EAD</h1>
 <p>Die eingegebenen Parameter werden aus <strong>01 INIT</strong> übergeben.</p>
 <div id="demand-generation" class="section level3">
 <h3>Demand generation</h3>
-<p>Die Beziehung zwischen Customer und Customer Needs wird als Demand beschrieben.<br />
-Um diese Beziehung in Form eines Vektors zu zufällig generieren, wird die Funktion <em>gen_Demand</em> aus <strong>gen_Q.R</strong> ausgeführt.</p>
-<p>Daraus ergibt sich: 33, 68.</p>
+<p>Der Demand ist der Startwert, also die “Messgröße” für die Kunden C.<br />
+Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion <em>gen_Demand</em> aus <strong>gen_Q.R</strong> ausgeführt.</p>
+<p>Daraus ergibt sich: 70, 31. (In Summe 101, wieso?)</p>
+</div>
+<div id="create-designmatrix" class="section level3">
+<h3>Create Designmatrix</h3>
+<p>Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion <em>create_designmatrix</em> aus dem Reiter <strong>designfunctions.R</strong> ausgeführt.</p>
+</div>
+<div id="customer-diversity" class="section level3">
+<h3>Customer diversity</h3>
+<p>Daraus ergibt sich: <span class="math display">\[
+demand*A_{CCN} = CN.
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+70\\
+31
+\end{array}\right)
+* \left(\begin{array}{cc} 
+0 &amp; 1\\
+1 &amp; 0
+\end{array}\right)
+= \left(\begin{array}{cc} 
+31\\ 
+70
+\end{array}\right)
+\]</span></p>
 </div>
 </div>
 

@@ -1,7 +1,7 @@
 ---
 title: "Documentation"
 author: "Lasse Kehrhahn"
-date: "7 4 2020"
+date: ""
 output: html_document
 ---
 
@@ -13,6 +13,7 @@ Reiter sind __fett__.
 Input-Parameter eingeben.  
 
 ```{r, echo=FALSE}
+## ============ CONTROL&FIXED PARAMETERS ===========
 EAD = list()                           
 DATA = data.frame()
 DATAp = data.frame()
@@ -22,9 +23,22 @@ EAD$NUMB_CN =      2
 EAD$NUMB_FR =      3
 EAD$NUMB_PV =      3
 EAD$NUMB_RC =      4
+
 SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
+
 TC =               100                #Total costs
 TQ =               100
+
+
+###### STRUKTUR BEACHTUNG ##########
+# EAD$TYPE_CCN  =    "UC"               #DefiNS = 0-1)
+# EAD$TYPE_CNFR =    "UC"
+# EAD$TYPE_FRCM =    "C"
+# EAD$TYPE_CMPV =    "UC"
+# EAD$TYPE_PVRC =    "UC"
+
+
+## ==== INPUT PARAMETER MASK ===========
 DENS_CCN = c(0.4)
 DENS_CNFR = c(0.4)
 DENS_FRCM = c(0.4)
@@ -33,9 +47,19 @@ DENS_PVRC = c(0.4)
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 NUMB_CM = c(3)
+
+
+set.seed(13) #Reproducability
+o=1 # First design point
+
+## ==== DESIGN OF EXPERIMENTS ==== 
+
 ```
-Kunden: `r EAD$NUMB_C`.  
-Kundenwünsche: `r EAD$NUMB_CN`.
+Kunden: `r EAD$NUMB_C`  
+Kundenwünsche: `r EAD$NUMB_CN`  
+Functional Requ.: `r EAD$NUMB_FR`  
+Processes: `r EAD$NUMB_PV`  
+Ressourcen: `r EAD$NUMB_RC`  
 
 # gen_EAD
 
@@ -43,8 +67,8 @@ Die eingegebenen Parameter werden aus __01 INIT__ übergeben.
 
 ### Demand generation
 
-Die Beziehung zwischen Customer und Customer Needs wird als Demand beschrieben.  
-Um diese Beziehung in Form eines Vektors zu zufällig generieren, wird die Funktion _gen_Demand_ aus __gen_Q.R__ ausgeführt.
+Der Demand ist der Startwert, also die "Messgröße" für die Kunden C.  
+Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion _gen_Demand_ aus __gen_Q.R__ ausgeführt.
 
 ```{r, echo=FALSE}
 .gen_Demand <- function(NUMB_C,TQ,Q_VAR){
@@ -73,3 +97,85 @@ Um diese Beziehung in Form eines Vektors zu zufällig generieren, wird die Funkt
 ```
 
 Daraus ergibt sich: `r C_DEMAND`. (In Summe 101, wieso?)
+
+### Create Designmatrix
+Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion _create_designmatrix_ aus dem Reiter __designfunctions.R__ ausgeführt.
+
+```{R, echo=FALSE}
+.create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
+ #generating A_X_Y  => design matrix
+  
+repeat
+  {
+
+  if(DENS == 2) {                 #Density is defined in gen_EAD for each matrix separatly (e.g. DENS_CNFR), if density = 2 we want a diagonal matrix
+    
+    if (X!=Y) {A_XY = 'error'}    #Size must be identical nrow = ncol
+    else {
+        A_YX = diag(X)# full decoupled
+      }
+    
+  }
+  
+  else if(DENS == -1) {           #if density = -1 we want a matrix with a random density between the desired boundaries (eg. [0.4,0.7])
+    DENS_MIN = 0.4
+    DENS_MAX = 0.7
+    DENS = runif(1, DENS_MIN, DENS_MAX);
+    rand_DENS = runif(X*Y) #draw random numbers
+    A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),nrow=X,ncol=Y) ## 1/0 DENSITY 
+  
+  }
+  
+  else {                          #if density is set to a fixed value 
+    
+    rand_DENS = runif(X*Y) #draw random numbers
+    A_YX = matrix(ifelse(rand_DENS > DENS, 0,1),nrow=X,ncol=Y) ## 1/0 DENSITY 
+  
+  }
+
+  ROW_ZEROS<-any(rowSums(A_YX[,])==0)   #every product need at least one resource
+  COL_ZEROS<-any(colSums(A_YX[,])==0)   #every resource needs to be used at least once
+  
+  if(ROW_ZEROS==FALSE & COL_ZEROS==FALSE) {  break  }   
+  }
+  
+
+  
+rownames(A_YX) = c(paste0(rowname, 1:nrow(A_YX)))
+colnames(A_YX) = c(paste0(colname, 1:ncol(A_YX)))
+
+return(A_YX)
+ 
+}
+```
+
+
+### Customer diversity
+
+```{R, echo=FALSE}
+  A_CCN =  .create_designmatrix(EAD$NUMB_C,EAD$NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
+  
+  CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
+  EAD$CN = CN
+  ```
+ 
+Daraus ergibt sich:
+$$
+demand*A_{CCN} = CN.
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r C_DEMAND[1]`\\
+`r C_DEMAND[2]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r A_CCN[1,1]` & `r A_CCN[1,2]`\\
+`r A_CCN[2,1]` & `r A_CCN[2,2]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r CN[1]`\\ 
+`r CN[2]`
+\end{array}\right)
+$$
+  
