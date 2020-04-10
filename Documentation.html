@@ -376,6 +376,7 @@ Reiter sind <strong>fett</strong>.</p>
 <p>Kunden: 2<br />
 Kundenwünsche: 2<br />
 Functional Requ.: 3<br />
+Komponenten: 3<br />
 Processes: 3<br />
 Ressourcen: 4</p>
 </div>
@@ -394,23 +395,141 @@ Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funkt
 </div>
 <div id="customer-diversity" class="section level3">
 <h3>Customer diversity</h3>
+<pre class="r"><code>  A_CCN =  .create_designmatrix(EAD$NUMB_C,EAD$NUMB_CN,DENS_CCN,&quot;C&quot;,&quot;CN&quot;) #Customer - Customer Needs Matrix
+  
+  CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
+  EAD$CN = CN</code></pre>
 <p>Daraus ergibt sich: <span class="math display">\[
-demand*A_{CCN} = CN.
+A_{CCN}^{T}*demand = CN
 \]</span></p>
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
-70\\
-31
-\end{array}\right)
-* \left(\begin{array}{cc} 
 0 &amp; 1\\
 1 &amp; 0
 \end{array}\right)
+* \left(\begin{array}{cc} 
+70\\
+31
+\end{array}\right)
 = \left(\begin{array}{cc} 
 31\\ 
-70
+70\\
 \end{array}\right)
 \]</span></p>
+</div>
+<div id="market-structure" class="section level3">
+<h3>Market Structure</h3>
+<pre class="r"><code>  A_CNFR = .create_designmatrix(EAD$NUMB_CN,EAD$NUMB_FR,DENS_CNFR,&quot;CN&quot;,&quot;FR&quot;)
+  
+  FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
+  EAD$FR = FR</code></pre>
+<p><span class="math display">\[
+A_{CNRF}^{T}*CN = FR
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+0 &amp; 1\\
+1 &amp; 1\\
+1 &amp; 0
+\end{array}\right)
+* \left(\begin{array}{cc} 
+31\\
+70
+\end{array}\right)
+= \left(\begin{array}{cc} 
+70\\
+101\\
+31
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="product-architecture" class="section level3">
+<h3>Product architecture</h3>
+<pre class="r"><code>  A_FRCM = .create_designmatrix(EAD$NUMB_FR,EAD$NUMB_CM,DENS_FRCM,&quot;FR&quot;,&quot;CM&quot;)
+
+  #EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
+  CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
+  EAD$CM = CM</code></pre>
+<p><span class="math display">\[
+A_{FRCM}^{T}*FR = CM
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+1 &amp; 1 &amp; 1\\
+1 &amp; 0 &amp; 0\\
+1 &amp; 0 &amp; 1
+\end{array}\right)
+* \left(\begin{array}{cc} 
+70\\
+101\\
+31
+\end{array}\right)
+= \left(\begin{array}{cc} 
+202\\
+70\\ 
+101
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="production-technology" class="section level3">
+<h3>Production technology</h3>
+<pre class="r"><code>  EAD = .gen_RES_CONS_PAT(EAD,EAD$NUMB_CM,EAD$NUMB_PV,DENS_CMPV)
+  A_CMPV = EAD$A_CMPV
+
+  PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
+  EAD$PV = PV</code></pre>
+<p><span class="math display">\[
+A_{CMPV}^{T}*CM = PV
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+2 &amp; 16 &amp; 6\\
+0 &amp; 23 &amp; 2\\
+14 &amp; 0 &amp; 0
+\end{array}\right)
+* \left(\begin{array}{cc} 
+202\\
+70\\
+101
+\end{array}\right)
+= \left(\begin{array}{cc} 
+2130\\ 
+1812\\
+2828
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="resources" class="section level3">
+<h3>Resources</h3>
+<pre class="r"><code>  A_PVRC = .create_designmatrix(EAD$NUMB_PV,EAD$NUMB_RC,DENS_PVRC,&quot;PV&quot;,&quot;RC&quot;)
+ 
+  RC = as.vector(PV) %*% (A_PVRC) # computing CM * q
+  EAD$RC = RC</code></pre>
+<p><span class="math display">\[
+A_{PVRC}^{T}*PV = RC
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+1 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1\\
+1 &amp; 0 &amp; 0\\
+0 &amp; 1 &amp; 1
+\end{array}\right)
+* \left(\begin{array}{cc} 
+2130\\
+1812\\
+2828
+\end{array}\right)
+= \left(\begin{array}{cc} 
+2130\\ 
+2828\\
+2130\\ 
+4640
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="ead-computing" class="section level3">
+<h3>EAD Computing</h3>
 </div>
 </div>
 

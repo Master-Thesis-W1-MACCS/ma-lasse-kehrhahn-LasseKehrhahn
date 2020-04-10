@@ -1,0 +1,127 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Documentation},
+  pdfauthor={Lasse Kehrhahn},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Documentation}
+\author{Lasse Kehrhahn}
+\date{}
+
+\begin{document}
+\maketitle
+
+Funktionen sind \emph{kursiv}.\\
+Reiter sind \textbf{fett}.
+
+\hypertarget{init}{%
+\section{01 INIT}\label{init}}
+
+Input-Parameter eingeben.
+
+Kunden: 2\\
+Kundenwünsche: 2\\
+Functional Requ.: 3\\
+Processes: 3\\
+Ressourcen: 4
+
+\hypertarget{gen_ead}{%
+\section{gen\_EAD}\label{gen_ead}}
+
+Die eingegebenen Parameter werden aus \textbf{01 INIT} übergeben.
+
+\hypertarget{demand-generation}{%
+\subsubsection{Demand generation}\label{demand-generation}}
+
+Der Demand ist der Startwert, also die ``Messgröße'' für die Kunden C.\\
+Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird
+die Funktion \emph{gen\_Demand} aus \textbf{gen\_Q.R} ausgeführt.
+
+Daraus ergibt sich: 70, 31. (In Summe 101, wieso?)
+
+\hypertarget{create-designmatrix}{%
+\subsubsection{Create Designmatrix}\label{create-designmatrix}}
+
+Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion
+\emph{create\_designmatrix} aus dem Reiter \textbf{designfunctions.R}
+ausgeführt.
+
+\hypertarget{customer-diversity}{%
+\subsubsection{Customer diversity}\label{customer-diversity}}
+
+Daraus ergibt sich: \[
+demand*A_{CCN} = CN.
+\]
+
+\[
+\left(\begin{array}{cc} 
+70\\
+31
+\end{array}\right)
+* \left(\begin{array}{cc} 
+0 & 1\\
+1 & 0
+\end{array}\right)
+= \left(\begin{array}{cc} 
+31\\ 
+70
+\end{array}\right)
+\]
+
+\end{document}

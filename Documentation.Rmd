@@ -1,8 +1,10 @@
 ---
 title: "Documentation"
 author: "Lasse Kehrhahn"
-date: ""
-output: html_document
+date: ''
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 Funktionen sind _kursiv_.  
@@ -21,6 +23,7 @@ DATAp = data.frame()
 EAD$NUMB_C =       2
 EAD$NUMB_CN =      2
 EAD$NUMB_FR =      3
+EAD$NUMB_CM =      3
 EAD$NUMB_PV =      3
 EAD$NUMB_RC =      4
 
@@ -28,15 +31,6 @@ SIM_NUMB =         100                 #Control Variable - Number of Simulations
 
 TC =               100                #Total costs
 TQ =               100
-
-
-###### STRUKTUR BEACHTUNG ##########
-# EAD$TYPE_CCN  =    "UC"               #DefiNS = 0-1)
-# EAD$TYPE_CNFR =    "UC"
-# EAD$TYPE_FRCM =    "C"
-# EAD$TYPE_CMPV =    "UC"
-# EAD$TYPE_PVRC =    "UC"
-
 
 ## ==== INPUT PARAMETER MASK ===========
 DENS_CCN = c(0.4)
@@ -46,18 +40,16 @@ DENS_CMPV = c(0.4)
 DENS_PVRC = c(0.4)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
-NUMB_CM = c(3)
-
+#NUMB_CM = c(3)
 
 set.seed(13) #Reproducability
 o=1 # First design point
-
-## ==== DESIGN OF EXPERIMENTS ==== 
 
 ```
 Kunden: `r EAD$NUMB_C`  
 Kundenwünsche: `r EAD$NUMB_CN`  
 Functional Requ.: `r EAD$NUMB_FR`  
+Komponenten: `r EAD$NUMB_CM`  
 Processes: `r EAD$NUMB_PV`  
 Ressourcen: `r EAD$NUMB_RC`  
 
@@ -152,30 +144,316 @@ return(A_YX)
 
 ### Customer diversity
 
-```{R, echo=FALSE}
+```{R}
   A_CCN =  .create_designmatrix(EAD$NUMB_C,EAD$NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
   
   CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
   EAD$CN = CN
-  ```
+```
  
 Daraus ergibt sich:
 $$
-demand*A_{CCN} = CN.
+A_{CCN}^{T}*demand = CN
 $$
   
 $$
 \left(\begin{array}{cc} 
+`r A_CCN[1,1]` & `r A_CCN[2,1]`\\
+`r A_CCN[1,2]` & `r A_CCN[2,2]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
 `r C_DEMAND[1]`\\
 `r C_DEMAND[2]`
 \end{array}\right)
-* \left(\begin{array}{cc} 
-`r A_CCN[1,1]` & `r A_CCN[1,2]`\\
-`r A_CCN[2,1]` & `r A_CCN[2,2]`
-\end{array}\right)
 = \left(\begin{array}{cc} 
 `r CN[1]`\\ 
-`r CN[2]`
+`r CN[2]`\\
 \end{array}\right)
 $$
   
+### Market Structure
+
+```{R}
+  A_CNFR = .create_designmatrix(EAD$NUMB_CN,EAD$NUMB_FR,DENS_CNFR,"CN","FR")
+  
+  FR = as.vector(CN) %*% (A_CNFR)   # computing FR * q
+  EAD$FR = FR
+```
+
+$$
+A_{CNRF}^{T}*CN = FR
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_CNFR[1,1]` & `r A_CNFR[2,1]`\\
+`r A_CNFR[1,2]` & `r A_CNFR[2,2]`\\
+`r A_CNFR[1,3]` & `r A_CNFR[2,3]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r CN[1]`\\
+`r CN[2]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r FR[1]`\\
+`r FR[2]`\\
+`r FR[3]`
+\end{array}\right)
+$$
+
+### Product architecture
+    
+```{R}
+  A_FRCM = .create_designmatrix(EAD$NUMB_FR,EAD$NUMB_CM,DENS_FRCM,"FR","CM")
+
+  #EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
+  CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
+  EAD$CM = CM
+```
+
+$$
+A_{FRCM}^{T}*FR = CM
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_FRCM[1,1]` & `r A_FRCM[2,1]` & `r A_FRCM[3,1]`\\
+`r A_FRCM[1,2]` & `r A_FRCM[2,2]` & `r A_FRCM[3,2]`\\
+`r A_FRCM[1,3]` & `r A_FRCM[2,3]` & `r A_FRCM[3,3]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r FR[1]`\\
+`r FR[2]`\\
+`r FR[3]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r CM[1]`\\
+`r CM[2]`\\ 
+`r CM[3]`
+\end{array}\right)
+$$
+
+### Production technology
+
+```{R, echo=FALSE}
+.gen_RES_CONS_PAT <- function(EAD,NUMB_CM,NUMB_PV,DENS_CMPV){
+
+## ====================== STEP 1 Determining the activities =========================
+  UNITLEVEL_ACT_SHARE_MIN = 0.2    #0.2 is the size of DISP1 =10
+  UNITLEVEL_ACT_SHARE_MAX = 0.4
+  EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE = runif(1, UNITLEVEL_ACT_SHARE_MIN, UNITLEVEL_ACT_SHARE_MAX) #random activity share between lower and upper bounds
+  
+  EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE_MIN = UNITLEVEL_ACT_SHARE_MIN
+  EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE_MAX = UNITLEVEL_ACT_SHARE_MAX
+## ====================== STEP 1 Determining the amount of cost categories =================
+  
+  unitsize = floor(EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE*NUMB_PV)
+  nonunitsize = NUMB_PV-unitsize
+  
+  EAD$PRODUCTION_TECHNOLOGY$UNITSIZE = unitsize
+  EAD$PRODUCTION_TECHNOLOGY$NONUNITSIZE = nonunitsize
+
+## ====================== STEP 0.b Determining the density (DENS)  =========================
+
+  #Randomization and setting clear design points. 
+
+  if(DENS_CMPV == -1)
+  {
+    DENS_MIN = 0.4;
+    DENS_MAX = 0.7;
+    DENS = runif(1, DENS_MIN, DENS_MAX)}
+  else{DENS=DENS_CMPV}
+    EAD$PRODUCTION_TECHNOLOGY$DENS_CMPV = DENS
+
+## ====================== STEP 1 BASELINE NORM ========================= 
+
+repeat    {
+    
+BASE = rnorm(NUMB_PV) #creates for every CO (product) a random number
+  
+RES_CONS_PATpre = matrix(rnorm(NUMB_CM*NUMB_PV,mean=0,sd=1), 
+                         NUMB_CM, NUMB_PV)                            #random pre matrix, as Baseline
+
+RES_CONS_PAT = matrix(0, nrow = NUMB_CM, ncol = NUMB_PV, byrow = TRUE) #empy matrix, that is going to be filled 
+
+
+## ====================== STEP 1.a CORRELATION ========================= 
+# Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
+# Rows Products Colums Resources
+
+COR1 =-1
+COR2 =-1
+
+# Correlation of  resources
+if(COR1 == -1){
+  COR1 <- runif(1, -0.2, 0.8)
+ 
+}
+
+sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
+
+# Correlation of the remaining resources
+if(COR2 == -1){
+  COR2 <- runif(1, -0.2, 0.8)
+  
+}
+
+sqrt_const_2 <- sqrt(1 - (COR2 * COR2))
+
+for (i in 1:(EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE*NUMB_PV)) #unitsize+1
+{
+  RES_CONS_PAT[,i] <- (COR1 * BASE)+ sqrt_const_1 * RES_CONS_PATpre[,i];
+}
+
+for (i in ((unitsize)+1) : NUMB_PV) #nonunitsize+1 (34+1)
+{
+  RES_CONS_PAT[,i] <- (COR2 * BASE)+ sqrt_const_2 * RES_CONS_PATpre[,i];
+}
+
+## ====================== STEP 1.b DENSITY ========================= 
+res_cons_pat_b_pre = runif(NUMB_CM*NUMB_PV)
+
+## 1/0 DENSITY
+res_cons_part_b <- matrix(ifelse(res_cons_pat_b_pre > DENS, 0,1),
+                          NUMB_CM,NUMB_PV)
+
+
+RES_CONS_PAT = res_cons_part_b * RES_CONS_PAT
+EAD$PRODUCTION_TECHNOLOGY$RES_CONS_PAT = RES_CONS_PAT
+
+## ====================== STEP 1.c Ceiling and Scaling ============= 
+
+# take absolute value of X and Z and scale by 10 and round them
+# Anand et al. 2019
+##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS
+RES_CONS_PAT[,1] <- (BASE)
+RES_CONS_PAT <- ceiling(abs(RES_CONS_PAT) * 10)
+
+##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAND
+RES_CONS_PAT_TOTAL <- RES_CONS_PAT * as.vector(EAD$CM)
+
+
+
+##CALCULATING TCU
+TCU <- colSums(RES_CONS_PAT_TOTAL)
+##INDIVIDUAL REQUIREMENTS OF THE PRODUCTS * DEMAMD / TRU (Currently like this in Anand et al. 2019)
+RES_CONS_PATp <- sweep((RES_CONS_PAT_TOTAL),2,TCU,"/") #Absolute matrix to relative matrix
+
+## ===================== EXCPETION HANDLER ====================
+
+# EXPECTION HANDLER  & CHECKS AFTER ANAND ET AL. 2019 # It is important the the first RES_CONS_PAT column has no zeros
+# in accordance with Anand etl. 2019 and Balakrishnan et al. 2011; Substantiation of this hidden formalization remains unclear. 
+
+PRO_ZEROS<-any(rowSums(RES_CONS_PAT[,])==0)   #every product need at least one resource
+RES_ZEROS<-any(colSums(RES_CONS_PAT[,])==0)   #every resource needs to be used at least once
+BASE_ZEROS <-any(RES_CONS_PAT[,1]==0)         #first resource needs to be in every product ->why?
+
+if(PRO_ZEROS==FALSE & RES_ZEROS==FALSE & BASE_ZEROS==FALSE) #discard the matrix if one of these conditions is not met
+{
+  break
+}
+
+}
+
+
+## ====================== STEP 3 CHECK ========================= 
+
+# AverageZeroConsumption
+  EAD$PRODUCTION_TECHNOLOGY$NonZeroConsumption = sum(colSums(RES_CONS_PAT != 0))/     #Ratio of Zeros in Res_cons_pat
+  (NUMB_CM * NUMB_PV)
+
+# Average consumption of products consuming a resource
+EAD$PRODUCTION_TECHNOLOGY$countNonZero<-mean(colSums(RES_CONS_PAT[,]>0))
+
+# Correlation Test
+# EAD$PRODUCTION_TECHNOLOGY$COR1<-mean(cor(RES_CONS_PAT[,1:(unitsize)])[1,])
+  
+# EAD$PRODUCTION_TECHNOLOGY$COR2<-mean(cor(RES_CONS_PAT[,c(1,((unitsize)+1):NUMB_PV)])[1,])
+
+rownames(RES_CONS_PAT) = c(paste0('CM', 1:nrow(RES_CONS_PAT)))
+colnames(RES_CONS_PAT) = c(paste0('PV', 1:ncol(RES_CONS_PAT)))
+
+
+#Average distance 
+EAD$PRODUCTION_TECHNOLOGY$RES_CONS_PAT = RES_CONS_PAT
+EAD$A_CMPV = RES_CONS_PAT
+EAD$PRODUCTION_TECHNOLOGY$RES_CONS_PAT_TOTAL = RES_CONS_PAT_TOTAL
+EAD$PRODUCTION_TECHNOLOGY$RES_CONS_PATp = RES_CONS_PATp
+
+
+#
+#
+#
+return(EAD)
+
+}
+```
+
+```{R}
+  EAD = .gen_RES_CONS_PAT(EAD,EAD$NUMB_CM,EAD$NUMB_PV,DENS_CMPV)
+  A_CMPV = EAD$A_CMPV
+
+  PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
+  EAD$PV = PV
+```
+
+$$
+A_{CMPV}^{T}*CM = PV
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_CMPV[1,1]` & `r A_CMPV[2,1]` & `r A_CMPV[3,1]`\\
+`r A_CMPV[1,2]` & `r A_CMPV[2,2]` & `r A_CMPV[3,2]`\\
+`r A_CMPV[1,3]` & `r A_CMPV[2,3]` & `r A_CMPV[3,3]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r CM[1]`\\
+`r CM[2]`\\
+`r CM[3]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r PV[1]`\\ 
+`r PV[2]`\\
+`r PV[3]`
+\end{array}\right)
+$$
+
+### Resources
+
+```{R}
+  A_PVRC = .create_designmatrix(EAD$NUMB_PV,EAD$NUMB_RC,DENS_PVRC,"PV","RC")
+ 
+  RC = as.vector(PV) %*% (A_PVRC) # computing CM * q
+  EAD$RC = RC
+```
+
+$$
+A_{PVRC}^{T}*PV = RC
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_PVRC[1,1]` & `r A_PVRC[2,1]` & `r A_PVRC[3,1]`\\
+`r A_PVRC[1,2]` & `r A_PVRC[2,2]` & `r A_PVRC[3,2]`\\
+`r A_PVRC[1,3]` & `r A_PVRC[2,3]` & `r A_PVRC[3,3]`\\
+`r A_PVRC[1,4]` & `r A_PVRC[2,4]` & `r A_PVRC[3,4]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r PV[1]`\\
+`r PV[2]`\\
+`r PV[3]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r RC[1]`\\ 
+`r RC[2]`\\
+`r RC[3]`\\ 
+`r RC[4]`
+\end{array}\right)
+$$
+
+### EAD Computing
+
+```{R}
+
+```
