@@ -8,7 +8,11 @@ output:
 ---
 
 Funktionen sind _kursiv_.  
-Reiter sind __fett__.
+Reiter sind __fett__.  
+Beachte Matrizen-Multiplikationsregel:
+$$
+A*B=B^{T}*A^{T}
+$$
 
 # 01 INIT
 
