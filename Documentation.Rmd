@@ -92,7 +92,7 @@ Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funkt
   EAD$C_DEMAND <- C_DEMAND
 ```
 
-Daraus ergibt sich: `r C_DEMAND`. (In Summe 101, wieso?)
+Daraus ergibt sich: `r C_DEMAND`.
 
 ### Create Designmatrix
 Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion _create_designmatrix_ aus dem Reiter __designfunctions.R__ ausgeführt.
@@ -494,7 +494,7 @@ $$
 ```
 
 ```{R}
-RCC = matrix(.gen_RCC(RCC_VAR,1*10^6,RC))
+RCC = matrix(.gen_RCC(RCC_VAR,TC,RC))
 ```
 
 $$
