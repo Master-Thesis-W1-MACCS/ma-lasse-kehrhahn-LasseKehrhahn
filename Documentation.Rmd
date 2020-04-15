@@ -64,11 +64,10 @@ Die eingegebenen Parameter werden aus __01 INIT__ übergeben.
 ### Demand generation
 
 Der Demand ist der Startwert, also die "Messgröße" für die Kunden C.  
-Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion _gen_Demand_ aus __gen_Q.R__ ausgeführt.
+Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion _.gen_Demand_ aus __gen_Q.R__ ausgeführt.In dieser Funktion werden zunächst mittels _runif()_ zufällige Werte mit einer Standartabweichung zwischen Q_VAR_MIN/MAX erzeugt. Anschließend werden die Werte auf TQ normiert und gerundet und absteigend in den Vektor sortiert.
 
-```{r, echo=FALSE}
+```{r}
 .gen_Demand <- function(NUMB_C,TQ,Q_VAR){
-  # This has been used in the Mertens (2020) for modeling dispersed realized demand
 
   if (Q_VAR == -1)
   {
@@ -77,38 +76,46 @@ Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funkt
     Q_VAR = runif(1, Q_VAR_MIN, Q_VAR_MAX) #runif = Uniform Distribution on interval min to max.
   }
   
-  preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #preDemand is buildup as a -> Log Normal Distribution whose logarithm has mean equal to meanlog and standard deviation equal to sdlog
+  preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #Log Normal Distribution
   DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = runden
   EAD$Q_VAR_draw = Q_VAR
-  
-  #CHECKS 
-  Qs = sort(DEMAND, decreasing = TRUE)
-  EAD$CHECK$Q20 = sum(Qs[1:(0.2 * NUMB_C)])/TQ        #no. of units of 20% biggest products
-  
+
   return(DEMAND)
 }
 
+#Demand generation
   C_DEMAND <- .gen_Demand(EAD$NUMB_C, TQ, Q_VAR)
   EAD$C_DEMAND <- C_DEMAND
 ```
 
-Daraus ergibt sich: `r C_DEMAND`.
+Daraus ergibt sich beispielsweise:
+
+$$
+demand
+= \left(\begin{array}{cc} 
+`r C_DEMAND[1]`\\
+`r C_DEMAND[2]`
+\end{array}\right)
+$$
 
 ### Create Designmatrix
-Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion _create_designmatrix_ aus dem Reiter __designfunctions.R__ ausgeführt.
+Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion _.create_designmatrix_ aus dem Reiter __designfunctions.R__ ausgeführt. Dabei darf es keine 0-Reihe sowie keine 0-Spalte geben.
+Die generierten Matrizen sind abhängig von dem Parameter DENS. Hierzu werden folgende Fälle unterschieden:
+
+DENS = 2:  Die generierte Matrix ist diagonal, das Gleichungssystem ist somit entkoppelt.  
+DENS = -1: Die Einträge der Matrix werden wie demand generation zufällig generiert.
+DENS = Rest: zufällige Matrix mit der eingegebenen DENS.
 
 ```{R, echo=FALSE}
 .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
- #generating A_X_Y  => design matrix
-  
+
 repeat
   {
 
-  if(DENS == 2) {                 #Density is defined in gen_EAD for each matrix separatly (e.g. DENS_CNFR), if density = 2 we want a diagonal matrix
-    
+  if(DENS == 2) {                 #Density is defined in gen_EAD for each matrix separatly (e.g. DENS_CNFR), if density = 2 it is diagonal
     if (X!=Y) {A_XY = 'error'}    #Size must be identical nrow = ncol
     else {
-        A_YX = diag(X)# full decoupled
+        A_YX = diag(X)# fully decoupled
       }
     
   }
@@ -135,7 +142,6 @@ repeat
   if(ROW_ZEROS==FALSE & COL_ZEROS==FALSE) {  break  }   
   }
   
-
   
 rownames(A_YX) = c(paste0(rowname, 1:nrow(A_YX)))
 colnames(A_YX) = c(paste0(colname, 1:ncol(A_YX)))
@@ -145,9 +151,8 @@ return(A_YX)
 }
 ```
 
-
 ### Customer diversity
-
+Die Kundenvielfalt wird mittels der Funktion _.create_designmatrix()_ erstellt. Die folgenden Schritte sind analog.
 ```{R}
   A_CCN =  .create_designmatrix(EAD$NUMB_C,EAD$NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
   
@@ -206,7 +211,7 @@ $$
 $$
 
 ### Product architecture
-    
+
 ```{R}
   A_FRCM = .create_designmatrix(EAD$NUMB_FR,EAD$NUMB_CM,DENS_FRCM,"FR","CM")
 
@@ -238,7 +243,7 @@ $$
 $$
 
 ### Production technology
-
+Ausnahme. Hier wird die Matrix durch die Funktion _.gen_RES_CONS_PAT()_ erstellt. Dies funktionietrt im Prinzip wie die demand generation.
 ```{R, echo=FALSE}
 .gen_RES_CONS_PAT <- function(EAD,NUMB_CM,NUMB_PV,DENS_CMPV){
 
@@ -457,6 +462,7 @@ $$
 $$
 
 ### EAD Computing
+s
 ```{R, echo=FALSE}
 .gen_RCC<- function(RC_VAR, TC, NUMB_RC)  
   {

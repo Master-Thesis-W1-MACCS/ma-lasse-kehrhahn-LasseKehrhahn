@@ -389,15 +389,44 @@ Ressourcen: 4</p>
 <div id="demand-generation" class="section level3">
 <h3>Demand generation</h3>
 <p>Der Demand ist der Startwert, also die “Messgröße” für die Kunden C.<br />
-Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion <em>gen_Demand</em> aus <strong>gen_Q.R</strong> ausgeführt.</p>
-<p>Daraus ergibt sich: 70, 31. (In Summe 101, wieso?)</p>
+Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion <em>.gen_Demand</em> aus <strong>gen_Q.R</strong> ausgeführt.In dieser Funktion werden zunächst mittels <em>runif()</em> zufällige Werte mit einer Standartabweichung zwischen Q_VAR_MIN/MAX erzeugt. Anschließend werden die Werte auf TQ normiert und gerundet und absteigend in den Vektor sortiert.</p>
+<pre class="r"><code>.gen_Demand &lt;- function(NUMB_C,TQ,Q_VAR){
+
+  if (Q_VAR == -1)
+  {
+    Q_VAR_MIN = 0.4
+    Q_VAR_MAX = 1.6
+    Q_VAR = runif(1, Q_VAR_MIN, Q_VAR_MAX) #runif = Uniform Distribution on interval min to max.
+  }
+  
+  preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #Log Normal Distribution
+  DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = runden
+  EAD$Q_VAR_draw = Q_VAR
+
+  return(DEMAND)
+}
+
+#Demand generation
+  C_DEMAND &lt;- .gen_Demand(EAD$NUMB_C, TQ, Q_VAR)
+  EAD$C_DEMAND &lt;- C_DEMAND</code></pre>
+<p>Daraus ergibt sich beispielsweise:</p>
+<p><span class="math display">\[
+demand
+= \left(\begin{array}{cc} 
+70\\
+31
+\end{array}\right)
+\]</span></p>
 </div>
 <div id="create-designmatrix" class="section level3">
 <h3>Create Designmatrix</h3>
-<p>Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion <em>create_designmatrix</em> aus dem Reiter <strong>designfunctions.R</strong> ausgeführt.</p>
+<p>Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion <em>.create_designmatrix</em> aus dem Reiter <strong>designfunctions.R</strong> ausgeführt. Dabei darf es keine 0-Reihe sowie keine 0-Spalte geben. Die generierten Matrizen sind abhängig von dem Parameter DENS. Hierzu werden folgende Fälle unterschieden:</p>
+<p>DENS = 2: Die generierte Matrix ist diagonal, das Gleichungssystem ist somit entkoppelt.<br />
+DENS = -1: Die Einträge der Matrix werden wie demand generation zufällig generiert. DENS = Rest: zufällige Matrix mit der eingegebenen DENS.</p>
 </div>
 <div id="customer-diversity" class="section level3">
 <h3>Customer diversity</h3>
+<p>Die Kundenvielfalt wird mittels der Funktion <em>.create_designmatrix()</em> erstellt.</p>
 <pre class="r"><code>  A_CCN =  .create_designmatrix(EAD$NUMB_C,EAD$NUMB_CN,DENS_CCN,&quot;C&quot;,&quot;CN&quot;) #Customer - Customer Needs Matrix
   
   CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers

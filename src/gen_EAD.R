@@ -82,7 +82,7 @@ gen_EAD <- function(EAD,TQ) {
   
   EAD$RC = RC
   
-  RCC = matrix(.gen_RCC(RCC_VAR,1*10^6,RC))
+  RCC = matrix(.gen_RCC(RCC_VAR,TC,RC))
   #RCU = (RCC/RC)
   
   
