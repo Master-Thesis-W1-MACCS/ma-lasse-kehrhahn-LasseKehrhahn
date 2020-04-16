@@ -512,3 +512,154 @@ RCC=
 `r RCC[4,1]`
 \end{array}\right)
 $$
+
+### Cost Computing
+Der letzte Schritt ist die Berechnung der Gesamtkosten. Hierfür werden zunächst die Matrizen modifiziert, indem alle Matrix-Einträge durch die Summe der jeweiligen Spalte geteilt werden.
+
+```{R}
+  A_PVRCp <- sweep((A_PVRC),2,colSums(A_PVRC),"/") #Absolute matrix to relative matrix, colSums() = Sum of the column
+  A_CMPVp <- sweep((A_CMPV),2,colSums(A_CMPV),"/") #Absolute matrix to relative matrix  
+  A_FRCMp <- sweep((A_FRCM),2,colSums(A_FRCM),"/") #Absolute matrix to relative matrix
+  A_CNFRp <- sweep((A_CNFR),2,colSums(A_CNFR),"/") #Absolute matrix to relative matrix
+  A_CCNp  <- sweep((A_CCN),2,colSums(A_CCN),"/")   #Absolute matrix to relative matrix
+  
+```
+
+Zum Beispiel:
+
+$$
+A_{PVRCp_{3,4}} = `r A_PVRC[3,4]` / `r colSums(A_PVRC)[4]` = `r A_PVRC[3,4] / colSums(A_PVRC)[4]`
+$$
+
+Anschließend wird das EAD rückwärts zurückgerechnet, mit den modifizierten Matrizen beginnend mit RCC.
+
+```{R}
+  PVC =  (A_PVRCp) %*% as.vector(RCC)
+  CMC =  (A_CMPVp) %*% as.vector(PVC)
+  FRC =  (A_FRCMp) %*% as.vector((CMC))
+  CNC =  (A_CNFRp) %*% as.vector((FRC))
+  CC  =  (A_CCNp)  %*% as.vector((CNC))
+
+  EAD$RCC = RCC
+  EAD$A_CCN = A_CCN
+  EAD$A_CNFR = A_CNFR
+  EAD$A_FRCM = A_FRCM
+  EAD$A_CMPV = A_CMPV
+  EAD$A_PVRC = A_PVRC
+```
+
+#### Prozesskosten
+
+$$
+A_{PVRCp}*RCC = PVC
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_PVRCp[1,1]` & `r A_PVRCp[1,2]` & `r A_PVRCp[1,3]` & `r A_PVRCp[1,4]`\\
+`r A_PVRCp[2,1]` & `r A_PVRCp[2,2]` & `r A_PVRCp[2,3]` & `r A_PVRCp[2,4]`\\
+`r A_PVRCp[3,1]` & `r A_PVRCp[3,2]` & `r A_PVRCp[3,3]` & `r A_PVRCp[3,4]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r RCC[1]`\\ 
+`r RCC[2]`\\
+`r RCC[3]`\\ 
+`r RCC[4]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r PVC[1]`\\
+`r PVC[2]`\\
+`r PVC[3]`
+\end{array}\right)
+$$
+
+#### Komponentenkosten
+
+$$
+A_{CMPVp}*PVC = CMC
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_CMPVp[1,1]` & `r A_CMPVp[1,2]` & `r A_CMPVp[1,3]`\\
+`r A_CMPVp[2,1]` & `r A_CMPVp[2,2]` & `r A_CMPVp[2,3]`\\
+`r A_CMPVp[3,1]` & `r A_CMPVp[3,2]` & `r A_CMPVp[3,3]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r PVC[1]`\\ 
+`r PVC[2]`\\
+`r PVC[3]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r CMC[1]`\\
+`r CMC[2]`\\
+`r CMC[3]`
+\end{array}\right)
+$$
+
+#### Architekturkosten
+
+$$
+A_{FRCMp}*CMC = FRC
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_FRCMp[1,1]` & `r A_FRCMp[1,2]` & `r A_FRCMp[1,3]`\\
+`r A_FRCMp[2,1]` & `r A_FRCMp[2,2]` & `r A_FRCMp[2,3]`\\
+`r A_FRCMp[3,1]` & `r A_FRCMp[3,2]` & `r A_FRCMp[3,3]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r CMC[1]`\\ 
+`r CMC[2]`\\
+`r CMC[3]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r FRC[1]`\\
+`r FRC[2]`\\
+`r FRC[3]`
+\end{array}\right)
+$$
+
+#### Marktstrukturkosten
+
+$$
+A_{CNFRp}*FRC = CNC
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_CNFRp[1,1]` & `r A_CNFRp[1,2]` & `r A_CNFRp[1,3]`\\
+`r A_CNFRp[2,1]` & `r A_CNFRp[2,2]` & `r A_CNFRp[2,3]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r FRC[1]`\\ 
+`r FRC[2]`\\
+`r FRC[3]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r CNC[1]`\\
+`r CNC[2]`
+\end{array}\right)
+$$
+
+#### Gesamtkosten
+
+$$
+A_{CCNp}*CNC = CC
+$$
+  
+$$
+\left(\begin{array}{cc} 
+`r A_CCNp[1,1]` & `r A_CCNp[1,2]`\\
+`r A_CCNp[2,1]` & `r A_CCNp[2,2]`
+\end{array}\right)
+* \left(\begin{array}{cc} 
+`r CNC[1]`\\ 
+`r CNC[2]`
+\end{array}\right)
+= \left(\begin{array}{cc} 
+`r CC[1]`\\
+`r CC[2]`
+\end{array}\right)
+$$
