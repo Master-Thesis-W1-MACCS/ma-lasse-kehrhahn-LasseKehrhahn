@@ -94,6 +94,8 @@ gen_EAD <- function(EAD,TQ) {
   A_CNFRp <- sweep((A_CNFR),2,colSums(A_CNFR),"/") #Absolute matrix to relative matrix
   A_CCNp  <- sweep((A_CCN),2,colSums(A_CCN),"/") #Absolute matrix to relative matrix
   
+  EAD$A_PVRCp = A_PVRCp
+  
   PVC =  (A_PVRCp) %*% as.vector(RCC)
   CMC =  (A_CMPVp) %*% as.vector(PVC)
   FRC =  (A_FRCMp) %*% as.vector((CMC))

@@ -389,7 +389,7 @@ Ressourcen: 4</p>
 <div id="demand-generation" class="section level3">
 <h3>Demand generation</h3>
 <p>Der Demand ist der Startwert, also die “Messgröße” für die Kunden C.<br />
-Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion <em>.gen_Demand</em> aus <strong>gen_Q.R</strong> ausgeführt.In dieser Funktion werden zunächst mittels <em>runif()</em> zufällige Werte mit einer Standartabweichung zwischen Q_VAR_MIN/MAX erzeugt. Anschließend werden die Werte auf TQ normiert und gerundet und absteigend in den Vektor sortiert.</p>
+Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion <em>.gen_Demand</em> aus <strong>gen_Q.R</strong> ausgeführt.In dieser Funktion werden zunächst mittels <em>runif()</em> zufällige Werte mit einer Standartabweichung zwischen Q_VAR_MIN/MAX erzeugt. Anschließend werden die Werte auf TQ normiert, aufgerundet und absteigend in den Vektor sortiert.</p>
 <pre class="r"><code>.gen_Demand &lt;- function(NUMB_C,TQ,Q_VAR){
 
   if (Q_VAR == -1)
@@ -400,7 +400,7 @@ Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funkt
   }
   
   preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #Log Normal Distribution
-  DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = runden
+  DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = aufrunden
   EAD$Q_VAR_draw = Q_VAR
 
   return(DEMAND)
@@ -426,7 +426,7 @@ DENS = -1: Die Einträge der Matrix werden wie demand generation zufällig gener
 </div>
 <div id="customer-diversity" class="section level3">
 <h3>Customer diversity</h3>
-<p>Die Kundenvielfalt wird mittels der Funktion <em>.create_designmatrix()</em> erstellt.</p>
+<p>Die Kundenvielfalt wird mittels der Funktion <em>.create_designmatrix()</em> erstellt. Die folgenden Schritte sind analog.</p>
 <pre class="r"><code>  A_CCN =  .create_designmatrix(EAD$NUMB_C,EAD$NUMB_CN,DENS_CCN,&quot;C&quot;,&quot;CN&quot;) #Customer - Customer Needs Matrix
   
   CN = C_DEMAND %*% (A_CCN)  #computing CN * q from the customers
@@ -505,6 +505,7 @@ A_{FRCM}^{T}*FR = CM
 </div>
 <div id="production-technology" class="section level3">
 <h3>Production technology</h3>
+<p>Ausnahme. Hier wird die Matrix durch die Funktion <em>.gen_RES_CONS_PAT()</em> erstellt. Dies funktionietrt im Prinzip wie die demand generation. Die Einträge der Matrix werden zufällig mit der eingegebenen Standartabweichung generiert (also nicht nur 1 und 0 Einträge).</p>
 <pre class="r"><code>  EAD = .gen_RES_CONS_PAT(EAD,EAD$NUMB_CM,EAD$NUMB_PV,DENS_CMPV)
   A_CMPV = EAD$A_CMPV
 
@@ -533,6 +534,7 @@ A_{CMPV}^{T}*CM = PV
 </div>
 <div id="resources" class="section level3">
 <h3>Resources</h3>
+<p>Hier wird wieder eine zufällige Matrix mit 1 und 0 gebildet.</p>
 <pre class="r"><code>  A_PVRC = .create_designmatrix(EAD$NUMB_PV,EAD$NUMB_RC,DENS_PVRC,&quot;PV&quot;,&quot;RC&quot;)
  
   RC = as.vector(PV) %*% (A_PVRC) # computing CM * q
@@ -562,6 +564,7 @@ A_{PVRC}^{T}*PV = RC
 </div>
 <div id="ead-computing" class="section level3">
 <h3>EAD Computing</h3>
+<p>Anschließend werden die Resource-Costs berechnet. hierfür wird die Funktion <em>.gen_RCC</em> aus dem Reiter <strong>.gen_RCC.R</strong> verwendet. Diese erstellt wie bei der Erstellung des demands einen Vektor mit zufälligen Einträgen mit der eingegebenen Standartabweichung. Diese Werte werden anschließend auf die eingegebenen Gesamtkosten TC normiert.</p>
 <pre class="r"><code>RCC = matrix(.gen_RCC(RCC_VAR,TC,RC))</code></pre>
 <p><span class="math display">\[
 RCC=
@@ -572,6 +575,143 @@ RCC=
 17.0168186
 \end{array}\right)
 \]</span></p>
+</div>
+<div id="cost-computing" class="section level3">
+<h3>Cost Computing</h3>
+<p>Der letzte Schritt ist die Berechnung der Gesamtkosten. Hierfür werden zunächst die Matrizen modifiziert, indem alle Matrix-Einträge durch die Summe der jeweiligen Spalte geteilt werden.</p>
+<pre class="r"><code>  A_PVRCp &lt;- sweep((A_PVRC),2,colSums(A_PVRC),&quot;/&quot;) #Absolute matrix to relative matrix, colSums() = Sum of the column
+  A_CMPVp &lt;- sweep((A_CMPV),2,colSums(A_CMPV),&quot;/&quot;) #Absolute matrix to relative matrix  
+  A_FRCMp &lt;- sweep((A_FRCM),2,colSums(A_FRCM),&quot;/&quot;) #Absolute matrix to relative matrix
+  A_CNFRp &lt;- sweep((A_CNFR),2,colSums(A_CNFR),&quot;/&quot;) #Absolute matrix to relative matrix
+  A_CCNp  &lt;- sweep((A_CCN),2,colSums(A_CCN),&quot;/&quot;)   #Absolute matrix to relative matrix</code></pre>
+<p>Zum Beispiel:</p>
+<p><span class="math display">\[
+A_{PVRCp_{3,4}} = 1 / 2 = 0.5
+\]</span></p>
+<p>Anschließend wird das EAD rückwärts zurückgerechnet, mit den modifizierten Matrizen angefangen bei RCC.</p>
+<pre class="r"><code>  PVC =  (A_PVRCp) %*% as.vector(RCC)
+  CMC =  (A_CMPVp) %*% as.vector(PVC)
+  FRC =  (A_FRCMp) %*% as.vector((CMC))
+  CNC =  (A_CNFRp) %*% as.vector((FRC))
+  CC  =  (A_CCNp)  %*% as.vector((CNC))
+
+  EAD$RCC = RCC
+  EAD$A_CCN = A_CCN
+  EAD$A_CNFR = A_CNFR
+  EAD$A_FRCM = A_FRCM
+  EAD$A_CMPV = A_CMPV
+  EAD$A_PVRC = A_PVRC</code></pre>
+<div id="prozesskosten" class="section level4">
+<h4>Prozesskosten</h4>
+<p><span class="math display">\[
+A_{PVRCp}*RCC = PVC
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+1 &amp; 0 &amp; 1 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 0.5\\
+0 &amp; 1 &amp; 0 &amp; 0.5
+\end{array}\right)
+* \left(\begin{array}{cc} 
+35.1210767\\ 
+33.1519962\\
+14.7101085\\ 
+17.0168186
+\end{array}\right)
+= \left(\begin{array}{cc} 
+49.8311852\\
+8.5084093\\
+41.6604055
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="komponentenkosten" class="section level4">
+<h4>Komponentenkosten</h4>
+<p><span class="math display">\[
+A_{CMPVp}*PVC = CMC
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+0.0833333 &amp; 0 &amp; 1\\
+0.6666667 &amp; 0.92 &amp; 0\\
+0.25 &amp; 0.08 &amp; 0
+\end{array}\right)
+* \left(\begin{array}{cc} 
+49.8311852\\ 
+8.5084093\\
+41.6604055
+\end{array}\right)
+= \left(\begin{array}{cc} 
+45.8130043\\
+41.0485267\\
+13.138469
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="architekturkosten" class="section level4">
+<h4>Architekturkosten</h4>
+<p><span class="math display">\[
+A_{FRCMp}*CMC = FRC
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+0.3333333 &amp; 1 &amp; 0.5\\
+0.3333333 &amp; 0 &amp; 0\\
+0.3333333 &amp; 0 &amp; 0.5
+\end{array}\right)
+* \left(\begin{array}{cc} 
+45.8130043\\ 
+41.0485267\\
+13.138469
+\end{array}\right)
+= \left(\begin{array}{cc} 
+62.8887626\\
+15.2710014\\
+21.8402359
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="marktstrukturkosten" class="section level4">
+<h4>Marktstrukturkosten</h4>
+<p><span class="math display">\[
+A_{CNFRp}*FRC = CNC
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+0 &amp; 0.5 &amp; 1\\
+1 &amp; 0.5 &amp; 0
+\end{array}\right)
+* \left(\begin{array}{cc} 
+62.8887626\\ 
+15.2710014\\
+21.8402359
+\end{array}\right)
+= \left(\begin{array}{cc} 
+29.4757367\\
+70.5242633
+\end{array}\right)
+\]</span></p>
+</div>
+<div id="gesamtkosten" class="section level4">
+<h4>Gesamtkosten</h4>
+<p><span class="math display">\[
+A_{CCNp}*CNC = CC
+\]</span></p>
+<p><span class="math display">\[
+\left(\begin{array}{cc} 
+0 &amp; 1\\
+1 &amp; 0
+\end{array}\right)
+* \left(\begin{array}{cc} 
+29.4757367\\ 
+70.5242633
+\end{array}\right)
+= \left(\begin{array}{cc} 
+70.5242633\\
+29.4757367
+\end{array}\right)
+\]</span></p>
+</div>
 </div>
 </div>
 

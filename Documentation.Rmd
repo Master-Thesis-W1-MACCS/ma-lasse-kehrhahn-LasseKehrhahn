@@ -64,7 +64,7 @@ Die eingegebenen Parameter werden aus __01 INIT__ übergeben.
 ### Demand generation
 
 Der Demand ist der Startwert, also die "Messgröße" für die Kunden C.  
-Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion _.gen_Demand_ aus __gen_Q.R__ ausgeführt.In dieser Funktion werden zunächst mittels _runif()_ zufällige Werte mit einer Standartabweichung zwischen Q_VAR_MIN/MAX erzeugt. Anschließend werden die Werte auf TQ normiert und gerundet und absteigend in den Vektor sortiert.
+Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion _.gen_Demand_ aus __gen_Q.R__ ausgeführt.In dieser Funktion werden zunächst mittels _runif()_ zufällige Werte mit einer Standartabweichung zwischen Q_VAR_MIN/MAX erzeugt. Anschließend werden die Werte auf TQ normiert, aufgerundet und absteigend in den Vektor sortiert.
 
 ```{r}
 .gen_Demand <- function(NUMB_C,TQ,Q_VAR){
@@ -77,7 +77,7 @@ Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funkt
   }
   
   preDemand = rlnorm(NUMB_C, meanlog = 1, sdlog = Q_VAR) #Log Normal Distribution
-  DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = runden
+  DEMAND = ceiling((preDemand/sum(preDemand))*TQ) #ceiling = aufrunden
   EAD$Q_VAR_draw = Q_VAR
 
   return(DEMAND)
@@ -243,7 +243,7 @@ $$
 $$
 
 ### Production technology
-Ausnahme. Hier wird die Matrix durch die Funktion _.gen_RES_CONS_PAT()_ erstellt. Dies funktionietrt im Prinzip wie die demand generation.
+Ausnahme. Hier wird die Matrix durch die Funktion _.gen_RES_CONS_PAT()_ erstellt. Dies funktionietrt im Prinzip wie die demand generation. Die Einträge der Matrix werden zufällig mit der eingegebenen Standartabweichung generiert (also nicht nur 1 und 0 Einträge).
 ```{R, echo=FALSE}
 .gen_RES_CONS_PAT <- function(EAD,NUMB_CM,NUMB_PV,DENS_CMPV){
 
@@ -256,7 +256,7 @@ Ausnahme. Hier wird die Matrix durch die Funktion _.gen_RES_CONS_PAT()_ erstellt
   EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE_MAX = UNITLEVEL_ACT_SHARE_MAX
 ## ====================== STEP 1 Determining the amount of cost categories =================
   
-  unitsize = floor(EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE*NUMB_PV)
+  unitsize = floor(EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE*NUMB_PV) #floor = abrunden
   nonunitsize = NUMB_PV-unitsize
   
   EAD$PRODUCTION_TECHNOLOGY$UNITSIZE = unitsize
@@ -429,7 +429,7 @@ $$
 $$
 
 ### Resources
-
+Hier wird wieder eine zufällige Matrix mit 1 und 0 gebildet.
 ```{R}
   A_PVRC = .create_designmatrix(EAD$NUMB_PV,EAD$NUMB_RC,DENS_PVRC,"PV","RC")
  
@@ -462,7 +462,7 @@ $$
 $$
 
 ### EAD Computing
-s
+Anschließend werden die Resource-Costs berechnet. hierfür wird die Funktion _.gen_RCC_ aus dem Reiter __.gen_RCC.R__ verwendet. Diese erstellt wie bei der Erstellung des demands einen Vektor mit zufälligen Einträgen mit der eingegebenen Standartabweichung. Diese Werte werden anschließend auf die eingegebenen Gesamtkosten TC normiert. 
 ```{R, echo=FALSE}
 .gen_RCC<- function(RC_VAR, TC, NUMB_RC)  
   {
