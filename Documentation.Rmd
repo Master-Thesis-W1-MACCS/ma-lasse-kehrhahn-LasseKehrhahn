@@ -33,7 +33,7 @@ EAD$NUMB_RC =      4
 
 SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
-TC =               100                #Total costs
+TC =               1000                #Total costs
 TQ =               100
 
 ## ==== INPUT PARAMETER MASK ===========
@@ -56,6 +56,7 @@ Functional Requ.: `r EAD$NUMB_FR`
 Komponenten: `r EAD$NUMB_CM`  
 Processes: `r EAD$NUMB_PV`  
 Ressourcen: `r EAD$NUMB_RC`  
+Gesamtkosten: `r TC`
 
 # gen_EAD
 
@@ -66,6 +67,7 @@ Die eingegebenen Parameter werden aus __01 INIT__ übergeben.
 Der Demand ist der Startwert, also die "Messgröße" für die Kunden C.  
 Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funktion _.gen_Demand_ aus __gen_Q.R__ ausgeführt.In dieser Funktion werden zunächst mittels _runif()_ zufällige Werte mit einer Standartabweichung zwischen Q_VAR_MIN/MAX erzeugt. Anschließend werden die Werte auf TQ normiert, aufgerundet und absteigend in den Vektor sortiert.
 
+aus __gen_Q.R__:
 ```{r}
 .gen_Demand <- function(NUMB_C,TQ,Q_VAR){
 
@@ -102,11 +104,12 @@ $$
 Die Designmatrizen werden zufällig generiert. Hierzu wird die Funktion _.create_designmatrix_ aus dem Reiter __designfunctions.R__ ausgeführt. Dabei darf es keine 0-Reihe sowie keine 0-Spalte geben.
 Die generierten Matrizen sind abhängig von dem Parameter DENS. Hierzu werden folgende Fälle unterschieden:
 
-DENS = 2:  Die generierte Matrix ist diagonal, das Gleichungssystem ist somit entkoppelt.  
+DENS = 2:  Die generierte Matrix ist diagonal mit 1 gefüllt, das Gleichungssystem ist somit entkoppelt.  
 DENS = -1: Die Einträge der Matrix werden wie demand generation zufällig generiert.
-DENS = Rest: zufällige Matrix mit der eingegebenen DENS.
+0 < DENS < 1: zufällige Matrix mit der eingegebenen DENS.Bsp.: DENS = 0.4 bedeutet, dass 40 % der Einträge in der Matrix mit 1 und der Rest mit 0 gefüllt werden.
 
-```{R, echo=FALSE}
+aus __designfunctions.R__:
+```{R}
 .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
 
 repeat
@@ -152,7 +155,9 @@ return(A_YX)
 ```
 
 ### Customer diversity
-Die Kundenvielfalt wird mittels der Funktion _.create_designmatrix()_ erstellt. Die folgenden Schritte sind analog.
+Die Kundenvielfalt A_CCN wird mittels der Funktion _.create_designmatrix()_ erstellt.
+
+aus __gen_EAD.R__:
 ```{R}
   A_CCN =  .create_designmatrix(EAD$NUMB_C,EAD$NUMB_CN,DENS_CCN,"C","CN") #Customer - Customer Needs Matrix
   
@@ -181,7 +186,9 @@ $$
 $$
   
 ### Market Structure
+Die Marktstruktur A_CNFR wird mittels der Funktion _.create_designmatrix()_ erstellt.
 
+aus __gen_EAD.R__:
 ```{R}
   A_CNFR = .create_designmatrix(EAD$NUMB_CN,EAD$NUMB_FR,DENS_CNFR,"CN","FR")
   
@@ -211,7 +218,9 @@ $$
 $$
 
 ### Product architecture
+Die Produktarchitektur A_FRCM wird mittels der Funktion _.create_designmatrix()_ erstellt.
 
+aus __gen_EAD.R__:
 ```{R}
   A_FRCM = .create_designmatrix(EAD$NUMB_FR,EAD$NUMB_CM,DENS_FRCM,"FR","CM")
 
@@ -243,7 +252,9 @@ $$
 $$
 
 ### Production technology
-Ausnahme. Hier wird die Matrix durch die Funktion _.gen_RES_CONS_PAT()_ erstellt. Dies funktionietrt im Prinzip wie die demand generation. Die Einträge der Matrix werden zufällig mit der eingegebenen Standartabweichung generiert (also nicht nur 1 und 0 Einträge).
+Die Produkttechnologie A_CMPV wird anders als die vorherigen  Matrizen durch die Funktion _.gen_RES_CONS_PAT()_ erstellt. Dies funktioniert im Prinzip wie die Demand Generation. Die Einträge der Matrix werden zufällig mit der eingegebenen Standartabweichung UNITLEVEL_ACT_SHARE_MIN/MAX generiert. Diese Matrix besitzt also nicht nur 1 und 0 Einträge.
+
+aus __.gen_RES_CONS_PAR.R__: (atm ausgeblendet, weil nicht so schön)
 ```{R, echo=FALSE}
 .gen_RES_CONS_PAT <- function(EAD,NUMB_CM,NUMB_PV,DENS_CMPV){
 
@@ -429,7 +440,9 @@ $$
 $$
 
 ### Resources
-Hier wird wieder eine zufällige Matrix mit 1 und 0 gebildet.
+Die benötigten Ressourcen A_PVRC werden mittels der Funktion _.create_designmatrix()_ erstellt.
+
+aus __gen_EAD.R__:
 ```{R}
   A_PVRC = .create_designmatrix(EAD$NUMB_PV,EAD$NUMB_RC,DENS_PVRC,"PV","RC")
  
@@ -463,7 +476,9 @@ $$
 
 ### EAD Computing
 Anschließend werden die Resource-Costs berechnet. hierfür wird die Funktion _.gen_RCC_ aus dem Reiter __.gen_RCC.R__ verwendet. Diese erstellt wie bei der Erstellung des demands einen Vektor mit zufälligen Einträgen mit der eingegebenen Standartabweichung. Diese Werte werden anschließend auf die eingegebenen Gesamtkosten TC normiert. 
-```{R, echo=FALSE}
+
+aus __.gen_RCC.R__:
+```{R}
 .gen_RCC<- function(RC_VAR, TC, NUMB_RC)  
   {
   # INIT
@@ -499,6 +514,7 @@ Anschließend werden die Resource-Costs berechnet. hierfür wird die Funktion _.
 }
 ```
 
+aus __gen_EAD.R__:
 ```{R}
 RCC = matrix(.gen_RCC(RCC_VAR,TC,RC))
 ```
@@ -514,8 +530,9 @@ RCC=
 $$
 
 ### Cost Computing
-Der letzte Schritt ist die Berechnung der Gesamtkosten. Hierfür werden zunächst die Matrizen modifiziert, indem alle Matrix-Einträge durch die Summe der jeweiligen Spalte geteilt werden.
+Der letzte Schritt ist die Berechnung der Gesamtkosten. Hierfür werden zunächst die Matrizen modifiziert, indem durch die _sweep_-Funktion alle Matrix-Einträge durch die Summe der jeweiligen Spalte geteilt werden.
 
+aus __gen_EAD.R__:
 ```{R}
   A_PVRCp <- sweep((A_PVRC),2,colSums(A_PVRC),"/") #Absolute matrix to relative matrix, colSums() = Sum of the column
   A_CMPVp <- sweep((A_CMPV),2,colSums(A_CMPV),"/") #Absolute matrix to relative matrix  
@@ -531,8 +548,9 @@ $$
 A_{PVRCp_{3,4}} = `r A_PVRC[3,4]` / `r colSums(A_PVRC)[4]` = `r A_PVRC[3,4] / colSums(A_PVRC)[4]`
 $$
 
-Anschließend wird das EAD rückwärts zurückgerechnet, mit den modifizierten Matrizen beginnend mit RCC.
+Anschließend wird das EAD-Modell umgekehrt zurückgerechnet, mit den modifizierten Matrizen, beginnend mit RCC.
 
+aus __gen_EAD.R__:
 ```{R}
   PVC =  (A_PVRCp) %*% as.vector(RCC)
   CMC =  (A_CMPVp) %*% as.vector(PVC)

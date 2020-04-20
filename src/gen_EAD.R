@@ -92,9 +92,7 @@ gen_EAD <- function(EAD,TQ) {
   A_CMPVp <- sweep((A_CMPV),2,colSums(A_CMPV),"/") #Absolute matrix to relative matrix  
   A_FRCMp <- sweep((A_FRCM),2,colSums(A_FRCM),"/") #Absolute matrix to relative matrix
   A_CNFRp <- sweep((A_CNFR),2,colSums(A_CNFR),"/") #Absolute matrix to relative matrix
-  A_CCNp  <- sweep((A_CCN),2,colSums(A_CCN),"/") #Absolute matrix to relative matrix
-  
-  EAD$A_PVRCp = A_PVRCp
+  A_CCNp  <- sweep((A_CCN),2,colSums(A_CCN),"/")   #Absolute matrix to relative matrix
   
   PVC =  (A_PVRCp) %*% as.vector(RCC)
   CMC =  (A_CMPVp) %*% as.vector(PVC)
