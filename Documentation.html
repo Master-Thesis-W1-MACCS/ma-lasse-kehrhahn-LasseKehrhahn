@@ -674,6 +674,12 @@ RCC=
   A_CCNp  &lt;- sweep((A_CCN),2,colSums(A_CCN),&quot;/&quot;)   #Absolute matrix to relative matrix</code></pre>
 <p>Zum Beispiel:</p>
 <p><span class="math display">\[
+A_{PVRC} = \left(\begin{array}{cc} 
+1 &amp; 0 &amp; 1 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1\\
+0 &amp; 1 &amp; 0 &amp; 1
+\end{array}\right)
+\]</span> <span class="math display">\[
 A_{PVRCp_{3,4}} = 1 / 2 = 0.5
 \]</span></p>
 <p>Anschließend wird das EAD-Modell umgekehrt zurückgerechnet, mit den modifizierten Matrizen, beginnend mit RCC.</p>
