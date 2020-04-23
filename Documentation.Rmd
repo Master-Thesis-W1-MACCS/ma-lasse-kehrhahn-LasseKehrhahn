@@ -13,6 +13,19 @@ Beachte Matrizen-Multiplikationsregel:
 $$
 A*B=B^{T}*A^{T}
 $$
+# Einleitung
+
+Dieses Modell simuliert das sogenannte EAD, um den Produktplanungsprozess zu formalisieren. Die Grundlage für das EAD ist die Integration der Theorie des ingenieurwissenschaftlichen Designs mit der ökonomischen Theorie. In der ökonomische Produktionstheorie sind die Produktions- und Kapazitätsplanung bereits stark ausgearbeitet und formalisiert. Diese Studien unterteilen Produktionstechnologien in die drei Stufen:  
+* Produkte/Komponenten (CM)  
+* Prozesse (PV)  
+* Ressourcen (RC)  
+Während Prozesse und Ressourcen für Kostenstudien ausreichend detailliert sind, werden Produkte nicht spezifisch modelliert in der Gewinnmaximierung berücksichtigt. Um die Gewinnmaximierung als Motivation für Entscheidungen in einem breiten produktbasierten Planungskonzept zu nutzen, ist die Produktmodellierung notwendig. Die Theorie des ingenieurwissenschaftlichen Designs stützt sich dabei auf die folgenden Parameter:  
+* Kundenbedürfnisse (CN)  
+* Funktionale Anforderungen (FR)  
+* Designparameter (DP)  
+Die Verbindung der ökonomischen und ingenieurwissenschaftlichen Theorien führt zum endgültigen Konzept des EAD, das eine Gewinnmaximierungsmotivation hinsichtlich Nachfrage und Kosten beinhaltet.  
+Das EAD beschreibt die genannten Parameter mittels Vektoren und die Zusammenhänge in Matrizen. Diese Zusammenhänge werden zufällig generiert um so allgemein gültige Zusammenhänge fesstellen zu können.
+
 
 # 01 INIT
 
