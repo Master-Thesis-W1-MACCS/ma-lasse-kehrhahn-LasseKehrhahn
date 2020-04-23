@@ -372,7 +372,9 @@ summary {
 Reiter sind <strong>fett</strong>.<br />
 Beachte Matrizen-Multiplikationsregel: <span class="math display">\[
 A*B=B^{T}*A^{T}
-\]</span> # Einleitung</p>
+\]</span></p>
+<div id="einleitung" class="section level1">
+<h1>Einleitung</h1>
 <p>Dieses Modell simuliert das sogenannte EAD, um den Produktplanungsprozess zu formalisieren. Die Grundlage für das EAD ist die Integration der Theorie des ingenieurwissenschaftlichen Designs mit der ökonomischen Theorie. In der ökonomische Produktionstheorie sind die Produktions- und Kapazitätsplanung bereits stark ausgearbeitet und formalisiert. Diese Studien unterteilen Produktionstechnologien in die drei Stufen:<br />
 * Produkte/Komponenten (CM)<br />
 * Prozesse (PV)<br />
@@ -382,7 +384,8 @@ Während Prozesse und Ressourcen für Kostenstudien ausreichend detailliert sind
 * Funktionale Anforderungen (FR)<br />
 * Designparameter (DP)<br />
 Die Verbindung der ökonomischen und ingenieurwissenschaftlichen Theorien führt zum endgültigen Konzept des EAD, das eine Gewinnmaximierungsmotivation hinsichtlich Nachfrage und Kosten beinhaltet.<br />
-Das EAD beschreibt die genannten Parameter mittels Vektoren und die Zusammenhänge in Matrizen. Diese Zusammenhänge werden zufällig generiert um so allgemein gültige Zusammenhänge fesstellen zu können.</p>
+Das EAD beschreibt die genannten Parameter mittels Vektoren und die Zusammenhänge in Matrizen. Diese Zusammenhänge werden während der Simulation zufällig generiert.</p>
+</div>
 <div id="init" class="section level1">
 <h1>01 INIT</h1>
 <p>Input-Parameter eingeben.</p>
@@ -425,8 +428,8 @@ Der Demand wird in Form eines Vektors zufällig generiert, hierzu wird die Funkt
 <p><span class="math display">\[
 demand
 = \left(\begin{array}{cc} 
-70\\
-31
+32\\
+69
 \end{array}\right)
 \]</span></p>
 </div>
@@ -496,12 +499,12 @@ A_{CCN}^{T}*demand = CN
 1 &amp; 0
 \end{array}\right)
 * \left(\begin{array}{cc} 
-70\\
-31
+32\\
+69
 \end{array}\right)
 = \left(\begin{array}{cc} 
-31\\ 
-70\\
+69\\ 
+32\\
 \end{array}\right)
 \]</span></p>
 </div>
@@ -520,16 +523,16 @@ A_{CNRF}^{T}*CN = FR
 \left(\begin{array}{cc} 
 0 &amp; 1\\
 1 &amp; 1\\
-1 &amp; 0
+0 &amp; 1
 \end{array}\right)
 * \left(\begin{array}{cc} 
-31\\
-70
+69\\
+32
 \end{array}\right)
 = \left(\begin{array}{cc} 
-70\\
+32\\
 101\\
-31
+32
 \end{array}\right)
 \]</span></p>
 </div>
@@ -548,18 +551,18 @@ A_{FRCM}^{T}*FR = CM
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
 1 &amp; 1 &amp; 1\\
-1 &amp; 0 &amp; 0\\
-1 &amp; 0 &amp; 1
+0 &amp; 1 &amp; 0\\
+1 &amp; 0 &amp; 0
 \end{array}\right)
 * \left(\begin{array}{cc} 
-70\\
+32\\
 101\\
-31
+32
 \end{array}\right)
 = \left(\begin{array}{cc} 
-202\\
-70\\ 
-101
+165\\
+101\\ 
+32
 \end{array}\right)
 \]</span></p>
 </div>
@@ -577,19 +580,19 @@ A_{CMPV}^{T}*CM = PV
 \]</span></p>
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
-2 &amp; 16 &amp; 6\\
-0 &amp; 23 &amp; 2\\
-14 &amp; 0 &amp; 0
+2 &amp; 8 &amp; 3\\
+0 &amp; 10 &amp; 0\\
+0 &amp; 0 &amp; 7
 \end{array}\right)
 * \left(\begin{array}{cc} 
-202\\
-70\\
-101
+165\\
+101\\
+32
 \end{array}\right)
 = \left(\begin{array}{cc} 
-2130\\ 
-1812\\
-2828
+1234\\ 
+1010\\
+224
 \end{array}\right)
 \]</span></p>
 </div>
@@ -606,21 +609,21 @@ A_{PVRC}^{T}*PV = RC
 \]</span></p>
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
-1 &amp; 0 &amp; 0\\
-0 &amp; 0 &amp; 1\\
-1 &amp; 0 &amp; 0\\
-0 &amp; 1 &amp; 1
+0 &amp; 1 &amp; 1\\
+0 &amp; 1 &amp; 1\\
+1 &amp; 0 &amp; 1\\
+1 &amp; 1 &amp; 0
 \end{array}\right)
 * \left(\begin{array}{cc} 
-2130\\
-1812\\
-2828
+1234\\
+1010\\
+224
 \end{array}\right)
 = \left(\begin{array}{cc} 
-2130\\ 
-2828\\
-2130\\ 
-4640
+1234\\ 
+1234\\
+1458\\ 
+2244
 \end{array}\right)
 \]</span></p>
 </div>
@@ -666,10 +669,10 @@ A_{PVRC}^{T}*PV = RC
 <p><span class="math display">\[
 RCC=
 \left(\begin{array}{cc} 
-351.2107669\\
-331.5199619\\
-147.101085\\
-170.1681862
+410.0376639\\
+127.2641764\\
+387.1769521\\
+75.5212075
 \end{array}\right)
 \]</span></p>
 </div>
@@ -685,12 +688,12 @@ RCC=
 <p>Zum Beispiel:</p>
 <p><span class="math display">\[
 A_{PVRC} = \left(\begin{array}{cc} 
-1 &amp; 0 &amp; 1 &amp; 0\\
-0 &amp; 0 &amp; 0 &amp; 1\\
-0 &amp; 1 &amp; 0 &amp; 1
+0 &amp; 0 &amp; 1 &amp; 1\\
+1 &amp; 1 &amp; 0 &amp; 1\\
+1 &amp; 1 &amp; 1 &amp; 0
 \end{array}\right)
 \]</span> <span class="math display">\[
-A_{PVRCp_{3,4}} = 1 / 2 = 0.5
+A_{PVRCp_{3,4}} = 0 / 2 = 0
 \]</span></p>
 <p>Anschließend wird das EAD-Modell umgekehrt mit den modifizierten Matrizen zurückgerechnet, beginnend mit RCC.</p>
 <p>aus <strong>gen_EAD.R</strong>:</p>
@@ -713,20 +716,20 @@ A_{PVRCp}*RCC = PVC
 \]</span></p>
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
-1 &amp; 0 &amp; 1 &amp; 0\\
-0 &amp; 0 &amp; 0 &amp; 0.5\\
-0 &amp; 1 &amp; 0 &amp; 0.5
+0 &amp; 0 &amp; 0.5 &amp; 0.5\\
+0.5 &amp; 0.5 &amp; 0 &amp; 0.5\\
+0.5 &amp; 0.5 &amp; 0.5 &amp; 0
 \end{array}\right)
 * \left(\begin{array}{cc} 
-351.2107669\\ 
-331.5199619\\
-147.101085\\ 
-170.1681862
+410.0376639\\ 
+127.2641764\\
+387.1769521\\ 
+75.5212075
 \end{array}\right)
 = \left(\begin{array}{cc} 
-498.3118519\\
-85.0840931\\
-416.604055
+231.3490798\\
+306.4115239\\
+462.2393962
 \end{array}\right)
 \]</span></p>
 </div>
@@ -737,19 +740,19 @@ A_{CMPVp}*PVC = CMC
 \]</span></p>
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
-0.0833333 &amp; 0 &amp; 1\\
-0.6666667 &amp; 0.92 &amp; 0\\
-0.25 &amp; 0.08 &amp; 0
+0.1538462 &amp; 0 &amp; 0\\
+0.6153846 &amp; 1 &amp; 0\\
+0.2307692 &amp; 0 &amp; 1
 \end{array}\right)
 * \left(\begin{array}{cc} 
-498.3118519\\ 
-85.0840931\\
-416.604055
+231.3490798\\ 
+306.4115239\\
+462.2393962
 \end{array}\right)
 = \left(\begin{array}{cc} 
-458.1300426\\
-410.4852669\\
-131.3846904
+35.5921661\\
+448.7801884\\
+515.6276454
 \end{array}\right)
 \]</span></p>
 </div>
@@ -760,19 +763,19 @@ A_{FRCMp}*CMC = FRC
 \]</span></p>
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
-0.3333333 &amp; 1 &amp; 0.5\\
-0.3333333 &amp; 0 &amp; 0\\
-0.3333333 &amp; 0 &amp; 0.5
+0.3333333 &amp; 0 &amp; 1\\
+0.3333333 &amp; 1 &amp; 0\\
+0.3333333 &amp; 0 &amp; 0
 \end{array}\right)
 * \left(\begin{array}{cc} 
-458.1300426\\ 
-410.4852669\\
-131.3846904
+35.5921661\\ 
+448.7801884\\
+515.6276454
 \end{array}\right)
 = \left(\begin{array}{cc} 
-628.8876264\\
-152.7100142\\
-218.4023594
+527.4917008\\
+460.6442438\\
+11.8640554
 \end{array}\right)
 \]</span></p>
 </div>
@@ -783,17 +786,17 @@ A_{CNFRp}*FRC = CNC
 \]</span></p>
 <p><span class="math display">\[
 \left(\begin{array}{cc} 
-0 &amp; 0.5 &amp; 1\\
-1 &amp; 0.5 &amp; 0
+0 &amp; 0.5 &amp; 0\\
+1 &amp; 0.5 &amp; 1
 \end{array}\right)
 * \left(\begin{array}{cc} 
-628.8876264\\ 
-152.7100142\\
-218.4023594
+527.4917008\\ 
+460.6442438\\
+11.8640554
 \end{array}\right)
 = \left(\begin{array}{cc} 
-294.7573665\\
-705.2426335
+230.3221219\\
+769.6778781
 \end{array}\right)
 \]</span></p>
 </div>
@@ -808,12 +811,12 @@ A_{CCNp}*CNC = CC
 1 &amp; 0
 \end{array}\right)
 * \left(\begin{array}{cc} 
-294.7573665\\ 
-705.2426335
+230.3221219\\ 
+769.6778781
 \end{array}\right)
 = \left(\begin{array}{cc} 
-705.2426335\\
-294.7573665
+769.6778781\\
+230.3221219
 \end{array}\right)
 \]</span></p>
 </div>

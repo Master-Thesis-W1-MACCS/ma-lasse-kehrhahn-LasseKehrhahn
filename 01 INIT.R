@@ -42,7 +42,7 @@ o=1 # First design point
 
 ## ==== DESIGN OF EXPERIMENTS ==== 
 
-## EVIRONMENTAL FACTORS [] 
+## ENVIRONMENTAL FACTORS [] 
 for (ix_DENS_CCN in seq_along(DENS_CCN)) {
   for (ix_DENS_CNFR in seq_along(DENS_CNFR)) {
     for (ix_DENS_FRCM in seq_along(DENS_FRCM)) {
