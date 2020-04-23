@@ -46,7 +46,7 @@ Q_VAR = c(-1)
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 #NUMB_CM = c(3)
 
-set.seed(13) #Reproducability
+set.seed(13) #Reproducability, zieht zufällige Zahlenreihe
 o=1 # First design point
 
 ```

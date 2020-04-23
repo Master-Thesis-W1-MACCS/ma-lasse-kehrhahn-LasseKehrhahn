@@ -682,7 +682,7 @@ A_{PVRC} = \left(\begin{array}{cc}
 \]</span> <span class="math display">\[
 A_{PVRCp_{3,4}} = 1 / 2 = 0.5
 \]</span></p>
-<p>Anschließend wird das EAD-Modell umgekehrt zurückgerechnet, mit den modifizierten Matrizen, beginnend mit RCC.</p>
+<p>Anschließend wird das EAD-Modell umgekehrt mit den modifizierten Matrizen zurückgerechnet, beginnend mit RCC.</p>
 <p>aus <strong>gen_EAD.R</strong>:</p>
 <pre class="r"><code>  PVC =  (A_PVRCp) %*% as.vector(RCC)
   CMC =  (A_CMPVp) %*% as.vector(PVC)
