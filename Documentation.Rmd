@@ -701,3 +701,6 @@ $$
 `r CC[2]`
 \end{array}\right)
 $$
+
+# Output
+Hi

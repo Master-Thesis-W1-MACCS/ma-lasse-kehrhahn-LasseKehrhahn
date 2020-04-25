@@ -2,6 +2,23 @@
 
 ####----current gen_Demand functions----####
 
+# ==== roxygen2 documentation ====
+
+#' .gen_Demand
+#'
+#' Generates a random series of numbers, from which the sum is normalized to TQ and returned
+#' @param NUMB_C Length of the series of numbers
+#' @param TQ Sum of the series of numbers
+#' @param Q_VAR ??
+#'
+#' @return DEMAND
+#' @example .gen_Demand(1,100,-1)
+#' @export
+#'
+#' @examples
+
+# ==== documentation end ====
+
 .gen_Demand <- function(NUMB_C,TQ,Q_VAR){
   # This has been used in the Mertens (2020) for modeling dispersed realized demand
 
