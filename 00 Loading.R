@@ -8,10 +8,11 @@
 #   "igraph",
 #   "visNetwork",
 #   "data.tree",
-#   "reshape"
-#   "roxygen2"
+#   "reshape",
+#   "roxygen2",
+#   "devtools"
 # 
-# ))
+# ))writeLines('PATH="${RTOOLS40_HOME}\\usr\\bin;${PATH}"', con = "~/.Renviron")
 # 
 # Packages <- c("dplyr", "ggplot2", "rmarkdown", "tidyr", "igraph","data.tree", "reshape",'visNetwork')
 # lapply(Packages, library, character.only = TRUE)
