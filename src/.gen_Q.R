@@ -4,18 +4,20 @@
 
 # ==== roxygen2 documentation ====
 
-#' .gen_Demand
+#setwd("C:\\Users\\lasse\\OneDrive\\Dokumente\\EAD-LasseKehrhahn\\anRpackage")
+# getwd()
+# roxygen2::roxygenise()
+
+#' generate Demand
 #'
 #' Generates a random series of numbers, from which the sum is normalized to TQ and returned
 #' @param NUMB_C Length of the series of numbers
 #' @param TQ Sum of the series of numbers
 #' @param Q_VAR ??
 #'
-#' @return DEMAND
+#' @return Vektor which contains the randomly generated values
 #' @example .gen_Demand(1,100,-1)
 #' @export
-#'
-#' @examples
 
 # ==== documentation end ====
 
