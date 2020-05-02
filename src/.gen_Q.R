@@ -4,7 +4,7 @@
 
 # ==== roxygen2 documentation ====
 
-#setwd("C:\\Users\\lasse\\OneDrive\\Dokumente\\EAD-LasseKehrhahn\\anRpackage")
+# setwd("C:\\Users\\lasse\\OneDrive\\Dokumente\\EAD-LasseKehrhahn\\anRpackage") (vorher war ohne anRpackage..)
 # getwd()
 # roxygen2::roxygenise()
 
@@ -14,12 +14,9 @@
 #' @param NUMB_C Length of the series of numbers
 #' @param TQ Sum of the series of numbers
 #' @param Q_VAR ??
-#'
 #' @return Vektor which contains the randomly generated values
 #' @example .gen_Demand(1,100,-1)
 #' @export
-
-# ==== documentation end ====
 
 .gen_Demand <- function(NUMB_C,TQ,Q_VAR){
   # This has been used in the Mertens (2020) for modeling dispersed realized demand
