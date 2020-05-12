@@ -31,7 +31,7 @@ DENS_CCN = c(0.4)
 DENS_CNFR = c(0.4)
 DENS_FRCM = c(0.4)
 DENS_CMPV = c(0.4)
-DENS_PVRC = c(0.4)  
+DENS_PVRC = (0.4)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 NUMB_CM = c(3)
@@ -95,7 +95,7 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
                    
                     
-                    DATA = .system_datalogging(o,nn,EAD,DATA)
+                    DATA = .product_datalogging(o,nn,EAD,DATA)
                   
                     o=o+1 #Counting for the total number of runs
                         }
