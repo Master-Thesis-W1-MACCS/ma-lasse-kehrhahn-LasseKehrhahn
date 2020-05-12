@@ -24,6 +24,8 @@
 # 1 - Start
 ##############################
 
+#help with: ?FUNCTIONNAME (without ".")
+
 ## SOURCE THIS FILE FOR EXECUTION
 #source("01 INIT.R")
 source("src/.datalogging.R")                #egal
@@ -37,4 +39,3 @@ source("src/gen_ProductionEnvironment.R")   #erstellt A_CMPV irgendwie anders al
 source("src/.gen_RES_CONS_PAT.R")           #erstellt auch A_CMPV, wird in gen_ProductEnvironment aufgerufen .... ?
 source("src/.gen_Q.R")                      #Demand generation ... ? Wird in gen_EAD ausgeführt
 source("01 INIT.R")
-

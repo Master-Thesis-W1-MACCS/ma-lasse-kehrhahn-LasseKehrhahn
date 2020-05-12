@@ -2,7 +2,7 @@
 % Please edit documentation in R/gen_Q.R
 \name{gen_Demand}
 \alias{gen_Demand}
-\title{generate Demand}
+\title{Generate Demand Vektor}
 \usage{
 gen_Demand(NUMB_C, TQ, Q_VAR)
 }

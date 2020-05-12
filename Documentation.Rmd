@@ -46,7 +46,7 @@ EAD$NUMB_RC =      4
 
 SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
-TC =               1000                #Total costs
+TC =               100                #Total costs
 TQ =               100
 
 ## ==== INPUT PARAMETER MASK ===========

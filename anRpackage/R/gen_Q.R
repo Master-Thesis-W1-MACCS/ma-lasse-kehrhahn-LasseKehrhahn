@@ -1,9 +1,9 @@
-#' generate Demand
+#' Generate Demand Vektor
 #'
 #' Generates a random series of numbers, from which the sum is normalized to TQ and returned
 #' @param NUMB_C Length of the series of numbers
 #' @param TQ Sum of the series of numbers
-#' @param Q_VAR ??
+#' @param Q_VAR Standard deviation of the drawn numbers
 #' @return Vektor which contains the randomly generated values
 #' @example .gen_Demand(1,100,-1)
 #' @export

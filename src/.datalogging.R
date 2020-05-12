@@ -10,12 +10,12 @@
 DATApre = data.frame(o,nn,EAD$NUMB_C, EAD$NUMB_CN, EAD$NUMB_FR, EAD$NUMB_CM, EAD$NUMB_PV, EAD$NUMB_RC,
                        EAD$DENS_CCN, EAD$DENS_CNFR, EAD$DENS_FRCM, EAD$DENS_CMPV, EAD$DENS_PVRC,
                        EAD$Q_VAR, EAD$RCC_VAR, EAD$DENS_FRCM_measured,
-                       EAD$Diff_total)
+                       EAD$Diff_total, EAD$CC, EAD$CCB)
   
 colnames(DATApre) = c('o','nn','NUMB_C','NUMB_CN', "NUMB_FR", "NUMB_CM", "NUMB_PV", "NUMB_RC",
                      "DENS_CCN", "DENS_CNFR","DENS_FRCM","DENS_CMPV","DENS_PVRC",
                      "Q_VAR","RCC_VAR", "DENS_FRCM_m",
-                     "DIFF_COST")    
+                     "DIFF_COST", "Total cost of each product", "CCB")    
  
 DATA = rbind(DATA,DATApre) #put it together
  
