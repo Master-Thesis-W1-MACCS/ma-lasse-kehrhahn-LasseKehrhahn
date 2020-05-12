@@ -35,7 +35,7 @@ DATA = rbind(DATA,DATApre) #put it together
   o[PRODUCT] = o #run, repetition
   nn[PRODUCT] = nn #which kind of design? 
   
-  DATApre = data.frame(o,nn,PRODUCT,EAD$CC) # construct the dataframe 
+  DATApre = data.frame(o,nn,PRODUCT,EAD$CC[PRODUCT]) # construct the dataframe 
   
   colnames(DATApre) = c('o','nn','PRODUCT','CC')
   
