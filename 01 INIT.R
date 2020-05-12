@@ -14,8 +14,8 @@ EAD$NUMB_RC =      4
 
 SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
-TC =               100                #Total costs
-TQ =               100
+TC =               50                  #Total costs
+TQ =               2                  #Total demand
 
 
 ###### STRUKTUR BEACHTUNG ##########

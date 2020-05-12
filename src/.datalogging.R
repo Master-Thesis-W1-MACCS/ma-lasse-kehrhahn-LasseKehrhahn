@@ -31,13 +31,19 @@ DATA = rbind(DATA,DATApre) #put it together
   
   
   PRODUCT <- c(1:EAD$NUMB_C) #How many products per run 
-  EAD$CC[PRODUCT] = EAD$CC #total cost of the product
-  o[PRODUCT] = o #run, repetition
+  EAD$C_DEMAND[PRODUCT] = EAD$C_DEMAND #total cost of the product
+  
+  EAD$PVC[PRODUCT] = ceiling(EAD$PVC)
+  EAD$CMC[PRODUCT] = ceiling(EAD$CMC)
+  EAD$FRC[PRODUCT] = ceiling(EAD$FRC)
+  EAD$CNC[PRODUCT] = ceiling(EAD$CNC)
+  EAD$CCx[PRODUCT] = ceiling(EAD$CCx)
+  EAD$CC[PRODUCT] = ceiling(EAD$CC) #total cost of the product, rounded for easier formatting in excel
   nn[PRODUCT] = nn #which kind of design? 
   
-  DATApre = data.frame(o,nn,PRODUCT,EAD$CC[PRODUCT]) # construct the dataframe 
+  DATApre = data.frame(nn,PRODUCT, EAD$C_DEMAND[PRODUCT], EAD$PVC[PRODUCT], EAD$CMC[PRODUCT], EAD$FRC[PRODUCT], EAD$CNC[PRODUCT], EAD$CCx[PRODUCT], EAD$CC[PRODUCT]) # construct the dataframe 
   
-  colnames(DATApre) = c('o','nn','PRODUCT','CC')
+  colnames(DATApre) = c('nn','Customer', 'DEMAND', 'PVC', 'CMC', 'FRC', 'CNC', 'CCx', 'CC')
   
   DATAp = rbind(DATAp,DATApre) #put it together
   

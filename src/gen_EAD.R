@@ -98,7 +98,13 @@ gen_EAD <- function(EAD,TQ) {
   CMC =  (A_CMPVp) %*% as.vector(PVC)
   FRC =  (A_FRCMp) %*% as.vector((CMC))
   CNC =  (A_CNFRp) %*% as.vector((FRC))
-  CC  =  (A_CCNp)  %*% as.vector((CNC))
+  CCx  =  (A_CCNp)  %*% as.vector((CNC))
+  
+  EAD$PVC = PVC
+  EAD$CMC = CMC
+  EAD$FRC = FRC
+  EAD$CNC = CNC
+  EAD$CCx = CCx
   
   # Check routine 
   A_CRC = ((as.vector(C_DEMAND)) * A_CCN) %*% A_CNFR %*% A_FRCM %*% A_CMPV %*% A_PVRC
