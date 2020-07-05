@@ -10,7 +10,7 @@ EAD$NUMB_C =       2
 EAD$NUMB_CN =      2
 EAD$NUMB_FR =      3
 EAD$NUMB_PV =      3
-EAD$NUMB_RC =      4
+EAD$NUMB_RC =      5
 
 SIM_NUMB =         100                 #Control Variable - Number of Simulations for every single environment (standard: 30)     
 
@@ -27,17 +27,17 @@ TQ =               2                  #Total demand
 
 
 ## ==== INPUT PARAMETER MASK ===========
-DENS_CCN = c(0.4)
-DENS_CNFR = c(0.4)
+DENS_CCN = c(1)
+DENS_CNFR = c(3)
 DENS_FRCM = c(0.4)
 DENS_CMPV = c(0.4)
-DENS_PVRC = (0.4)  
+DENS_PVRC = (0.9)  
 Q_VAR = c(-1)  
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 NUMB_CM = c(3)
 
 
-set.seed(13) #Reproducability
+set.seed(15) #Reproducability
 o=1 # First design point
 
 ## ==== DESIGN OF EXPERIMENTS ==== 

@@ -1,10 +1,10 @@
 .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
  #generating A_X_Y  => design matrix
-  
-  
+
 repeat
   {
 
+    
   if(DENS == 2) {                 #Density is defined in gen_EAD for each matrix separatly (e.g. DENS_CNFR), if density = 2 we want a diagonal matrix
     
     if (X!=Y) {A_XY = 'error'}    #Size must be identical nrow = ncol
@@ -14,6 +14,11 @@ repeat
     
   }
   
+  else if(DENS == 3) {                 #enter specific matrix
+      
+      A_YX = matrix(c(0,1,1,1,0,0),byrow=TRUE,nrow=2)
+  }  
+    
   else if(DENS == -1) {           #if density = -1 we want a matrix with a random density between the desired boundaries (eg. [0.4,0.7])
     DENS_MIN = 0.4
     DENS_MAX = 0.7

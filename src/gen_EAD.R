@@ -14,7 +14,7 @@ gen_EAD <- function(EAD,TQ) {
   
   
   
-  #### PREDETERMINING ====   #aus 01 INIT?
+  #### PREDETERMINING ====   
   DENS_CCN =  EAD$DENS_CCN
   DENS_CNFR = EAD$DENS_CNFR
   DENS_FRCM = EAD$DENS_FRCM
@@ -61,6 +61,8 @@ gen_EAD <- function(EAD,TQ) {
   #   A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
   # }
   #  }
+  
+  # IMPLEMENT DESIGN QUALITY CHECK
   EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
   
   CM = as.vector(FR) %*% (A_FRCM) # computing CM * q

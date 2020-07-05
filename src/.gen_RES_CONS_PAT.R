@@ -4,7 +4,7 @@
 
 ## ====================== STEP 1 Determining the activities =========================
   UNITLEVEL_ACT_SHARE_MIN = 0.2    #0.2 is the size of DISP1 =10
-  UNITLEVEL_ACT_SHARE_MAX = 0.4
+  UNITLEVEL_ACT_SHARE_MAX = 0.5
   EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE = runif(1, UNITLEVEL_ACT_SHARE_MIN, UNITLEVEL_ACT_SHARE_MAX) #random activity share between lower and upper bounds
   
   EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE_MIN = UNITLEVEL_ACT_SHARE_MIN
