@@ -31,8 +31,8 @@ DENS_CCN = c(1)
 DENS_CNFR = c(3)
 DENS_FRCM = c(0.4)
 DENS_CMPV = c(0.4)
-DENS_PVRC = (0.9)  
-Q_VAR = c(-1)  
+DENS_PVRC = (0.9)
+Q_VAR = c(-1)
 RCC_VAR = c(-1)  #Resource cost variation --> base for DISP2 (ABL2019) (0.2)
 NUMB_CM = c(3)
 
@@ -67,46 +67,45 @@ for (ix_DENS_CCN in seq_along(DENS_CCN)) {
                     
                     ## ======== SIMULATION =========
                     for (nn in 1:SIM_NUMB) {
-                    
-                    
-                    #error_raiser(EAD)  
                       
-                    # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
-                    EAD = gen_EAD(EAD,TQ)
                       
-                    #EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
-                    EAD = .benchmark(EAD,NUMB_CN,NUMB_C,TQ)
-                    
-                    EAD = calc_EAD(EAD)
+                      #error_raiser(EAD)  
                       
-              
+                      # COMPUTING THE BENCHMARK PRODUCT PROGRAM PLAN THROUGH THE EAD
+                      EAD = gen_EAD(EAD,TQ)
                       
-                    EAD$Diff_unit =  EAD$CCM - EAD$CCB
-                    EAD$Diff_total = sum(EAD$CCM_T- EAD$CC)
-                    #print(EAD$DENS_FRCM)
-                    #print(EAD$DENS_CMPV)
-                    #print(EAD$Diff_total)
-                    print(nn)
-                    
-                    #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
-                    #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
-                    #browser()
-                    #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
-                    #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
-                   
-                    
-                    DATA = .product_datalogging(o,nn,EAD,DATA)
-                  
-                    o=o+1 #Counting for the total number of runs
-                        }
-                      }
+                      #EAD = .modularize(EAD,NUMB_CN,NUMB_C,TQ)
+                      EAD = .benchmark(EAD,NUMB_CN,NUMB_C,TQ)
+                      
+                      EAD = calc_EAD(EAD)
+                      
+                      
+                      EAD$Diff_unit =  EAD$CCM - EAD$CCB
+                      EAD$Diff_total = sum(EAD$CCM_T- EAD$CC)
+                      #print(EAD$DENS_FRCM)
+                      #print(EAD$DENS_CMPV)
+                      #print(EAD$Diff_total)
+                      print(nn)
+                      
+                      #.plotigraph(EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                      #.plotigraph(EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                      #browser()
+                      #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRCM,EAD$A_CMPV,EAD$A_PVRC)
+                      #.visNetwork(EAD$A_CCN,EAD$A_CNFR,EAD$A_FRM,EAD$A_MPV,EAD$A_PVRC)
+                      
+                      
+                      DATA = .product_datalogging(o,nn,EAD,DATA)
+                      
+                      o=o+1 #Counting for the total number of runs
+                     }
                     }
                   }
                 }
-              }  
+              }
             }  
-          }
+          }  
         }
+      }
 
 ## ==== OUTPUT WRITING ===================================
 

@@ -54,7 +54,7 @@ gen_EAD <- function(EAD,TQ) {
   
   A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
   
-  #Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
+    #Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
   #  if(EAD$TYPE_FRCM != "C"){
   #  if(sum(diag(A_FRCM))<NUMB_FR)  {
   #   diag(A_FRCM) <- 1
@@ -63,6 +63,7 @@ gen_EAD <- function(EAD,TQ) {
   #  }
   
   # IMPLEMENT DESIGN QUALITY CHECK
+  EAD$INDEP_A_FRCM = checkDesign(A_FRCM)
   EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
   
   CM = as.vector(FR) %*% (A_FRCM) # computing CM * q

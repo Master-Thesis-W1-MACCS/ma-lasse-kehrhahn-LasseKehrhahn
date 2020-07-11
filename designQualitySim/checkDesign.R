@@ -59,8 +59,8 @@ checkDesign <- function(matrix){
     }
     check_array = append(check_array,new_array) 
   }
-  print(matrix)
-  print(design_check)
+  #print(matrix)
+  #print(design_check)
  
   return(design_check)
   }

@@ -33,6 +33,7 @@ source("src/.auxiliar_functions.R")         #Hilfsfunktionen egal
 source("src/.modularize.R")                 #Modularisierung später
 source("src/gen_EAD.R")                     #Matrix Erstellung
 source("src/.designfunctions.R")            #erstellt Matrizen mit .create_desginmatrix, wird auch in gen_EAD aufgerufen
+source("src/checkDesign.R")                 #prüft die Unabhängigkeit der Matrix
 source("src/.gen_RCC.R")                    #Erstellt Gesamtkostenmatrix .... ? Auch in gen_EAD
 source("src/.networkvisualization.R")       #egal
 source("src/gen_ProductionEnvironment.R")   #erstellt A_CMPV irgendwie anders als designfunctions mittels RES_CONS_PAT Auch in gen_EAD
