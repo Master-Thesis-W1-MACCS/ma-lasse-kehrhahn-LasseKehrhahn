@@ -12,8 +12,6 @@ gen_EAD <- function(EAD,TQ) {
   #  % 19.03 - Market structure
   
   
-  
-  
   #### PREDETERMINING ====   
   DENS_CCN =  EAD$DENS_CCN
   DENS_CNFR = EAD$DENS_CNFR
@@ -63,7 +61,7 @@ gen_EAD <- function(EAD,TQ) {
   #  }
   
   # IMPLEMENT DESIGN QUALITY CHECK
-  EAD$INDEP_A_FRCM = checkDesign(A_FRCM)
+  EAD$INDEP_A_FRCM = checkIndep(A_FRCM)
   EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
   
   CM = as.vector(FR) %*% (A_FRCM) # computing CM * q

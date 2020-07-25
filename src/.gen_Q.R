@@ -2,7 +2,7 @@
 
 ####----current gen_Demand functions----####
 
-gen_Demand <- function(NUMB_C,TQ,Q_VAR){
+.gen_Demand <- function(NUMB_C,TQ,Q_VAR){
   # This has been used in the Mertens (2020) for modeling dispersed realized demand
 
   if (Q_VAR == -1)

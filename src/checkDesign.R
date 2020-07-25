@@ -1,4 +1,4 @@
-checkDesign <- function(matrix){
+checkIndep <- function(matrix){
   
   design_check = TRUE
   rowSum = rowSums(matrix)
@@ -56,23 +56,39 @@ checkDesign <- function(matrix){
   return(design_check)
 }
 
+matrix=matrix(c(1,0,0,1,1,0,1,1,1),byrow=TRUE,nrow=3)
+infoCont(convToProbMatrix(matrix))
 
-calcInfoCont <- function(matrix, DENS_FRCM_measured){
+
+convToProbMatrix <- function(matrix){
   
-     #Kalkuliere Spalten-Summen
-     #Summe > 1 heißt mehrere Abhängigkeiten, daher erhöhte Komplexität
-     #Erhöhte Komplexität bedeutet geringere Wahrscheinlichkeit, dass die FR erfüllt werden können.
-     #Eine geringere Erfolgswahrscheinlichkeit impliziert, dass mehr Informationen benötigt werden.
-     #Zusammenhang zwischen Spaltensummen und p herstellen. p = Wahrscheinlichkeit, dass FR erfüllt wird. ZB.:
-         #p=1/(Anz.SpaltenSummen > 1/2... = benötigen komplexe Komponenten)
-         #Komponenten-Komplexität ist Abhängig von Spaltensumme.
-         #Je größer die Spaltensumme, desto Komplexer, zB.: p_CM_i = 1/Spaltensumme --> Bilde Vektor p_CM = c()
-         #Ermittle Wahrscheinlichkeit, dass das FR erfüllt wird.
-         #p_FR_i = FR_i Zeile*p_CM = c()
-         #p_FR_i = avarage(p_FR_i) --> Wahrscheinlichkeit in %
-         #bilde p_FR = c()
-     #Der Informationsgehalt wird ermittelt: I = -log(1/p_FR) = c() 
+  #Erstelle Wahrscheinlichkeitsmatrix 
+  #Spaltensumme > 1 heißt mehrere Abhängigkeiten, daher erhöhte Komplexität.
+  #Erhöhte Komplexität bedeutet geringere Wahrscheinlichkeit, dass die FR erfüllt werden können.
+ 
+   colSum = colSums(matrix)
+  probMatrix <- sweep((matrix),2,colSum,"/")
   
+  return(probMatrix)
+}
+
+infoCont <- function(matrix){
+  #Ermittle Informationsgehalt pro CM_i in Array, bzw. Total = Summe(Array)
+  #Eine geringere Erfolgswahrscheinlichkeit impliziert, dass mehr Informationen benötigt werden.
+  #Der Informationsgehalt wird ermittelt: I = -log(1/p_FR), p = Wahrscheinlichkeit
+
+  
+  for (i in 1:nrow(matrix)){
+    for(j in 1:ncol(matrix)){
+      if (matrix[i,j]!=0){
+        matrix[i,j] = -log(matrix[i,j],2)
+      }
+    }
+  }
+
+  I_CM = colSums(matrix)
+  I_total = sum(I_CM)
+  return(I_total)
   
 }   
      #Das Erlangen von Informationen setzt immer bestimmte Prozesse voraus, was Kosten verursacht.
