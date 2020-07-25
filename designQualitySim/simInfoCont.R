@@ -1,9 +1,10 @@
-NUMB_CM = 10
-NUMB_FR = 10
+NUMB_CM = 50
+NUMB_FR = 50
 DENS_FRCM = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8)
 SIM_NUMB = 500
 infoContArray = c()
 infoContAv = c()
+infoContSD = c()
 
 for (i_DENS_FRCM in seq_along(DENS_FRCM)) {
   
@@ -15,9 +16,14 @@ for (i_DENS_FRCM in seq_along(DENS_FRCM)) {
     infoContArray[j] = infoCont(convToInfoMatrix(A_FRCM)) 
   }
   infoContAv[i_DENS_FRCM] = mean(infoContArray)
+  infoContSD[i_DENS_FRCM] = sd(infoContArray)
 }
 
-plot(DENS_FRCM, infoContAv)
+covData <- data.frame(DENS_FRCM,infoContAv,infoContSD)
+plot(DENS_FRCM,infoContAv,ylim=c(0,infoContAv[length(DENS_FRCM)]+infoContSD[length(DENS_FRCM)]+1))
+lines(rbind(DENS_FRCM,DENS_FRCM,NA),rbind(covData$infoContAv-covData$infoContSD,covData$infoContAv+covData$infoContSD,NA))
+rbind(covData$infoContAv-covData$infoContSD,covData$infoContAv+covData$infoContSD,NA)
+
 
 .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
   #generating A_X_Y  => design matrix
