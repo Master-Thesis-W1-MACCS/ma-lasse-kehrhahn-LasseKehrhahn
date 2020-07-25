@@ -7,10 +7,10 @@
 #   Beispiel:
 #   Simulationen pro Variation: 100, DENS_FRCM=0.4, Matrix: 3x3, TRUE:30, FALSE:70, Diagrammeintrag: x: 0.4 y: 30/100=30%
 
-NUMB_CM = 3
-NUMB_FR = 3
+NUMB_CM = 10
+NUMB_FR = 10
 DENS_FRCM = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8)
-SIM_NUMB = 500
+SIM_NUMB = 1000
 PERCENTAGE = c()
 
 for (i_DENS_FRCM in seq_along(DENS_FRCM)) {

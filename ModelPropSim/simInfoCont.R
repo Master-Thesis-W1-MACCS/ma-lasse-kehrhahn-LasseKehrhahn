@@ -1,7 +1,7 @@
-NUMB_CM = 50
-NUMB_FR = 50
+NUMB_CM = 10
+NUMB_FR = 10
 DENS_FRCM = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8)
-SIM_NUMB = 500
+SIM_NUMB = 1000
 infoContArray = c()
 infoContAv = c()
 infoContSD = c()
