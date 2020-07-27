@@ -32,7 +32,6 @@ DATA = rbind(DATA,DATApre) #put it together
   
   PRODUCT <- c(1:EAD$NUMB_C) #How many products per run 
   EAD$C_DEMAND[PRODUCT] = EAD$C_DEMAND #total cost of the product
-  
   EAD$DENS_FRCM_measured[PRODUCT] =  round(EAD$DENS_FRCM_measured, digits = 2)
   EAD$INDEP_A_FRCM[PRODUCT] = EAD$INDEP_A_FRCM
   EAD$INFOCONT_A_FRCM[PRODUCT] = round(EAD$INFOCONT_A_FRCM, digits = 2)
