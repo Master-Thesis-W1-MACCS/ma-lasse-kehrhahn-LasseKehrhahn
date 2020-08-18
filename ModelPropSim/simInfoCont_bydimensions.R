@@ -1,44 +1,36 @@
-NUMB_CM = c(2,4,6,8,10)
+NUMB_CM = c(2,4,6,8,10) #different plots for each
 NUMB_FR = c(2,4,6,8,10)
-DENS_FRCM = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8) #x-Achse des Plots
+DENS_FRCM = c(0.2, 0.35, 0.5, 0.65, 0.8) #x-Achse
 color = c("blue","green","red","yellow","black")
-SIM_NUMB = 1000
+SIM_NUMB = 100
 
 infoContArray = c()
 infoContAv = c()
 infoContSD = c()
 
-for (i_NUMB_CM in seq_along(NUMB_CM)) {
+for (i_DENS_FRCM in seq_along(DENS_FRCM)) {
   
-  for (i_DENS_FRCM in seq_along(DENS_FRCM)) {
+  for (i_NUMB_CM in seq_along(NUMB_CM)) {
     ACTUAL_DENS = DENS_FRCM[i_DENS_FRCM]
     
     for (j in 1:SIM_NUMB) {
       A_FRCM = .create_designmatrix(NUMB_FR[i_NUMB_CM], NUMB_CM[i_NUMB_CM], ACTUAL_DENS, "FR", "CM")
       infoContArray[j] = infoCont(convToInfoMatrix(A_FRCM),NUMB_FR[i_NUMB_CM])
     }
-    infoContAv[i_DENS_FRCM] = mean(infoContArray)
-    infoContSD[i_DENS_FRCM] = sd(infoContArray)
+    infoContAv[i_NUMB_CM] = mean(infoContArray)
+    infoContSD[i_NUMB_CM] = sd(infoContArray)
   }
   
-  if (i_NUMB_CM==1){
-    plot(DENS_FRCM,infoContAv,ylim=c(0,30), type="o", main="Total Information Content",col=color[i_NUMB_CM]) #infoContAv[length(NUMB_CM)]+infoContSD[length(NUMB_CM)]+1
-    lines(rbind(DENS_FRCM,DENS_FRCM,NA),rbind(infoContAv-infoContSD,infoContAv+infoContSD,NA),col=color[i_NUMB_CM])
+  if (i_DENS_FRCM==1){
+    plot(NUMB_CM,infoContAv,ylim=c(0,30), type="o", main="Total Information Content",col=color[i_DENS_FRCM]) #infoContAv[length(NUMB_CM)]+infoContSD[length(NUMB_CM)]+1
+    lines(rbind(NUMB_CM,NUMB_CM,NA),rbind(infoContAv-infoContSD,infoContAv+infoContSD,NA),col=color[i_DENS_FRCM])
   } else{
-    points(DENS_FRCM,infoContAv)
-    lines(DENS_FRCM,infoContAv,col=color[i_NUMB_CM])
-    lines(rbind(DENS_FRCM,DENS_FRCM,NA),rbind(infoContAv-infoContSD,infoContAv+infoContSD,NA),col=color[i_NUMB_CM])
+    points(NUMB_CM,infoContAv)
+    lines(NUMB_CM,infoContAv,col=color[i_DENS_FRCM])
+    lines(rbind(NUMB_CM,NUMB_CM,NA),rbind(infoContAv-infoContSD,infoContAv+infoContSD,NA),col=color[i_DENS_FRCM])
   }
-  
-  #plot(DENS_FRCM,infoContAv,ylim=c(0,infoContAv[length(DENS_FRCM)]+infoContSD[length(DENS_FRCM)]+1), add=TRUE)
-  #lines(rbind(DENS_FRCM,DENS_FRCM,NA),rbind(infoContAv-infoContSD,infoContAv+infoContSD,NA))
 }
-legend(x="topleft",c("2","4","6","8","10"),col=color,lty=c(1,1,1,1,1))
-
-#covData <- data.frame(DENS_FRCM,infoContAv,infoContSD)
-#plot(DENS_FRCM,infoContAv,ylim=c(0,infoContAv[length(DENS_FRCM)]+infoContSD[length(DENS_FRCM)]+1))
-#lines(rbind(DENS_FRCM,DENS_FRCM,NA),rbind(covData$infoContAv-covData$infoContSD,covData$infoContAv+covData$infoContSD,NA))
-#plot(...,add=TRUE) um im selben Fenster zu plotten
+legend(x="topleft",c("0.2","0.35","0.5","0.65","0.8"),col=color,lty=c(1,1,1,1,1))
 
 .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
   #generating A_X_Y  => design matrix
@@ -98,7 +90,7 @@ convToProbMatrix <- function(matrix){
   #Spaltensumme > 1 heißt mehrere Abhängigkeiten, daher erhöhte Komplexität.
   #Erhöhte Komplexität bedeutet geringere Wahrscheinlichkeit, dass die FR erfüllt werden können.
   
-  colSum = colSums(matrix)/NUMB_FR
+  colSum = colSums(matrix)
   probMatrix <- sweep((matrix),2,colSum,"/")
   
   return(probMatrix)

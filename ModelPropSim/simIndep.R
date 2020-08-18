@@ -7,31 +7,38 @@
 #   Beispiel:
 #   Simulationen pro Variation: 100, DENS_FRCM=0.4, Matrix: 3x3, TRUE:30, FALSE:70, Diagrammeintrag: x: 0.4 y: 30/100=30%
 
-NUMB_CM = 10
-NUMB_FR = 10
+NUMB_CM = c(2,4,6,8,10)
+NUMB_FR = c(2,4,6,8,10)
 DENS_FRCM = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8)
-SIM_NUMB = 1000
+color = c("blue","green","red","yellow","black")
+SIM_NUMB = 10000
 PERCENTAGE = c()
 
-for (i_DENS_FRCM in seq_along(DENS_FRCM)) {
+for (i_NUMB_CM in seq_along(NUMB_CM)){
+
+  for (i_DENS_FRCM in seq_along(DENS_FRCM)) {
  
-   ACTUAL_DENS = DENS_FRCM[i_DENS_FRCM]
-   counter = 0
+     ACTUAL_DENS = DENS_FRCM[i_DENS_FRCM]
+     counter = 0
    
-   for (j in 1:SIM_NUMB) {
-     A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,ACTUAL_DENS,"FR","CM")
-     #DENS_FRCM_measured = count_nonzeros(A_FRCM)
+     for (j in 1:SIM_NUMB) {
+       A_FRCM = .create_designmatrix(NUMB_FR[i_NUMB_CM],NUMB_CM[i_NUMB_CM],ACTUAL_DENS,"FR","CM")
     
-     if (checkDesign(A_FRCM)) {
-       counter=counter+1
+       if (checkDesign(A_FRCM)) {
+         counter=counter+1
+       }
      }
-   }
-   PERCENTAGE[i_DENS_FRCM] = (counter/SIM_NUMB)*100
+     PERCENTAGE[i_DENS_FRCM] = (counter/SIM_NUMB)*100
+  }
+  
+  if (i_NUMB_CM==1){
+    plot(DENS_FRCM,PERCENTAGE,ylim=c(0,100), type="o", main="Indep. Chance",col=color[i_NUMB_CM]) #infoContAv[length(NUMB_CM)]+infoContSD[length(NUMB_CM)]+1
+  } else{
+    points(DENS_FRCM,PERCENTAGE)
+    lines(DENS_FRCM,PERCENTAGE,col=color[i_NUMB_CM])
+  }
 }
-
-plot(DENS_FRCM, PERCENTAGE)
-
-
+legend(x="topright",c("2x2","4x4","6x6","8x8","10x10"),col=color,lty=c(1,1,1,1,1))
 
 checkDesign <- function(matrix){
   

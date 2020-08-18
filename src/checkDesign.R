@@ -86,7 +86,7 @@ infoCont <- function(matrix){
     }
   }
 
-  I_CM = colSums(matrix)
+  I_CM = colSums(matrix)/NUMB_FR
   I_total = sum(I_CM)
   return(I_total)
   

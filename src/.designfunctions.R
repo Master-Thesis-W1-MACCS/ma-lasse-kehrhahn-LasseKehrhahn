@@ -1,3 +1,13 @@
+create_indep_matrix <- function(X,Y,DENS,rowname,colname) {
+  while (TRUE) {
+    A = .create_designmatrix(X,Y,DENS,rowname,colname)
+    indep = checkIndep(A)
+    if(indep){
+      return(A) 
+    }
+  }
+}
+
 .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
  #generating A_X_Y  => design matrix
 
