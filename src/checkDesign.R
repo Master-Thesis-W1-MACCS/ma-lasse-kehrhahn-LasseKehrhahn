@@ -1,3 +1,5 @@
+#Independent Axiom
+
 checkIndep <- function(matrix){
   
   design_check = TRUE
@@ -56,9 +58,41 @@ checkIndep <- function(matrix){
   return(design_check)
 }
 
-matrix=matrix(c(1,0,0,1,1,0,1,1,1),byrow=TRUE,nrow=3)
-infoCont(convToProbMatrix(matrix))
 
+# A_YX = matrix(c(1,1,0,1,1,1),byrow=TRUE,nrow=2)
+# p=CM_prob_to_sat(A_YX)
+# I_total=infoCont_vektor(p)
+
+#Information Axiom
+
+CM_prob_to_sat <- function(matrix){
+  probVektor <- c()
+  CM_prob_to_sat <- c()
+  #Erstelle Wahrscheinlichkeitsmatrix 
+  #Spaltensumme > 1 heißt mehrere Abhängigkeiten, daher erhöhte Komplexität.
+  #Erhöhte Komplexität bedeutet geringere Wahrscheinlichkeit, dass die FR erfüllt werden können.
+  
+  colSum = colSums(matrix)
+  CM_prob_to_sat <- 1/colSum
+  
+  return(CM_prob_to_sat)
+}
+
+infoCont_vektor <- function(vektor){
+  #Ermittle Informationsgehalt pro CM_i in Array, bzw. Total = Summe(Array)
+  #Eine geringere Erfolgswahrscheinlichkeit impliziert, dass mehr Informationen benötigt werden.
+  #Der Informationsgehalt wird ermittelt: I = -log2(1/p_FR), p = Wahrscheinlichkeit
+
+    for(j in 1:NROW(vektor)){
+      if (vektor[j]!=0){
+        vektor[j] = -log2(vektor[j])
+      }
+    }
+
+  I_total = sum(vektor)
+  return(I_total)
+  
+}   
 
 convToProbMatrix <- function(matrix){
   
