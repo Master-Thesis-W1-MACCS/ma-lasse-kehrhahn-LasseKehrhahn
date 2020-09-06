@@ -149,3 +149,53 @@ checkDesign <- function(matrix){
   return(A_YX)
   
 }
+
+# A_YX = matrix(c(0,2,5,14,0,0),byrow=TRUE,nrow=2)
+# A_YX_x = conv_res_to_dep(A_YX)
+# print(A_YX_x)
+
+
+conv_res_to_dep <- function(matrix) {
+  
+  for (i in 1:nrow(matrix)){
+     for(j in 1:ncol(matrix)){
+       if (matrix[i,j]!=0){
+          matrix[i,j] = 1
+       }
+     }
+  }
+
+    return(matrix)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

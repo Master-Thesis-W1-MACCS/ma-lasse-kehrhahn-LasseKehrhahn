@@ -1,5 +1,18 @@
 #Independent Axiom
 
+conv_res_to_dep <- function(matrix) {
+  
+  for (i in 1:nrow(matrix)){
+    for(j in 1:ncol(matrix)){
+      if (matrix[i,j]!=0){
+        matrix[i,j] = 1
+      }
+    }
+  }
+  
+  return(matrix)
+}
+
 checkIndep <- function(matrix){
   
   design_check = TRUE
@@ -57,7 +70,6 @@ checkIndep <- function(matrix){
  
   return(design_check)
 }
-
 
 # A_YX = matrix(c(1,1,0,1,1,1),byrow=TRUE,nrow=2)
 # p=CM_prob_to_sat(A_YX)
@@ -127,3 +139,4 @@ infoCont <- function(matrix){
 }   
      #Das Erlangen von Informationen setzt immer bestimmte Prozesse voraus, was Kosten verursacht.
      #Gesamtkosten von I abhängig machen
+

@@ -2,7 +2,7 @@ NUMB_CM = c(2,4,6,8,10)
 NUMB_FR = c(2,4,6,8,10)
 DENS_FRCM = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8) #x-Achse des Plots
 color = c("blue","green","red","yellow","black")
-SIM_NUMB = 1000
+SIM_NUMB = 100
 
 infoContArray = c()
 infoContAv = c()
@@ -15,7 +15,7 @@ for (i_NUMB_CM in seq_along(NUMB_CM)) {
     
     for (j in 1:SIM_NUMB) {
       A_FRCM = .create_designmatrix(NUMB_FR[i_NUMB_CM], NUMB_CM[i_NUMB_CM], ACTUAL_DENS, "FR", "CM")
-      infoContArray[j] = infoCont(convToInfoMatrix(A_FRCM),NUMB_FR[i_NUMB_CM])
+      infoContArray[j] = infoCont(CM_prob_to_sat(A_FRCM))
     }
     infoContAv[i_DENS_FRCM] = mean(infoContArray)
     infoContSD[i_DENS_FRCM] = sd(infoContArray)
@@ -33,12 +33,13 @@ for (i_NUMB_CM in seq_along(NUMB_CM)) {
   #plot(DENS_FRCM,infoContAv,ylim=c(0,infoContAv[length(DENS_FRCM)]+infoContSD[length(DENS_FRCM)]+1), add=TRUE)
   #lines(rbind(DENS_FRCM,DENS_FRCM,NA),rbind(infoContAv-infoContSD,infoContAv+infoContSD,NA))
 }
-legend(x="topleft",c("2","4","6","8","10"),col=color,lty=c(1,1,1,1,1))
+legend(x="topleft",c("2x2","4x4","6x6","8x8","10x10"),col=color,lty=c(1,1,1,1,1))
 
 #covData <- data.frame(DENS_FRCM,infoContAv,infoContSD)
 #plot(DENS_FRCM,infoContAv,ylim=c(0,infoContAv[length(DENS_FRCM)]+infoContSD[length(DENS_FRCM)]+1))
 #lines(rbind(DENS_FRCM,DENS_FRCM,NA),rbind(covData$infoContAv-covData$infoContSD,covData$infoContAv+covData$infoContSD,NA))
 #plot(...,add=TRUE) um im selben Fenster zu plotten
+
 
 .create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
   #generating A_X_Y  => design matrix
@@ -92,34 +93,74 @@ legend(x="topleft",c("2","4","6","8","10"),col=color,lty=c(1,1,1,1,1))
   
 }
 
-convToProbMatrix <- function(matrix){
-  
+CM_prob_to_sat <- function(matrix){
+  probVektor <- c()
+  CM_prob_to_sat <- c()
   #Erstelle Wahrscheinlichkeitsmatrix 
   #Spaltensumme > 1 heißt mehrere Abhängigkeiten, daher erhöhte Komplexität.
   #Erhöhte Komplexität bedeutet geringere Wahrscheinlichkeit, dass die FR erfüllt werden können.
   
-  colSum = colSums(matrix)/NUMB_FR
-  probMatrix <- sweep((matrix),2,colSum,"/")
+  colSum = colSums(matrix)
+  CM_prob_to_sat <- 1/colSum
   
-  return(probMatrix)
+  return(CM_prob_to_sat)
 }
 
-infoCont <- function(matrix,NUMB_FR_current){
+infoCont <- function(vektor){
   #Ermittle Informationsgehalt pro CM_i in Array, bzw. Total = Summe(Array)
   #Eine geringere Erfolgswahrscheinlichkeit impliziert, dass mehr Informationen benötigt werden.
-  #Der Informationsgehalt wird ermittelt: I = -log(1/p_FR), p = Wahrscheinlichkeit
+  #Der Informationsgehalt wird ermittelt: I = -log2(1/p_FR), p = Wahrscheinlichkeit
   
-  
-  for (i in 1:nrow(matrix)){
-    for(j in 1:ncol(matrix)){
-      if (matrix[i,j]!=0){
-        matrix[i,j] = -log(matrix[i,j],2)
-      }
+  for(j in 1:NROW(vektor)){
+    if (vektor[j]!=0){
+      vektor[j] = -log2(vektor[j])
     }
   }
   
-  I_CM = colSums(matrix)/NUMB_FR_current
-  I_total = sum(I_CM)
+  I_total = sum(vektor)
   return(I_total)
   
 }   
+
+
+
+
+
+
+
+
+
+
+
+
+# convToProbMatrix <- function(matrix){
+#   
+#   #Erstelle Wahrscheinlichkeitsmatrix 
+#   #Spaltensumme > 1 heißt mehrere Abhängigkeiten, daher erhöhte Komplexität.
+#   #Erhöhte Komplexität bedeutet geringere Wahrscheinlichkeit, dass die FR erfüllt werden können.
+#   
+#   colSum = colSums(matrix)/NUMB_FR
+#   probMatrix <- sweep((matrix),2,colSum,"/")
+#   
+#   return(probMatrix)
+# }
+# 
+# infoCont <- function(matrix,NUMB_FR_current){
+#   #Ermittle Informationsgehalt pro CM_i in Array, bzw. Total = Summe(Array)
+#   #Eine geringere Erfolgswahrscheinlichkeit impliziert, dass mehr Informationen benötigt werden.
+#   #Der Informationsgehalt wird ermittelt: I = -log(1/p_FR), p = Wahrscheinlichkeit
+#   
+#   
+#   for (i in 1:nrow(matrix)){
+#     for(j in 1:ncol(matrix)){
+#       if (matrix[i,j]!=0){
+#         matrix[i,j] = -log(matrix[i,j],2)
+#       }
+#     }
+#   }
+#   
+#   I_CM = colSums(matrix)/NUMB_FR_current
+#   I_total = sum(I_CM)
+#   return(I_total)
+#   
+# }   

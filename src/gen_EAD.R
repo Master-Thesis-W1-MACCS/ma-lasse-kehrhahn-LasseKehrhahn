@@ -73,6 +73,7 @@ gen_EAD <- function(EAD,TQ) {
   
   EAD = gen_ProductionEnvironment(EAD,NUMB_CM,NUMB_PV,DENS_CMPV)
   A_CMPV = EAD$A_CMPV
+  EAD$INDEP_A_CMPV = checkIndep(conv_res_to_dep(A_CMPV))
   A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
   
   PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
