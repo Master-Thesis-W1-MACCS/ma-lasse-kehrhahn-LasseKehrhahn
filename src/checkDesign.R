@@ -13,9 +13,11 @@ conv_res_to_dep <- function(matrix) {
   return(matrix)
 }
 
+# A_YX = matrix(c(1,0,1,1,1,1),byrow=TRUE,nrow=2)
+# checkIndep(A_YX)
+
 checkIndep <- function(matrix){
   
-  design_check = TRUE
   rowSum = rowSums(matrix)
   colSum = colSums(matrix)
   columns = length(matrix[1,])
@@ -23,11 +25,11 @@ checkIndep <- function(matrix){
   checked_rows <- c()
   min_index = 0
   
-  #?u?ere Schleife l?uft so oft durch, wie Anzahl der Zeilen der Matrix
+  #Aeussere Schleife laeuft so oft durch, wie Anzahl der Zeilen der Matrix
   for (i in 1:(length(rowSum))){
-    min_value = columns+1                                         #Gr??er als max. Anzahl der Spalten
+    min_value = columns+1                                         #Groesser als max. Anzahl der Spalten
     
-    #Auswahl der Zeile mit der niedrigsten Anzahl von Eintr?gen, die noch nicht bisher gecheckt wurde
+    #Auswahl der Zeile mit der niedrigsten Anzahl von Eintraegen, die noch nicht bisher gecheckt wurde
     for (j in 1:(length(rowSum))){
       if (rowSum[j]<min_value && !is.element(j,checked_rows)){
         min_value = rowSum[j]
@@ -36,7 +38,7 @@ checkIndep <- function(matrix){
     }
     checked_rows = append(checked_rows,min_index)                 #array checked_rows speichert Index der Zeile
     
-    #Spaltenindizes der Nicht-Null-Eintr?ge der Zeile werden in row_array gespeichert
+    #Spaltenindizes der Nicht-Null-Eintraege der Zeile werden in row_array gespeichert
     row_array <- c()
     for (k in 1:(length(matrix[min_index,]))){
       if (matrix[min_index,k] != 0){
@@ -44,7 +46,7 @@ checkIndep <- function(matrix){
       }
     }
     
-    #Counter z?hlt, wie viele neue Spaltenindizes (inkl. zuvor gepr?fter Zeilen) Nicht-Null-Eintr?ge in der aktuellen Zeile haben
+    #Counter zaehlt, wie viele neue Spaltenindizes (inkl. zuvor gepruefter Zeilen) Nicht-Null-Eintraege in der aktuellen Zeile haben
     counter = 0
     new_array <- c()
     for (column in row_array){
@@ -54,12 +56,13 @@ checkIndep <- function(matrix){
       }
     }
     
-    if (counter == 0){                                          #kein neuer Nicht-Null-Eintrag, abh?ngiges Design
-      design_check = FALSE
+    if (counter == 0){                                          #kein neuer Nicht-Null-Eintrag, abhaengiges Design
+      return(paste("Coupling in FR", min_index))
+      
     } else if (counter>1) {                                     #mehr als ein neuer Nicht-Null-Eintrag
-        for (col in new_array){                                 #Pr?fen, ob die neuen Nicht-Null-Entr?ge auch in anderen Zeilen der Matrix vorkommen
+        for (col in new_array){                                 #Pruefen, ob die neuen Nicht-Null-Entr?ge auch in anderen Zeilen der Matrix vorkommen
           if (colSum[col]>1){
-            design_check = FALSE                                #Gucken, dass es alle neuen Werte in keiner anderen Zeile gibt
+            return(paste("CM", toString(new_array) ,"causes coupling in FR", min_index))                                #Gucken, dass es alle neuen Werte in keiner anderen Zeile gibt
           }
         }
     }
@@ -67,8 +70,8 @@ checkIndep <- function(matrix){
   }
   #print(matrix)
   #print(design_check)
- 
-  return(design_check)
+  
+    return("decoupled")
 }
 
 # A_YX = matrix(c(1,1,0,1,1,1),byrow=TRUE,nrow=2)
@@ -139,4 +142,3 @@ infoCont <- function(matrix){
 }   
      #Das Erlangen von Informationen setzt immer bestimmte Prozesse voraus, was Kosten verursacht.
      #Gesamtkosten von I abhängig machen
-

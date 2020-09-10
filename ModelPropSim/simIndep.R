@@ -11,7 +11,7 @@ NUMB_CM = c(2,4,6,8,10)
 NUMB_FR = c(2,4,6,8,10)
 DENS_FRCM = c(0.2,0.3,0.4,0.5,0.6,0.7,0.8)
 color = c("blue","green","red","yellow","black")
-SIM_NUMB = 10000
+SIM_NUMB = 1
 PERCENTAGE = c()
 
 for (i_NUMB_CM in seq_along(NUMB_CM)){
