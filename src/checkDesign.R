@@ -78,6 +78,7 @@ checkIndep <- function(matrix){
 # p=CM_prob_to_sat(A_YX)
 # I_total=infoCont_vektor(p)
 
+
 #Information Axiom
 
 CM_prob_to_sat <- function(matrix){
@@ -142,3 +143,8 @@ infoCont <- function(matrix){
 }   
      #Das Erlangen von Informationen setzt immer bestimmte Prozesse voraus, was Kosten verursacht.
      #Gesamtkosten von I abhängig machen
+
+calc_I_max <- function(matrix) {
+  I_max = -ncol(matrix)*log2(1/nrow(matrix))
+  
+}
