@@ -1,20 +1,20 @@
-create_indep_matrix <- function(X,Y,DENS,rowname,colname) {
-  while (TRUE) {
-    A = .create_designmatrix(X,Y,DENS,rowname,colname)
-    indep = checkIndep(A)
-    if(indep){
-      return(A) 
-    }
-  }
-}
+#' Generates a matrix to describe the relationship between the domains
+#'
+#' @param X Number of rows
+#' @param Y Number of columns
+#' @param DENS if = 2: diagonal matrix, if = -1: random density between the desired boundaries
+#' @param rowname 
+#' @param colname 
+#' @return Matrix which contains 1 and 0 entries
+#' @example .create_designmatrix(2,2,-1,"CN","FR")
+#' @export?
 
-.create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
+create_designmatrix <- function(X,Y,DENS,rowname="X",colname="Y") {
  #generating A_X_Y  => design matrix
 
 repeat
   {
 
-    
   if(DENS == 2) {                 #Density is defined in gen_EAD for each matrix separatly (e.g. DENS_CNFR), if density = 2 we want a diagonal matrix
     
     if (X!=Y) {A_XY = 'error'}    #Size must be identical nrow = ncol
@@ -24,11 +24,6 @@ repeat
     
   }
   
-  else if(DENS == 3) {                 #enter specific matrix
-      
-      A_YX = matrix(c(0,1,1,1,0,0),byrow=TRUE,nrow=2)
-  }  
-    
   else if(DENS == -1) {           #if density = -1 we want a matrix with a random density between the desired boundaries (eg. [0.4,0.7])
     DENS_MIN = 0.4
     DENS_MAX = 0.7

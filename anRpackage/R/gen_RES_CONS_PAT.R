@@ -1,10 +1,19 @@
-#BUILDING THE ACT_CONS_PAT  /  RES_CONS_PAT 
+#' Generates a matrix to define the relationship between CM and PV
+#'
+#' Random matrix with entries greater than 1 is generated somehow
+#' @param EAD 
+#' @param NUMB_CM 
+#' @param NUMB_PV 
+#' @param DENS_CMPV 
+#' @return EAD ??
+#' @example .gen_RES_CONS_PAT(EAD,2,2,-1)
+#' @export
 
-.gen_RES_CONS_PAT <- function(EAD,NUMB_CM,NUMB_PV,DENS_CMPV){
+gen_RES_CONS_PAT <- function(EAD,NUMB_CM,NUMB_PV,DENS_CMPV){
 
 ## ====================== STEP 1 Determining the activities =========================
   UNITLEVEL_ACT_SHARE_MIN = 0.2    #0.2 is the size of DISP1 =10
-  UNITLEVEL_ACT_SHARE_MAX = 0.5
+  UNITLEVEL_ACT_SHARE_MAX = 0.4
   EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE = runif(1, UNITLEVEL_ACT_SHARE_MIN, UNITLEVEL_ACT_SHARE_MAX) #random activity share between lower and upper bounds
   
   EAD$PRODUCTION_TECHNOLOGY$UNITLEVEL_ACT_SHARE_MIN = UNITLEVEL_ACT_SHARE_MIN
@@ -40,7 +49,6 @@ RES_CONS_PATpre = matrix(rnorm(NUMB_CM*NUMB_PV,mean=0,sd=1),
 
 RES_CONS_PAT = matrix(0, nrow = NUMB_CM, ncol = NUMB_PV, byrow = TRUE) #empy matrix, that is going to be filled 
 
-
 ## ====================== STEP 1.a CORRELATION ========================= 
 # Products and Resource are transposed in constrast to Anand 2019 but there is no issue in the model
 # Rows Products Colums Resources
@@ -51,7 +59,6 @@ COR2 =-1
 # Correlation of  resources
 if(COR1 == -1){
   COR1 <- runif(1, -0.2, 0.8)
- 
 }
 
 sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
@@ -59,7 +66,6 @@ sqrt_const_1 <- sqrt(1 - (COR1 * COR1))
 # Correlation of the remaining resources
 if(COR2 == -1){
   COR2 <- runif(1, -0.2, 0.8)
-  
 }
 
 sqrt_const_2 <- sqrt(1 - (COR2 * COR2))

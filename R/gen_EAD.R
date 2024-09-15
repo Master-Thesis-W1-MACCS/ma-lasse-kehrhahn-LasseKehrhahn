@@ -1,5 +1,5 @@
-# # MAIN FUNCTION FOR GENERATING A PRODUCT PROGRAM
-gen_EAD <- function(EAD,TQ) {
+gen_EAD <-
+function(EAD,TQ) {
 
   #  % 23.4. - Generates the customers in the market Customer generation function
   #  % 24.7. - Make customers' attributes more precise, in particular CN and FRN
@@ -12,7 +12,9 @@ gen_EAD <- function(EAD,TQ) {
   #  % 19.03 - Market structure
   
   
-  #### PREDETERMINING ====   
+  
+  
+  #### PREDETERMINING ====   #aus 01 INIT?
   DENS_CCN =  EAD$DENS_CCN
   DENS_CNFR = EAD$DENS_CNFR
   DENS_FRCM = EAD$DENS_FRCM
@@ -52,17 +54,13 @@ gen_EAD <- function(EAD,TQ) {
   
   A_FRCM = .create_designmatrix(NUMB_FR,NUMB_CM,DENS_FRCM,"FR","CM") #Functional Requirements - Components Matrix
   
-    #Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
+  #Number of functional requirements must be equal to the number of components. (symmetrical matrix needed)
   #  if(EAD$TYPE_FRCM != "C"){
   #  if(sum(diag(A_FRCM))<NUMB_FR)  {
   #   diag(A_FRCM) <- 1
   #   A_FRCM[!lower.tri(A_FRCM,diag=TRUE)] <- 0
   # }
   #  }
-  
-  # IMPLEMENT DESIGN QUALITY CHECK
-  EAD$INDEP_A_FRCM = checkIndep(A_FRCM)
-  EAD$INFOCONT_A_FRCM = infoCont_vektor(CM_prob_to_sat(A_FRCM))/calc_I_max(A_FRCM)
   EAD$DENS_FRCM_measured = count_nonzeros(A_FRCM) #set DENS_FRCM is not strictly the implemented. 
   
   CM = as.vector(FR) %*% (A_FRCM) # computing CM * q
@@ -73,7 +71,6 @@ gen_EAD <- function(EAD,TQ) {
   
   EAD = gen_ProductionEnvironment(EAD,NUMB_CM,NUMB_PV,DENS_CMPV)
   A_CMPV = EAD$A_CMPV
-  EAD$INDEP_A_CMPV = checkIndep(conv_res_to_dep(A_CMPV))
   A_PVRC = .create_designmatrix(NUMB_PV,NUMB_RC,DENS_PVRC,"PV","RC") #Processed - Resources Matrix
   
   PV = as.vector(CM) %*% (A_CMPV) # computing CM * q
@@ -101,13 +98,7 @@ gen_EAD <- function(EAD,TQ) {
   CMC =  (A_CMPVp) %*% as.vector(PVC)
   FRC =  (A_FRCMp) %*% as.vector((CMC))
   CNC =  (A_CNFRp) %*% as.vector((FRC))
-  CCx  =  (A_CCNp)  %*% as.vector((CNC))
-  
-  EAD$PVC = PVC
-  EAD$CMC = CMC
-  EAD$FRC = FRC
-  EAD$CNC = CNC
-  EAD$CCx = CCx
+  CC  =  (A_CCNp)  %*% as.vector((CNC))
   
   # Check routine 
   A_CRC = ((as.vector(C_DEMAND)) * A_CCN) %*% A_CNFR %*% A_FRCM %*% A_CMPV %*% A_PVRC
@@ -124,11 +115,3 @@ gen_EAD <- function(EAD,TQ) {
     
   
 return(EAD)}
-
-
-
-
-
-
-
-  

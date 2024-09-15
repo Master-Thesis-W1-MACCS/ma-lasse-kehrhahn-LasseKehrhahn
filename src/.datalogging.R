@@ -30,26 +30,22 @@ DATA = rbind(DATA,DATApre) #put it together
   ####### DOES NOT WORK YET ############
   
   
-  PRODUCT <- c(PRODUCT, 1:NUMB_PRO) #How many products per run 
-  DENS[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$DENS #Scaling firm parameter to products.
-  Q_VAR[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$Q_VAR #Scaling firm parameter to products.
-  RCC_VAR[PRODUCT] = FIRM$COSTING_SYSTEM$RC_VAR #Scaling firm parameter to products.
-  CP[PRODUCT] = FIRM$COSTING_SYSTEM$CP #Scaling firm parameter to products.
-  Error[PRODUCT] = FIRM$COSTING_SYSTEM$Error #Scaling firm parameter to products.
-  NUMB_Error[PRODUCT] = FIRM$COSTING_SYSTEM$NUMB_Error #Scaling firm parameter to products.
-  CC[PRODUCT] = FIRM$COSTING_SYSTEM$CC
-  MISCPOOLSIZE[PRODUCT] = FIRM$COSTING_SYSTEM$MISCPOOLSIZE
-  RUN[PRODUCT] = o #run, repetition
-  DESIGN[PRODUCT] = nn #which kind of design? 
+  PRODUCT <- c(1:EAD$NUMB_C) #How many products per run 
+  EAD$C_DEMAND[PRODUCT] = EAD$C_DEMAND #total cost of the product
+  EAD$DENS_FRCM_measured[PRODUCT] =  round(EAD$DENS_FRCM_measured, digits = 2)
+  EAD$INDEP_A_FRCM[PRODUCT] = EAD$INDEP_A_FRCM
+  EAD$INFOCONT_A_FRCM[PRODUCT] = round(EAD$INFOCONT_A_FRCM, digits = 2)
+  EAD$PVC[PRODUCT] = ceiling(EAD$PVC)
+  EAD$CMC[PRODUCT] = ceiling(EAD$CMC)
+  EAD$FRC[PRODUCT] = ceiling(EAD$FRC)
+  EAD$CNC[PRODUCT] = ceiling(EAD$CNC)
+  EAD$CCx[PRODUCT] = ceiling(EAD$CCx)
+  EAD$CC[PRODUCT] = ceiling(EAD$CC) #total cost of the product, rounded for easier formatting in excel
+  nn[PRODUCT] = nn #which kind of design? 
   
+  DATApre = data.frame(nn,PRODUCT, EAD$C_DEMAND[PRODUCT], EAD$PVC[PRODUCT], EAD$CMC[PRODUCT], EAD$FRC[PRODUCT], EAD$CNC[PRODUCT], EAD$CCx[PRODUCT], EAD$CC[PRODUCT], EAD$INDEP_A_FRCM[PRODUCT], EAD$DENS_FRCM_measured[PRODUCT], EAD$INFOCONT_A_FRCM[PRODUCT]) # construct the dataframe 
   
-  PE = (FIRM$COSTING_SYSTEM$PCH - FIRM$COSTING_SYSTEM$PCB)/FIRM$COSTING_SYSTEM$PCB
-  APE = abs((FIRM$COSTING_SYSTEM$PCH - FIRM$COSTING_SYSTEM$PCB))/FIRM$COSTING_SYSTEM$PCB
-  PCb[PRODUCT] = FIRM$COSTING_SYSTEM$PCB
-  PCh[PRODUCT] = FIRM$COSTING_SYSTEM$PCH
-  Q[PRODUCT] = FIRM$PRODUCTION_ENVIRONMENT$DEMAND
-  
-  DATApre = data.frame(o,nn,PRODUCT,PCb,PCh,Q,PE,APE,DENS,Q_VAR,RCC_VAR,CP,Error,NUMB_Error,CC,MISCPOOLSIZE) # construct the dataframe 
+  colnames(DATApre) = c('nn','Customer', 'DEMAND', 'PVC', 'CMC', 'FRC', 'CNC', 'CCx', 'CC', 'INDEP', 'DENS_MEASURED', 'INFOCONT_A_FRCM')
   
   DATAp = rbind(DATAp,DATApre) #put it together
   
